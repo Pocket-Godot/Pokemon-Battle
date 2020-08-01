@@ -14,4 +14,4 @@ After downloading, open Godot Engine Project Manager. Click Import, go to the fo
 
 ## Acknowledgements
 The following assets and plugins are used:
-* [FiniteStateMachine]{https://github.com/kubecz3k/FiniteStateMachine} by kubecz3k
+* [FiniteStateMachine](https://github.com/kubecz3k/FiniteStateMachine) by kubecz3k
