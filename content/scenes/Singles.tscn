@@ -1,24 +1,15 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://addons/net.kivano.fsm/content/fsm.gd" type="Script" id=1]
 [ext_resource path="res://content/ui_objects/stylebox.tres" type="Theme" id=2]
-[ext_resource path="res://content/scenes/FSM/states/Command/Command.gd" type="Script" id=3]
-[ext_resource path="res://content/scenes/FSM/states/MoveSelect/MoveSelect.gd" type="Script" id=4]
-[ext_resource path="res://content/scenes/FSM/states/MoveSelect/MoveSelect.tscn" type="PackedScene" id=5]
+[ext_resource path="res://content/scenes/FSM/transitions/ButtonPressed/ButtonPressed.tscn" type="PackedScene" id=3]
+[ext_resource path="res://content/scenes/FSM/states/MenuOn/MenuOn.tscn" type="PackedScene" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
-[ext_resource path="res://content/scenes/FSM/states/Command/Command.tscn" type="PackedScene" id=7]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
 [ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=10]
 [ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=11]
-[ext_resource path="res://content/scenes/FSM/transitions/GotoSequence/GotoSequence.gd" type="Script" id=12]
-[ext_resource path="res://content/scenes/FSM/transitions/GotoCommand/GotoCommand.gd" type="Script" id=13]
-[ext_resource path="res://content/scenes/FSM/transitions/GotoMoveSelect/GotoMoveSelect.gd" type="Script" id=14]
-[ext_resource path="res://content/scenes/FSM/states/Sequence/Sequence.gd" type="Script" id=15]
-[ext_resource path="res://content/scenes/FSM/transitions/GotoMoveSelect/GotoMoveSelect.tscn" type="PackedScene" id=16]
 [ext_resource path="res://content/scenes/FSM/states/Sequence/Sequence.tscn" type="PackedScene" id=17]
-[ext_resource path="res://content/scenes/FSM/transitions/GotoSequence/GotoSequence.tscn" type="PackedScene" id=18]
-[ext_resource path="res://content/scenes/FSM/transitions/GotoCommand/GotoCommand.tscn" type="PackedScene" id=19]
 
 [node name="Node" type="Node"]
 
@@ -29,49 +20,47 @@ script = ExtResource( 1 )
 "Create new:/Create state with name:" = null
 "Create new:/Create transition with name:" = null
 GraphData = {
+"ButtonPressed": Vector2( 423.5, 381 ),
+"ButtonPressed2_": Vector2( 192, 27 ),
+"ButtonPressed3": Vector2( 192, 27 ),
+"ButtonPressed3_": Vector2( 192, 27 ),
+"ButtonPressed_": Vector2( 424, 381 ),
 "Command": Vector2( 169, 133 ),
-"Command_": Vector2( -8, 27 ),
+"Command_": Vector2( 169, 133 ),
 "GotoCommand": Vector2( 476, 461 ),
-"GotoCommand_": Vector2( 364, 579 ),
+"GotoCommand_": Vector2( 476, 461 ),
 "GotoMoveSelect": Vector2( 466, 137 ),
-"GotoMoveSelect_": Vector2( 192, 27 ),
+"GotoMoveSelect_": Vector2( 466, 137 ),
 "GotoSequence": Vector2( 849, 301 ),
-"GotoSequence_": Vector2( 785, 292 ),
+"GotoSequence_": Vector2( 849, 301 ),
 "MoveSelect": Vector2( 847, 135 ),
-"MoveSelect_": Vector2( -8, 27 ),
-"Sequence": Vector2( 855, 460 ),
-"Sequence_": Vector2( -8, 27 )
+"MoveSelect_": Vector2( 847, 135 ),
+"ReadyForSequence": Vector2( 870, 360 ),
+"ReadyForSequence_": Vector2( 820, 296 ),
+"SelectMoves": Vector2( 855, 138 ),
+"Sequence": Vector2( 966, 583 ),
+"Sequence_": Vector2( 784, 479 )
 }
 
 [node name="States" type="Node2D" parent="FSM2D"]
 
-[node name="Command" type="Node" parent="FSM2D/States" instance=ExtResource( 7 )]
-script = ExtResource( 3 )
+[node name="Command" parent="FSM2D/States" instance=ExtResource( 5 )]
+np_associated_menu = NodePath("../../../UI_Layer/VBoxContainer/Control/Commands")
 
-[node name="MoveSelect" type="Node" parent="FSM2D/States" instance=ExtResource( 5 )]
-script = ExtResource( 4 )
+[node name="SelectMoves" parent="FSM2D/States" instance=ExtResource( 5 )]
+np_associated_menu = NodePath("../../../UI_Layer/Moves")
 
-[node name="Sequence" type="Node" parent="FSM2D/States" instance=ExtResource( 17 )]
-script = ExtResource( 15 )
+[node name="Sequence" parent="FSM2D/States" instance=ExtResource( 17 )]
 
 [node name="Transitions" type="Node2D" parent="FSM2D"]
 
-[node name="GotoMoveSelect" type="Node" parent="FSM2D/Transitions" instance=ExtResource( 16 )]
-script = ExtResource( 14 )
+[node name="GotoMoveSelect" parent="FSM2D/Transitions" instance=ExtResource( 3 )]
 path2SourceStates = [ NodePath(""), NodePath("../../States/Command") ]
-path2TargetState = NodePath("../../States/MoveSelect")
+path2TargetState = NodePath("../../States/SelectMoves")
 
-[node name="GotoCommand" type="Node" parent="FSM2D/Transitions" instance=ExtResource( 19 )]
-script = ExtResource( 13 )
-path2SourceStates = [ NodePath(""), NodePath("../../States/Sequence") ]
-path2TargetState = NodePath("../../States/Command")
-intervalBetweenChecks = -1.0
-
-[node name="GotoSequence" type="Node" parent="FSM2D/Transitions" instance=ExtResource( 18 )]
-script = ExtResource( 12 )
-path2SourceStates = [ NodePath(""), NodePath("../../States/MoveSelect") ]
+[node name="ReadyForSequence" parent="FSM2D/Transitions" instance=ExtResource( 3 )]
+path2SourceStates = [ NodePath(""), NodePath("../../States/MoveSelect"), NodePath("../../States/SelectMoves") ]
 path2TargetState = NodePath("../../States/Sequence")
-intervalBetweenChecks = -1.0
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 370.4, 116.025 )
@@ -173,6 +162,7 @@ __meta__ = {
 }
 
 [node name="Commands" type="VBoxContainer" parent="UI_Layer/VBoxContainer/Control"]
+visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -247,3 +237,4 @@ margin_bottom = 82.0
 margin_top = 87.0
 margin_right = 222.0
 margin_bottom = 111.0
+[connection signal="pressed" from="UI_Layer/VBoxContainer/Control/Commands/Fight" to="FSM2D/Transitions/GotoMoveSelect" method="_on_button_pressed"]

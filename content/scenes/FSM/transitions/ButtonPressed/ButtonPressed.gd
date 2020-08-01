@@ -9,8 +9,8 @@ extends "res://addons/net.kivano.fsm/content/FSMTransition.gd";
 # state activation (you can use it from code, or connect some signals to accomplish() method)
 
 ##################################################################################
-#####  Variables (Constants, Export Variables, Node Vars, Normal variables)  #####
-######################### var myvar setget myvar_set,myvar_get ###################
+#####  Variables (Constants, Export Variables, Node Vars, Normal variables)  
+var button_is_pressed:bool
 
 ######################################
 ####### Getters
@@ -20,7 +20,7 @@ func getLogicRoot(): return logicRoot; #access to logic root of FSM (usually fsm
 ######################################
 ####### Implement those below ########
 func transitionInit(inParam1=null, inParam2=null, inParam3=null, inParam4=null, inParam5=null): 
-	#you can optionally implement this to initialize transition on it's creation time 
+	button_is_pressed = false
 	pass
 
 func prepare(inNewStateID, inArg0 = null, inArg1 = null, inArg2 = null): 
@@ -29,4 +29,9 @@ func prepare(inNewStateID, inArg0 = null, inArg1 = null, inArg2 = null):
 
 func transitionCondition(inDeltaTime, inParam0=null, inParam1=null, inParam2=null, inParam3=null, inParam4=null): 
 	#YOU MUST IMPLEMENT TRANSITION CONDITION CHECK HERE: Return true/false
-	return false;
+	return button_is_pressed;
+	
+######################################
+####### Signals
+func _on_button_pressed():
+	button_is_pressed = true

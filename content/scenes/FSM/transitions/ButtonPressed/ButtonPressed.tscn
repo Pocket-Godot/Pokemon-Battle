@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://content/scenes/FSM/transitions/GotoCommand/GotoCommand.gd" type="Script" id=1]
+[ext_resource path="res://content/scenes/FSM/transitions/ButtonPressed/ButtonPressed.gd" type="Script" id=1]
 
-[node name="GotoCommand" type="Node"]
+[node name="ButtonPressed" type="Node"]
 script = ExtResource( 1 )
 path2SourceStates = [ NodePath("") ]
 path2TargetState = null
