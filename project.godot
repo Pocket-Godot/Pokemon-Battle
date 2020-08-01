@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Pokemon Battle System"
-run/main_scene="res://scenes/Battle.tscn"
+run/main_scene="res://content/scenes/Singles.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -25,6 +25,10 @@ window/size/width=512
 window/size/height=448
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "net.kivano.fsm" )
 
 [rendering]
 

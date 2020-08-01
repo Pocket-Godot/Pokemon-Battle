@@ -1,0 +1,249 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://addons/net.kivano.fsm/content/fsm.gd" type="Script" id=1]
+[ext_resource path="res://content/ui_objects/stylebox.tres" type="Theme" id=2]
+[ext_resource path="res://content/scenes/FSM/states/Command/Command.gd" type="Script" id=3]
+[ext_resource path="res://content/scenes/FSM/states/MoveSelect/MoveSelect.gd" type="Script" id=4]
+[ext_resource path="res://content/scenes/FSM/states/MoveSelect/MoveSelect.tscn" type="PackedScene" id=5]
+[ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://content/scenes/FSM/states/Command/Command.tscn" type="PackedScene" id=7]
+[ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
+[ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
+[ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=10]
+[ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=11]
+[ext_resource path="res://content/scenes/FSM/transitions/GotoSequence/GotoSequence.gd" type="Script" id=12]
+[ext_resource path="res://content/scenes/FSM/transitions/GotoCommand/GotoCommand.gd" type="Script" id=13]
+[ext_resource path="res://content/scenes/FSM/transitions/GotoMoveSelect/GotoMoveSelect.gd" type="Script" id=14]
+[ext_resource path="res://content/scenes/FSM/states/Sequence/Sequence.gd" type="Script" id=15]
+[ext_resource path="res://content/scenes/FSM/transitions/GotoMoveSelect/GotoMoveSelect.tscn" type="PackedScene" id=16]
+[ext_resource path="res://content/scenes/FSM/states/Sequence/Sequence.tscn" type="PackedScene" id=17]
+[ext_resource path="res://content/scenes/FSM/transitions/GotoSequence/GotoSequence.tscn" type="PackedScene" id=18]
+[ext_resource path="res://content/scenes/FSM/transitions/GotoCommand/GotoCommand.tscn" type="PackedScene" id=19]
+
+[node name="Node" type="Node"]
+
+[node name="FSM2D" type="Node2D" parent="."]
+script = ExtResource( 1 )
+"Initial state:" = ""
+"Create new:/Subdirectory for FSM nodes:" = "FSM"
+"Create new:/Create state with name:" = null
+"Create new:/Create transition with name:" = null
+GraphData = {
+"Command": Vector2( 169, 133 ),
+"Command_": Vector2( -8, 27 ),
+"GotoCommand": Vector2( 476, 461 ),
+"GotoCommand_": Vector2( 364, 579 ),
+"GotoMoveSelect": Vector2( 466, 137 ),
+"GotoMoveSelect_": Vector2( 192, 27 ),
+"GotoSequence": Vector2( 849, 301 ),
+"GotoSequence_": Vector2( 785, 292 ),
+"MoveSelect": Vector2( 847, 135 ),
+"MoveSelect_": Vector2( -8, 27 ),
+"Sequence": Vector2( 855, 460 ),
+"Sequence_": Vector2( -8, 27 )
+}
+
+[node name="States" type="Node2D" parent="FSM2D"]
+
+[node name="Command" type="Node" parent="FSM2D/States" instance=ExtResource( 7 )]
+script = ExtResource( 3 )
+
+[node name="MoveSelect" type="Node" parent="FSM2D/States" instance=ExtResource( 5 )]
+script = ExtResource( 4 )
+
+[node name="Sequence" type="Node" parent="FSM2D/States" instance=ExtResource( 17 )]
+script = ExtResource( 15 )
+
+[node name="Transitions" type="Node2D" parent="FSM2D"]
+
+[node name="GotoMoveSelect" type="Node" parent="FSM2D/Transitions" instance=ExtResource( 16 )]
+script = ExtResource( 14 )
+path2SourceStates = [ NodePath(""), NodePath("../../States/Command") ]
+path2TargetState = NodePath("../../States/MoveSelect")
+
+[node name="GotoCommand" type="Node" parent="FSM2D/Transitions" instance=ExtResource( 19 )]
+script = ExtResource( 13 )
+path2SourceStates = [ NodePath(""), NodePath("../../States/Sequence") ]
+path2TargetState = NodePath("../../States/Command")
+intervalBetweenChecks = -1.0
+
+[node name="GotoSequence" type="Node" parent="FSM2D/Transitions" instance=ExtResource( 18 )]
+script = ExtResource( 12 )
+path2SourceStates = [ NodePath(""), NodePath("../../States/MoveSelect") ]
+path2TargetState = NodePath("../../States/Sequence")
+intervalBetweenChecks = -1.0
+
+[node name="Foes" type="Node2D" parent="."]
+position = Vector2( 370.4, 116.025 )
+
+[node name="Foe1" type="Sprite" parent="Foes"]
+texture = ExtResource( 11 )
+
+[node name="Allies" type="Node2D" parent="."]
+position = Vector2( 171.049, 248.628 )
+scale = Vector2( 1.5, 1.5 )
+
+[node name="You" type="Sprite" parent="Allies"]
+texture = ExtResource( 10 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+
+[node name="UI_Layer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VSplitContainer" parent="UI_Layer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+split_offset = 350
+dragger_visibility = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="UI_Layer/VBoxContainer"]
+margin_right = 512.0
+margin_bottom = 370.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="StatusBars" type="Control" parent="UI_Layer/VBoxContainer/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 502.0
+margin_bottom = 360.0
+
+[node name="Foes" type="HBoxContainer" parent="UI_Layer/VBoxContainer/MarginContainer/StatusBars"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -152.0
+margin_bottom = 68.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bar" parent="UI_Layer/VBoxContainer/MarginContainer/StatusBars/Foes" instance=ExtResource( 6 )]
+margin_right = 152.0
+margin_bottom = 68.0
+
+[node name="Allies" type="HBoxContainer" parent="UI_Layer/VBoxContainer/MarginContainer/StatusBars"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -91.0
+margin_right = 152.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bar" parent="UI_Layer/VBoxContainer/MarginContainer/StatusBars/Allies" instance=ExtResource( 8 )]
+margin_right = 152.0
+margin_bottom = 91.0
+
+[node name="Control" type="Control" parent="UI_Layer/VBoxContainer"]
+margin_top = 370.0
+margin_right = 512.0
+margin_bottom = 448.0
+
+[node name="Dialog" type="PanelContainer" parent="UI_Layer/VBoxContainer/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="UI_Layer/VBoxContainer/Control/Dialog"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 505.0
+margin_bottom = 71.0
+
+[node name="Label" type="Label" parent="UI_Layer/VBoxContainer/Control/Dialog/MarginContainer"]
+margin_top = 16.0
+margin_right = 498.0
+margin_bottom = 47.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "What would
+Bulbasaur do?"
+max_lines_visible = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Commands" type="VBoxContainer" parent="UI_Layer/VBoxContainer/Control"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -99.0
+margin_top = -136.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Fight" type="Button" parent="UI_Layer/VBoxContainer/Control/Commands"]
+margin_right = 99.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Fight"
+align = 0
+
+[node name="Switch" type="Button" parent="UI_Layer/VBoxContainer/Control/Commands"]
+margin_top = 35.0
+margin_right = 99.0
+margin_bottom = 66.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Switch"
+align = 0
+
+[node name="Items" type="Button" parent="UI_Layer/VBoxContainer/Control/Commands"]
+margin_top = 70.0
+margin_right = 99.0
+margin_bottom = 101.0
+size_flags_vertical = 3
+text = "Items"
+align = 0
+
+[node name="Run" type="Button" parent="UI_Layer/VBoxContainer/Control/Commands"]
+margin_top = 105.0
+margin_right = 99.0
+margin_bottom = 136.0
+size_flags_vertical = 3
+text = "Run"
+align = 0
+
+[node name="Moves" type="VBoxContainer" parent="UI_Layer"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -377.084
+margin_top = -111.0
+margin_right = -155.084
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 2
+custom_constants/separation = 5
+
+[node name="Move1" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
+margin_right = 222.0
+
+[node name="Move2" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
+margin_top = 29.0
+margin_right = 222.0
+margin_bottom = 53.0
+
+[node name="Move3" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
+margin_top = 58.0
+margin_right = 222.0
+margin_bottom = 82.0
+
+[node name="Move4" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
+margin_top = 87.0
+margin_right = 222.0
+margin_bottom = 111.0
