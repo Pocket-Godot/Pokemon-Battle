@@ -1,66 +1,43 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://addons/net.kivano.fsm/content/fsm.gd" type="Script" id=1]
+[ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=1]
 [ext_resource path="res://content/ui_objects/stylebox.tres" type="Theme" id=2]
-[ext_resource path="res://content/scenes/FSM/transitions/ButtonPressed/ButtonPressed.tscn" type="PackedScene" id=3]
-[ext_resource path="res://content/scenes/FSM/states/MenuOn/MenuOn.tscn" type="PackedScene" id=5]
+[ext_resource path="res://addons/fsm-node/nodes/state.gd" type="Script" id=3]
+[ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=4]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
 [ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=10]
 [ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=11]
-[ext_resource path="res://content/scenes/FSM/states/Sequence/Sequence.tscn" type="PackedScene" id=17]
 
 [node name="Node" type="Node"]
 
-[node name="FSM2D" type="Node2D" parent="."]
+[node name="FSM" type="Node" parent="."]
 script = ExtResource( 1 )
-"Initial state:" = ""
-"Create new:/Subdirectory for FSM nodes:" = "FSM"
-"Create new:/Create state with name:" = null
-"Create new:/Create transition with name:" = null
-GraphData = {
-"ButtonPressed": Vector2( 423.5, 381 ),
-"ButtonPressed2_": Vector2( 192, 27 ),
-"ButtonPressed3": Vector2( 192, 27 ),
-"ButtonPressed3_": Vector2( 192, 27 ),
-"ButtonPressed_": Vector2( 424, 381 ),
-"Command": Vector2( 169, 133 ),
-"Command_": Vector2( 169, 133 ),
-"GotoCommand": Vector2( 476, 461 ),
-"GotoCommand_": Vector2( 476, 461 ),
-"GotoMoveSelect": Vector2( 466, 137 ),
-"GotoMoveSelect_": Vector2( 466, 137 ),
-"GotoSequence": Vector2( 849, 301 ),
-"GotoSequence_": Vector2( 849, 301 ),
-"MoveSelect": Vector2( 847, 135 ),
-"MoveSelect_": Vector2( 847, 135 ),
-"ReadyForSequence": Vector2( 870, 360 ),
-"ReadyForSequence_": Vector2( 820, 296 ),
-"SelectMoves": Vector2( 855, 138 ),
-"Sequence": Vector2( 966, 583 ),
-"Sequence_": Vector2( 784, 479 )
-}
 
-[node name="States" type="Node2D" parent="FSM2D"]
+[node name="Commands" type="Node" parent="FSM"]
+script = ExtResource( 3 )
+transitions = [ NodePath("../ToMoves") ]
 
-[node name="Command" parent="FSM2D/States" instance=ExtResource( 5 )]
-np_associated_menu = NodePath("../../../UI_Layer/VBoxContainer/Control/Commands")
+[node name="Moves" type="Node" parent="FSM"]
+script = ExtResource( 3 )
+transitions = [ NodePath("../ToSquence") ]
 
-[node name="SelectMoves" parent="FSM2D/States" instance=ExtResource( 5 )]
-np_associated_menu = NodePath("../../../UI_Layer/Moves")
+[node name="ActionSequence" type="Node" parent="FSM"]
+script = ExtResource( 3 )
+transitions = [ NodePath("../ToCommands") ]
 
-[node name="Sequence" parent="FSM2D/States" instance=ExtResource( 17 )]
+[node name="ToMoves" type="Node" parent="FSM"]
+script = ExtResource( 4 )
+target_state = NodePath("../Moves")
 
-[node name="Transitions" type="Node2D" parent="FSM2D"]
+[node name="ToSequence" type="Node" parent="FSM"]
+script = ExtResource( 4 )
+target_state = NodePath("../ActionSequence")
 
-[node name="GotoMoveSelect" parent="FSM2D/Transitions" instance=ExtResource( 3 )]
-path2SourceStates = [ NodePath(""), NodePath("../../States/Command") ]
-path2TargetState = NodePath("../../States/SelectMoves")
-
-[node name="ReadyForSequence" parent="FSM2D/Transitions" instance=ExtResource( 3 )]
-path2SourceStates = [ NodePath(""), NodePath("../../States/MoveSelect"), NodePath("../../States/SelectMoves") ]
-path2TargetState = NodePath("../../States/Sequence")
+[node name="ToCommands" type="Node" parent="FSM"]
+script = ExtResource( 4 )
+target_state = NodePath("../Commands")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 370.4, 116.025 )
@@ -187,6 +164,7 @@ margin_right = 99.0
 margin_bottom = 66.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+disabled = true
 text = "Switch"
 align = 0
 
@@ -195,6 +173,7 @@ margin_top = 70.0
 margin_right = 99.0
 margin_bottom = 101.0
 size_flags_vertical = 3
+disabled = true
 text = "Items"
 align = 0
 
@@ -203,6 +182,7 @@ margin_top = 105.0
 margin_right = 99.0
 margin_bottom = 136.0
 size_flags_vertical = 3
+disabled = true
 text = "Run"
 align = 0
 
@@ -237,4 +217,4 @@ margin_bottom = 82.0
 margin_top = 87.0
 margin_right = 222.0
 margin_bottom = 111.0
-[connection signal="pressed" from="UI_Layer/VBoxContainer/Control/Commands/Fight" to="FSM2D/Transitions/GotoMoveSelect" method="_on_button_pressed"]
+[connection signal="pressed" from="UI_Layer/VBoxContainer/Control/Commands/Fight" to="FSM/ToMoves" method="_condition"]
