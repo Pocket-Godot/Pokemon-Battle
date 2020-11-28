@@ -23,7 +23,7 @@ np_window = NodePath("../../UI_Layer/VBoxContainer/Control/Commands")
 
 [node name="Moves" type="Node" parent="FSM"]
 script = ExtResource( 5 )
-transitions = [ NodePath("../ToSequence") ]
+transitions = [ NodePath("../ToSequence"), NodePath("../ToCommands") ]
 np_window = NodePath("../../UI_Layer/Moves")
 
 [node name="ActionSequence" type="Node" parent="FSM"]
@@ -209,21 +209,30 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Move1" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
+[node name="Button" type="Button" parent="UI_Layer/Moves"]
 margin_right = 222.0
+margin_bottom = 20.0
+text = "Back"
+align = 2
+
+[node name="Move1" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
+margin_top = 25.0
+margin_right = 222.0
+margin_bottom = 49.0
 
 [node name="Move2" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
-margin_top = 29.0
+margin_top = 54.0
 margin_right = 222.0
-margin_bottom = 53.0
+margin_bottom = 78.0
 
 [node name="Move3" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
-margin_top = 58.0
+margin_top = 83.0
 margin_right = 222.0
-margin_bottom = 82.0
+margin_bottom = 107.0
 
 [node name="Move4" parent="UI_Layer/Moves" instance=ExtResource( 9 )]
-margin_top = 87.0
+margin_top = 112.0
 margin_right = 222.0
-margin_bottom = 111.0
+margin_bottom = 136.0
 [connection signal="pressed" from="UI_Layer/VBoxContainer/Control/Commands/Fight" to="FSM/ToMoves" method="_condition"]
+[connection signal="pressed" from="UI_Layer/Moves/Button" to="FSM/ToCommands" method="_condition"]

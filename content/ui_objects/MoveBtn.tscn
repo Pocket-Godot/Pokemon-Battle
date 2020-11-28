@@ -2,11 +2,13 @@
 
 [ext_resource path="res://content/ui_objects/stylebox.tres" type="Theme" id=1]
 
-
 [node name="Move" type="MarginContainer"]
 margin_right = 10.0
 margin_bottom = 24.0
 theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Button" type="Button" parent="."]
 margin_right = 221.0
