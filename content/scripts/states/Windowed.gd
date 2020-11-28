@@ -10,7 +10,10 @@ func _deactivate():
 	window.hide()
 	
 func _ready():
-	window = get_node(np_window)
+	._ready()
 	
-	connect("activate", self, "_activate")
-	connect("deactivate", self, "_deactivate")
+	if !Engine.editor_hint:
+		window = get_node(np_window)
+	
+		connect("activate", self, "_activate")
+		connect("deactivate", self, "_deactivate")
