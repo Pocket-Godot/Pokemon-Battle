@@ -7,9 +7,11 @@ export(Array, NodePath) var transitions
 var transition_nodes = []
 
 func _get_configuration_warning():
-	return "" if get_parent().get_class() == "FSM" else "Parent should be FSM."
+	return "" if get_parent().is_class("FSM") else "Parent should be FSM."
 
 func _ready():
+	._ready()
+	
 	if !Engine.editor_hint:
 		set_physics_process(false)
 		set_process(false)
@@ -20,6 +22,9 @@ func _ready():
 
 func get_class():
 	return "State"
+
+func is_class(c):
+	return c == get_class() or .is_class(c)
 
 func set_active(b:bool):
 	print(String(b), get_name())

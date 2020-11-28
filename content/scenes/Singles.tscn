@@ -1,10 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=1]
 [ext_resource path="res://content/ui_objects/stylebox.tres" type="Theme" id=2]
 [ext_resource path="res://addons/fsm-node/nodes/state.gd" type="Script" id=3]
 [ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=4]
-[ext_resource path="res://content/scripts/states/Windowed.gd" type="Script" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
@@ -17,29 +16,33 @@
 script = ExtResource( 1 )
 
 [node name="Commands" type="Node" parent="FSM"]
-script = ExtResource( 5 )
+script = ExtResource( 3 )
+graph_offset = Vector2( 160, 100 )
 transitions = [ NodePath("../ToMoves") ]
-np_window = NodePath("../../UI_Layer/VBoxContainer/Control/Commands")
 
 [node name="Moves" type="Node" parent="FSM"]
-script = ExtResource( 5 )
+script = ExtResource( 3 )
+graph_offset = Vector2( 1000, 240 )
 transitions = [ NodePath("../ToSequence") ]
-np_window = NodePath("../../UI_Layer/Moves")
 
 [node name="ActionSequence" type="Node" parent="FSM"]
 script = ExtResource( 3 )
+graph_offset = Vector2( 600, 680 )
 transitions = [ NodePath("../ToCommands") ]
 
 [node name="ToMoves" type="Node" parent="FSM"]
 script = ExtResource( 4 )
+graph_offset = Vector2( 620, 140 )
 target_state = NodePath("../Moves")
 
 [node name="ToSequence" type="Node" parent="FSM"]
 script = ExtResource( 4 )
+graph_offset = Vector2( 1120, 440 )
 target_state = NodePath("../ActionSequence")
 
 [node name="ToCommands" type="Node" parent="FSM"]
 script = ExtResource( 4 )
+graph_offset = Vector2( 160, 460 )
 target_state = NodePath("../Commands")
 
 [node name="Foes" type="Node2D" parent="."]
