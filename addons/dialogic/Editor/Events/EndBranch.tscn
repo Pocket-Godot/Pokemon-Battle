@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/dialogic/Editor/Events/Templates/EventTemplate.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/dialogic/Editor/Events/styles/Logic.tres" type="StyleBox" id=2]
+[ext_resource path="res://addons/dialogic/Images/Event Icons/Main Icons/end-branch.svg" type="Texture" id=5]
+
+[node name="EndBranch" instance=ExtResource( 1 )]
+event_data = {
+"event_id": "dialogic_013"
+}
+event_style = ExtResource( 2 )
+event_icon = ExtResource( 5 )
+event_name = "End Branch"
+expand_on_default = true
+
+[node name="PanelContainer" parent="." index="1"]
+custom_styles/panel = ExtResource( 2 )
+
+[node name="IconTexture" parent="PanelContainer/MarginContainer/VBoxContainer/Header" index="0"]
+margin_right = 32.0
+texture = ExtResource( 5 )
+
+[node name="TitleLabel" parent="PanelContainer/MarginContainer/VBoxContainer/Header" index="0"]
+margin_right = 76.0
+text = "End Branch"
+
+[node name="Content" parent="PanelContainer/MarginContainer/VBoxContainer/Header" index="3"]
+margin_left = 142.0
+margin_right = 152.0
+
+[node name="Spacer" parent="PanelContainer/MarginContainer/VBoxContainer/Header" index="5"]
+margin_left = 156.0

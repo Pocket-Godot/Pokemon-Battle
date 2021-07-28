@@ -1,0 +1,9 @@
+[gd_scene format=2]
+
+[node name="ChoiceButton" type="Button"]
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Testing button "
+__meta__ = {
+"_edit_use_anchors_": false
+}
