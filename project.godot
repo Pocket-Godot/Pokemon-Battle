@@ -8,34 +8,6 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "Node",
-"class": "FSM",
-"language": "GDScript",
-"path": "res://addons/fsm-node/nodes/fsm.gd"
-}, {
-"base": "Node",
-"class": "FSM_Component",
-"language": "GDScript",
-"path": "res://addons/fsm-node/nodes/fsm_component.gd"
-}, {
-"base": "FSM_Component",
-"class": "State",
-"language": "GDScript",
-"path": "res://addons/fsm-node/nodes/state.gd"
-}, {
-"base": "FSM_Component",
-"class": "Transition",
-"language": "GDScript",
-"path": "res://addons/fsm-node/nodes/transition.gd"
-} ]
-_global_script_class_icons={
-"FSM": "res://addons/fsm-node/nodes/icons/fsm.svg",
-"FSM_Component": "",
-"State": "res://addons/fsm-node/nodes/icons/state.svg",
-"Transition": "res://addons/fsm-node/nodes/icons/transition.svg"
-}
-
 [application]
 
 config/name="Pokemon Battle System"
