@@ -14,5 +14,4 @@ After downloading, open Godot Engine Project Manager. Click Import, go to the fo
 
 ## Acknowledgements
 The following assets and plugins are used:
-* [FiniteStateMachine](https://github.com/mechPenSketch/FiniteStateMachine) by mechPenSketch
-* [EXP Godot Dialog System](https://github.com/EXPWorlds/Godot-Dialog-System) by Dave the Dev
+* [Dialogic 1.2.5](https://github.com/coppolaemilio/dialogic) by [Emilio Coppola](https://github.com/coppolaemilio) and other contributors.
