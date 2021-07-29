@@ -11,14 +11,15 @@
 [node name="Node" type="Node"]
 
 [node name="Foes" type="Node2D" parent="."]
-position = Vector2( 370.4, 116.025 )
+position = Vector2( 772.4, 160.025 )
+scale = Vector2( 2, 2 )
 
 [node name="Foe1" type="Sprite" parent="Foes"]
 texture = ExtResource( 11 )
 
 [node name="Allies" type="Node2D" parent="."]
-position = Vector2( 171.049, 248.628 )
-scale = Vector2( 1.5, 1.5 )
+position = Vector2( 309.049, 372.628 )
+scale = Vector2( 3, 3 )
 
 [node name="You" type="Sprite" parent="Allies"]
 texture = ExtResource( 10 )
@@ -29,11 +30,6 @@ anchor_mode = 0
 [node name="UI_Layer" type="CanvasLayer" parent="."]
 
 [node name="DialogNode" parent="UI_Layer" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 370.0
-margin_right = 512.0
-margin_bottom = 448.0
 timeline = "timeline-1627461926.json"
 
 [node name="VBoxContainer" type="VSplitContainer" parent="UI_Layer"]
@@ -47,8 +43,8 @@ __meta__ = {
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="UI_Layer/VBoxContainer"]
-margin_right = 512.0
-margin_bottom = 448.0
+margin_right = 1024.0
+margin_bottom = 600.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -57,8 +53,8 @@ custom_constants/margin_bottom = 10
 [node name="StatusBars" type="Control" parent="UI_Layer/VBoxContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 502.0
-margin_bottom = 438.0
+margin_right = 1014.0
+margin_bottom = 590.0
 
 [node name="Foes" type="HBoxContainer" parent="UI_Layer/VBoxContainer/MarginContainer/StatusBars"]
 anchor_left = 1.0
@@ -88,28 +84,25 @@ margin_bottom = 91.0
 
 [node name="Commands" type="VBoxContainer" parent="UI_Layer/VBoxContainer"]
 visible = false
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -99.0
-margin_top = -136.0
+margin_top = 370.0
+margin_right = 1024.0
+margin_bottom = 600.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Fight" type="Button" parent="UI_Layer/VBoxContainer/Commands"]
-margin_right = 99.0
-margin_bottom = 31.0
+margin_right = 1024.0
+margin_bottom = 54.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Fight"
 align = 0
 
 [node name="Switch" type="Button" parent="UI_Layer/VBoxContainer/Commands"]
-margin_top = 35.0
-margin_right = 99.0
-margin_bottom = 66.0
+margin_top = 58.0
+margin_right = 1024.0
+margin_bottom = 113.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 disabled = true
@@ -117,18 +110,18 @@ text = "Switch"
 align = 0
 
 [node name="Items" type="Button" parent="UI_Layer/VBoxContainer/Commands"]
-margin_top = 70.0
-margin_right = 99.0
-margin_bottom = 101.0
+margin_top = 117.0
+margin_right = 1024.0
+margin_bottom = 171.0
 size_flags_vertical = 3
 disabled = true
 text = "Items"
 align = 0
 
 [node name="Run" type="Button" parent="UI_Layer/VBoxContainer/Commands"]
-margin_top = 105.0
-margin_right = 99.0
-margin_bottom = 136.0
+margin_top = 175.0
+margin_right = 1024.0
+margin_bottom = 230.0
 size_flags_vertical = 3
 disabled = true
 text = "Run"
