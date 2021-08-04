@@ -17,6 +17,7 @@ margin_bottom = 24.0
 [node name="MarginContainer" type="MarginContainer" parent="."]
 margin_right = 221.0
 margin_bottom = 24.0
+mouse_filter = 2
 custom_constants/margin_right = 5
 custom_constants/margin_top = 5
 custom_constants/margin_left = 5
@@ -27,6 +28,7 @@ margin_left = 5.0
 margin_top = 5.0
 margin_right = 216.0
 margin_bottom = 19.0
+mouse_filter = 2
 custom_constants/separation = 25
 
 [node name="Name" type="Label" parent="MarginContainer/HBoxContainer"]
