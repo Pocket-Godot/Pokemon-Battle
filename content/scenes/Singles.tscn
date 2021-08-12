@@ -1,13 +1,21 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://addons/dialogic/Dialog.tscn" type="PackedScene" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
+[ext_resource path="res://addons/dialogic/Example Assets/Sound Effects/Keyboard Noises/typing1.wav" type="AudioStream" id=4]
+[ext_resource path="res://addons/dialogic/Example Assets/Sound Effects/Keyboard Noises/typing2.wav" type="AudioStream" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://addons/dialogic/Example Assets/Sound Effects/Keyboard Noises/typing3.wav" type="AudioStream" id=7]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
 [ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=10]
 [ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=11]
+[ext_resource path="res://addons/dialogic/Example Assets/Fonts/NameFont.tres" type="DynamicFont" id=12]
+[ext_resource path="res://addons/dialogic/Example Assets/Fonts/DefaultItalicFont.tres" type="DynamicFont" id=13]
+[ext_resource path="res://addons/dialogic/Example Assets/Fonts/DefaultBoldFont.tres" type="DynamicFont" id=14]
+[ext_resource path="res://addons/dialogic/Example Assets/Sound Effects/Keyboard Noises/typing4.wav" type="AudioStream" id=15]
+[ext_resource path="res://addons/dialogic/Example Assets/Sound Effects/Keyboard Noises/typing5.wav" type="AudioStream" id=16]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -42,6 +50,49 @@ anchor_mode = 0
 timeline = "timeline-1627461926.json"
 reset_saves = false
 debug_mode = false
+
+[node name="RichTextLabel" parent="UI_Layer/DialogNode/TextBubble" index="2"]
+custom_fonts/italics_font = ExtResource( 13 )
+custom_fonts/bold_font = ExtResource( 14 )
+
+[node name="NextIndicatorContainer" parent="UI_Layer/DialogNode/TextBubble" index="3"]
+visible = false
+margin_top = -1.25789
+margin_bottom = 38.7421
+
+[node name="NextIndicator" parent="UI_Layer/DialogNode/TextBubble/NextIndicatorContainer" index="0"]
+visible = false
+margin_left = 876.6
+margin_top = 136.6
+margin_right = 927.6
+margin_bottom = 187.6
+rect_scale = Vector2( 0.4, 0.4 )
+
+[node name="NameLabel" parent="UI_Layer/DialogNode/TextBubble" index="4"]
+custom_fonts/font = ExtResource( 12 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0.619608 )
+
+[node name="ColorRect" parent="UI_Layer/DialogNode/TextBubble/NameLabel" index="0"]
+color = Color( 0.156863, 0.156863, 0.156863, 1 )
+
+[node name="TypingSFX" parent="UI_Layer/DialogNode/TextBubble" index="7"]
+samples = [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 7 ), ExtResource( 15 ), ExtResource( 16 ) ]
+random_volume_range = 5
+random_pitch_range = 0.2
+
+[node name="Title" parent="UI_Layer/DialogNode/DefinitionInfo/VBoxContainer" index="0"]
+bbcode_enabled = true
+
+[node name="Content" parent="UI_Layer/DialogNode/DefinitionInfo/VBoxContainer" index="1"]
+custom_colors/default_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+bbcode_enabled = true
+text = ""
+
+[node name="Extra" parent="UI_Layer/DialogNode/DefinitionInfo/VBoxContainer" index="2"]
+custom_colors/default_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+bbcode_enabled = true
+text = ""
 
 [node name="MarginContainer" type="MarginContainer" parent="UI_Layer"]
 margin_right = 1024.0
@@ -207,5 +258,9 @@ margin_right = 974.0
 margin_bottom = 520.0
 custom_constants/margin_left = 200
 
+[connection signal="text_completed" from="UI_Layer/DialogNode/TextBubble" to="." method="_on_dialog_completed"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="." method="_command_fight"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="." method="_move_back"]
+
+[editable path="UI_Layer/DialogNode"]
+[editable path="UI_Layer/DialogNode/TextBubble"]

@@ -4,6 +4,8 @@ enum STATES {COMMANDS, MOVES, TARGET, EXECUTION}
 var state = STATES.COMMANDS
 
 func _ready():
+	$UI_Layer/DialogNode.set_process_input(false)
+	
 	activate_state(state)
 
 func activate_state(s):
@@ -32,3 +34,7 @@ func _command_fight():
 
 func _move_back():
 	change_state(STATES.COMMANDS)
+
+func _on_dialog_completed():
+	if $UI_Layer/DialogNode.current_event:
+		pass
