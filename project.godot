@@ -33,13 +33,37 @@ _global_script_classes=[ {
 "class": "DialogicUtil",
 "language": "GDScript",
 "path": "res://addons/dialogic/Other/DialogicUtil.gd"
+}, {
+"base": "Node",
+"class": "FSM",
+"language": "GDScript",
+"path": "res://addons/fsm-node/nodes/fsm.gd"
+}, {
+"base": "Node",
+"class": "FSM_Component",
+"language": "GDScript",
+"path": "res://addons/fsm-node/nodes/fsm_component.gd"
+}, {
+"base": "FSM_Component",
+"class": "State",
+"language": "GDScript",
+"path": "res://addons/fsm-node/nodes/state.gd"
+}, {
+"base": "FSM_Component",
+"class": "Transition",
+"language": "GDScript",
+"path": "res://addons/fsm-node/nodes/transition.gd"
 } ]
 _global_script_class_icons={
 "Dialogic": "",
 "DialogicBackgroundMusic": "",
 "DialogicDefinitionsUtil": "",
 "DialogicResources": "",
-"DialogicUtil": ""
+"DialogicUtil": "",
+"FSM": "res://addons/fsm-node/nodes/icons/fsm.svg",
+"FSM_Component": "",
+"State": "res://addons/fsm-node/nodes/icons/state.svg",
+"Transition": "res://addons/fsm-node/nodes/icons/transition.svg"
 }
 
 [application]
@@ -59,7 +83,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/fsm-node/plugin.cfg" )
 
 [rendering]
 

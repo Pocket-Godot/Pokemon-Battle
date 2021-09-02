@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/fsm-node/main_screen/GraphFSMEdit.gd" type="Script" id=1]
+[ext_resource path="res://addons/fsm-node/main_screen/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 1 )
+
+[node name="GraphFSMEdit" type="GraphEdit"]
+margin_top = 26.0
+margin_right = 172.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 0, 400 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 2 )
+right_disconnects = true
+scroll_offset = Vector2( -172, -8 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="connection_request" from="." to="." method="_on_connection_request"]
+[connection signal="disconnection_request" from="." to="." method="_on_disconnection_request"]

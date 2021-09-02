@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/fsm-node/popups/NewState.tscn" type="PackedScene" id=1]
+
+[node name="NewTransition" instance=ExtResource( 1 )]
+window_title = "New Transition"
