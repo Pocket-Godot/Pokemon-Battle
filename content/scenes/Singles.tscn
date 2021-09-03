@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://addons/dialogic/Dialog.tscn" type="PackedScene" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
@@ -16,6 +16,10 @@
 [ext_resource path="res://addons/dialogic/Example Assets/Fonts/DefaultBoldFont.tres" type="DynamicFont" id=14]
 [ext_resource path="res://addons/dialogic/Example Assets/Sound Effects/Keyboard Noises/typing4.wav" type="AudioStream" id=15]
 [ext_resource path="res://addons/dialogic/Example Assets/Sound Effects/Keyboard Noises/typing5.wav" type="AudioStream" id=16]
+[ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=17]
+[ext_resource path="res://addons/fsm-node/nodes/state.gd" type="Script" id=18]
+[ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=19]
+[ext_resource path="res://content/scenes/menu_state.gd" type="Script" id=20]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -26,6 +30,40 @@ default_font = SubResource( 1 )
 
 [node name="Node" type="Node"]
 script = ExtResource( 3 )
+
+[node name="FSM" type="Node" parent="."]
+script = ExtResource( 17 )
+starting_state = NodePath("Commands")
+
+[node name="Commands" type="Node" parent="FSM"]
+script = ExtResource( 20 )
+transitions = [ NodePath("../To Moves") ]
+np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Commands")
+np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Commands/Fight")
+
+[node name="Moves" type="Node" parent="FSM"]
+script = ExtResource( 20 )
+transitions = [ NodePath("../Back to Commands") ]
+np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Moves")
+np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Moves/List/Move1")
+
+[node name="Execution" type="Node" parent="FSM"]
+script = ExtResource( 18 )
+graph_offset = Vector2( 200, 480 )
+
+[node name="Target" type="Node" parent="FSM"]
+script = ExtResource( 18 )
+graph_offset = Vector2( 620, 320 )
+
+[node name="To Moves" type="Node" parent="FSM"]
+script = ExtResource( 19 )
+graph_offset = Vector2( 80, 20 )
+target_state = NodePath("../Moves")
+
+[node name="Back to Commands" type="Node" parent="FSM"]
+script = ExtResource( 19 )
+graph_offset = Vector2( 160, 160 )
+target_state = NodePath("../Commands")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
@@ -57,8 +95,8 @@ custom_fonts/bold_font = ExtResource( 14 )
 
 [node name="NextIndicatorContainer" parent="UI_Layer/DialogNode/TextBubble" index="3"]
 visible = false
-margin_top = -1.25789
-margin_bottom = 38.7421
+margin_top = -9.99986
+margin_bottom = 30.0001
 
 [node name="NextIndicator" parent="UI_Layer/DialogNode/TextBubble/NextIndicatorContainer" index="0"]
 visible = false
@@ -259,8 +297,8 @@ margin_bottom = 520.0
 custom_constants/margin_left = 200
 
 [connection signal="text_completed" from="UI_Layer/DialogNode/TextBubble" to="." method="_on_dialog_completed"]
-[connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="." method="_command_fight"]
-[connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="." method="_move_back"]
+[connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/To Moves" method="_condition"]
+[connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/Back to Commands" method="_condition"]
 
 [editable path="UI_Layer/DialogNode"]
 [editable path="UI_Layer/DialogNode/TextBubble"]
