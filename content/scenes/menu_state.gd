@@ -1,3 +1,4 @@
+tool
 extends State
 
 export(NodePath) var np_associated_menu

@@ -43,27 +43,30 @@ np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Commands/Fight")
 
 [node name="Moves" type="Node" parent="FSM"]
 script = ExtResource( 20 )
-transitions = [ NodePath("../Back to Commands") ]
+graph_offset = Vector2( 700, 60 )
+transitions = [ NodePath("../Back to Commands"), NodePath("../Move Selected") ]
 np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Moves")
 np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Moves/List/Move1")
 
 [node name="Execution" type="Node" parent="FSM"]
 script = ExtResource( 18 )
-graph_offset = Vector2( 200, 480 )
-
-[node name="Target" type="Node" parent="FSM"]
-script = ExtResource( 18 )
-graph_offset = Vector2( 620, 320 )
+graph_offset = Vector2( 300, 440 )
+transitions = [ NodePath("../Back to Commands") ]
 
 [node name="To Moves" type="Node" parent="FSM"]
 script = ExtResource( 19 )
-graph_offset = Vector2( 80, 20 )
+graph_offset = Vector2( 420, 20 )
 target_state = NodePath("../Moves")
 
 [node name="Back to Commands" type="Node" parent="FSM"]
 script = ExtResource( 19 )
-graph_offset = Vector2( 160, 160 )
+graph_offset = Vector2( 140, 100 )
 target_state = NodePath("../Commands")
+
+[node name="Move Selected" type="Node" parent="FSM"]
+script = ExtResource( 19 )
+graph_offset = Vector2( 880, 220 )
+target_state = NodePath("../Execution")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
@@ -95,8 +98,8 @@ custom_fonts/bold_font = ExtResource( 14 )
 
 [node name="NextIndicatorContainer" parent="UI_Layer/DialogNode/TextBubble" index="3"]
 visible = false
-margin_top = -9.99986
-margin_bottom = 30.0001
+margin_top = -7.05427
+margin_bottom = 32.9457
 
 [node name="NextIndicator" parent="UI_Layer/DialogNode/TextBubble/NextIndicatorContainer" index="0"]
 visible = false
