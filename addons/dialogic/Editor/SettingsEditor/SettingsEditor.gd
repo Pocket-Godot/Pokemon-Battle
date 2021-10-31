@@ -1,23 +1,38 @@
 tool
 extends ScrollContainer
 
+var editor_reference
+
 onready var nodes = {
+	# Theme
 	'themes': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer/HBoxContainer/ThemeOptionButton,
 	'advanced_themes': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer/HBoxContainer2/AdvancedThemes,
-	'translations': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/HBoxContainer6/Translations,
+	'canvas_layer' : $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer/HBoxContainer3/CanvasLayer,
+	
+	# Dialog
 	'new_lines': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/HBoxContainer2/NewLines,
 	'remove_empty_messages': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/HBoxContainer/RemoveEmptyMessages,
 	'auto_color_names': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/HBoxContainer3/AutoColorNames,
 	'propagate_input': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/HBoxContainer4/PropagateInput,
 	'dim_characters': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/HBoxContainer5/DimCharacters,
-	'save_current_timeline': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer3/HBoxContainer/SaveCurrentTimeline,
-	'clear_current_timeline': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer3/HBoxContainer2/ClearCurrentTimeline,
-	'save_definitions_on_start': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer3/HBoxContainer3/SaveDefinitionsOnStart,
-	'save_definitions_on_end': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer3/HBoxContainer4/SaveDefinitionsOnEnd,
+	'text_event_audio_enable': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/HBoxContainer7/EnableVoices,
+	'text_event_audio_default_bus' : $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/TextAudioDefaultBus/AudioBus,
+	'translations': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer2/HBoxContainer6/Translations,
+	
+	# Save
+	'autosave': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer3/HBoxContainer/Autosave,
+	
+	# Input Settings
 	'delay_after_options': $VBoxContainer/HBoxContainer3/VBoxContainer2/VBoxContainer/HBoxContainer/LineEdit,
 	'default_action_key': $VBoxContainer/HBoxContainer3/VBoxContainer2/VBoxContainer/HBoxContainer2/DefaultActionKey,
-	'canvas_layer' : $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer/HBoxContainer3/CanvasLayer,
-}
+	'new_custom_event_open':$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/NewCustomEvent, 
+	'new_custom_event_section': $VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/CreateCustomEventSection, 
+	'new_custom_event_name': $VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/CreateCustomEventSection/CeName,
+	'new_custom_event_directory': $VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/CreateCustomEventSection/CeDirectory,
+	'new_custom_event_id': $VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/CreateCustomEventSection/CeEventId,
+	'new_custom_event_create':$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/CreateCustomEventSection/HBoxContainer/CreateCustomEvent,
+	'new_custom_event_cancel':$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/CreateCustomEventSection/HBoxContainer/CancelCustomEvent,
+	}
 
 var THEME_KEYS := [
 	'advanced_themes',
@@ -36,16 +51,17 @@ var DIALOG_KEYS := [
 	'auto_color_names',
 	'propagate_input',
 	'dim_characters',
+	'text_event_audio_enable',
 	]
 
 var SAVING_KEYS := [
-	'save_current_timeline', 
-	'clear_current_timeline',
-	'save_definitions_on_start',
-	'save_definitions_on_end',
+	'autosave', 
 	]
 
 func _ready():
+	editor_reference = find_parent('EditorView')
+	update_bus_selector()
+	
 	update_data()
 	
 	# Themes
@@ -57,21 +73,36 @@ func _ready():
 
 	nodes['default_action_key'].connect('pressed', self, '_on_default_action_key_presssed')
 	nodes['default_action_key'].connect('item_selected', self, '_on_default_action_key_item_selected')
-		
+	
+	AudioServer.connect("bus_layout_changed", self, "update_bus_selector")
+	nodes['text_event_audio_default_bus'].connect('item_selected', self, '_on_text_audio_default_bus_item_selected')
+	
 	for k in DIALOG_KEYS:
 		nodes[k].connect('toggled', self, '_on_item_toggled', ['dialog', k])
 	
 	for k in SAVING_KEYS:
 		nodes[k].connect('toggled', self, '_on_item_toggled', ['saving', k])
-
+		
+	## The custom event section
+	nodes['new_custom_event_open'].connect("pressed", self, "new_custom_event_pressed")
+	nodes['new_custom_event_section'].hide()
+	nodes['new_custom_event_name'].connect("text_changed", self, "custom_event_name_entered")
+	nodes['new_custom_event_id'].connect("text_changed", self, "custom_event_id_entered")
+	nodes['new_custom_event_cancel'].connect("pressed", self, "cancel_custom_event")
+	nodes['new_custom_event_create'].connect("pressed", self, "create_custom_event")
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.set('custom_colors/font_color', get_color("error_color", "Editor"))
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/CustomEventsDocs.icon = get_icon("HelpSearch", "EditorIcons")
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/CustomEventsDocs.connect("pressed", self, 'open_custom_event_docs')
+	
 
 func update_data():
 	var settings = DialogicResources.get_settings_config()
+	nodes['canvas_layer'].text = settings.get_value("theme", "canvas_layer", '1')
 	refresh_themes(settings)
 	load_values(settings, "dialog", DIALOG_KEYS)
 	load_values(settings, "saving", SAVING_KEYS)
 	load_values(settings, "input", INPUT_KEYS)
-
+	select_bus(settings.get_value("dialog", 'text_event_audio_default_bus', "Master"))
 
 func load_values(settings: ConfigFile, section: String, key: Array):
 	for k in key:
@@ -82,7 +113,7 @@ func load_values(settings: ConfigFile, section: String, key: Array):
 				if k == 'default_action_key':
 					nodes['default_action_key'].text = settings.get_value(section, k)
 				else:
-					nodes[k].pressed = settings.get_value(section, k)
+					nodes[k].pressed = settings.get_value(section, k, false)
 
 
 func refresh_themes(settings: ConfigFile):
@@ -136,9 +167,6 @@ func _on_default_action_key_presssed() -> void:
 
 
 func _on_default_action_key_item_selected(index) -> void:
-	print(index)
-	if index == 0:
-		print('here')
 	set_value('input', 'default_action_key', nodes['default_action_key'].text)
 
 
@@ -149,3 +177,111 @@ func _on_canvas_layer_text_changed(text) -> void:
 # Reading and saving data to the settings file
 func set_value(section, key, value):
 	DialogicResources.set_settings_value(section, key, value)
+
+func update_bus_selector():
+	if nodes["text_event_audio_default_bus"] != null:
+		var previous_selected_bus_name = ""
+		if nodes["text_event_audio_default_bus"].get_item_count():
+			previous_selected_bus_name = nodes["text_event_audio_default_bus"].get_item_text(max(0, nodes["text_event_audio_default_bus"].selected))
+
+		nodes["text_event_audio_default_bus"].clear()
+		for i in range(AudioServer.bus_count):
+			var bus_name = AudioServer.get_bus_name(i)
+			nodes["text_event_audio_default_bus"].add_item(bus_name)
+
+			if previous_selected_bus_name == bus_name:
+				nodes["text_event_audio_default_bus"].select(i)
+
+
+func select_bus(text):
+	for item_idx in range(nodes["text_event_audio_default_bus"].get_item_count()):
+		if nodes["text_event_audio_default_bus"].get_item_text(item_idx) == text:
+			nodes["text_event_audio_default_bus"].select(item_idx)
+			return
+	nodes["text_event_audio_default_bus"].select(0)
+
+
+func _on_text_audio_default_bus_item_selected(index):
+	var text = nodes['text_event_audio_default_bus'].get_item_text(index)
+	set_value('dialog', 'text_event_audio_default_bus', text)
+
+
+################################################################################
+##						CUSTOM EVENT SECTION
+################################################################################
+
+func open_custom_event_docs():
+	editor_reference.get_node("MainPanel/MasterTreeContainer/MasterTree").select_documentation_item("res://addons/dialogic/Documentation/Content/Events/Custom Events/CreateCustomEvents.md")
+
+func new_custom_event_pressed():
+	nodes['new_custom_event_section'].show()
+	nodes['new_custom_event_name'].text = ''
+	nodes['new_custom_event_directory'].text = ''
+	nodes['new_custom_event_id'].text = ''
+	
+	nodes['new_custom_event_create'].disabled = true
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = ""
+
+func custom_event_name_entered(text:String):
+	nodes['new_custom_event_directory'].text = text
+	
+	nodes['new_custom_event_create'].disabled = nodes['new_custom_event_id'].text != ''
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = ""
+
+
+func custom_event_id_entered(text):
+	if nodes['new_custom_event_name'].text != '':
+		nodes['new_custom_event_create'].disabled = false
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = ""
+
+func cancel_custom_event():
+	nodes['new_custom_event_section'].hide()
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = ""
+
+func create_custom_event():
+	# do checks for incomplete input
+	if nodes['new_custom_event_directory'].text.empty():
+		print('[D] No directory specified!')
+		$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = "Enter a directory name!"
+		return
+	if nodes['new_custom_event_name'].text.empty():
+		print('[D] No name specified!')
+		$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = "Enter a event name!"
+		return
+	if nodes['new_custom_event_id'].text.empty():
+		print('[D] No id specified!')
+		$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = "Enter an id!"
+		return
+	
+	# create new directory
+	var dir_name = 'res://dialogic/custom-events/'+nodes['new_custom_event_directory'].text
+	var dir = Directory.new()
+	if dir.dir_exists(dir_name):
+		$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = "The folder already exists!"
+		print("[D] Custom Events folder '"+nodes['new_custom_event_directory'].text+"' already exists!")
+		return
+	dir.make_dir(dir_name)
+	
+	# copy all necessary files
+	for file in ['EventBlock.tscn', 'Stylebox.tres', 'EventPart_Example.gd', 'EventPart_Example.tscn', 'event_yourname_000.gd']:
+		dir.copy("res://addons/dialogic/Example Assets/CustomEvents/"+file, dir_name+"/"+file)
+	
+	# rename the event handler script
+	dir.rename(dir_name+'/event_yourname_000.gd', dir_name+'/event_'+nodes['new_custom_event_id'].text+'.gd')
+	
+	# edit the EventBlock scene
+	var event_block_scene = load(dir_name+'/EventBlock.tscn').instance(PackedScene.GEN_EDIT_STATE_INSTANCE)
+	event_block_scene.event_name = nodes['new_custom_event_name'].text
+	event_block_scene.event_data = {'event_id':nodes['new_custom_event_id'].text}
+	event_block_scene.event_style = load(dir_name+"/Stylebox.tres")
+	event_block_scene.event_icon = load("res://addons/dialogic/Images/Event Icons/Main Icons/custom-event.svg")
+	var packed = PackedScene.new()
+	packed.pack(event_block_scene)
+	ResourceSaver.save(dir_name+'/EventBlock.tscn', packed)
+	
+	# close the section
+	nodes['new_custom_event_section'].hide()
+	
+	# force godot to show the folder
+	editor_reference.editor_interface.get_resource_filesystem().scan()
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = ""

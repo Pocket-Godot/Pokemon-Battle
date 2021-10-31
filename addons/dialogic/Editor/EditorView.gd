@@ -12,14 +12,10 @@ func _ready():
 	# Adding file dialog to get used by Events
 	editor_file_dialog = EditorFileDialog.new()
 	add_child(editor_file_dialog)
-
-	# Setting references to this node
-	$MainPanel/TimelineEditor.editor_reference = self
-	$MainPanel/CharacterEditor.editor_reference = self
-	$MainPanel/ValueEditor.editor_reference = self
-	$MainPanel/GlossaryEntryEditor.editor_reference = self
-	$MainPanel/ThemeEditor.editor_reference = self
-
+	
+	$ToolBar/Docs.text = DTS.translate('Help')
+	$ToolBar/Web.text = DTS.translate('Website')
+	
 	$MainPanel/MasterTreeContainer/MasterTree.connect("editor_selected", self, 'on_master_tree_editor_selected')
 
 	# Updating the folder structure
@@ -73,8 +69,13 @@ func _ready():
 	$ToolBar/NewThemeButton.connect('pressed', $MainPanel/MasterTreeContainer/MasterTree, 'new_theme')
 	$ToolBar/NewValueButton.connect('pressed', $MainPanel/MasterTreeContainer/MasterTree, 'new_value_definition')
 	$ToolBar/NewGlossaryEntryButton.connect('pressed', $MainPanel/MasterTreeContainer/MasterTree, 'new_glossary_entry')
-	$ToolBar/Docs.icon = get_icon("Instance", "EditorIcons")
-	$ToolBar/Docs.connect('pressed', OS, "shell_open", ["https://dialogic.coppolaemilio.com"])
+	$ToolBar/Web.icon = get_icon("Instance", "EditorIcons")
+	$ToolBar/Web.connect('pressed', OS, "shell_open", ["https://dialogic.coppolaemilio.com"])
+	$ToolBar/Docs.icon = get_icon("HelpSearch", "EditorIcons")
+	$ToolBar/Docs.connect('pressed',
+		$MainPanel/MasterTreeContainer/MasterTree,
+		"select_documentation_item",
+		['/'])
 	$ToolBar/FoldTools/ButtonFold.connect('pressed', $MainPanel/TimelineEditor, 'fold_all_nodes')
 	$ToolBar/FoldTools/ButtonUnfold.connect('pressed', $MainPanel/TimelineEditor, 'unfold_all_nodes')
 	
@@ -148,6 +149,9 @@ func godot_dialog_connect(who, method_name, signal_name = "file_selected"):
 	
 	# Checking if previous connections exist, if they do, disconnect them.
 	for test_signal in editor_file_dialog.get_signal_list():
+		if not file_picker_data['node'] or not is_instance_valid(file_picker_data['node']):
+			continue
+		
 		if editor_file_dialog.is_connected(
 			test_signal.name,
 			file_picker_data['node'],
@@ -158,7 +162,6 @@ func godot_dialog_connect(who, method_name, signal_name = "file_selected"):
 					file_picker_data['node'],
 					file_picker_data['method']
 				)
-	
 	# Connect new signals
 	for new_signal_name in signal_name if typeof(signal_name) == TYPE_ARRAY else [signal_name]:
 		editor_file_dialog.connect(new_signal_name, who, method_name, [who])

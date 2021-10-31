@@ -19,7 +19,7 @@ onready var nodes = {
 	'new_portrait_button': $HBoxContainer/Container/ScrollContainer/VBoxContainer/HBoxContainer/Button,
 	'import_from_folder_button': $HBoxContainer/Container/ScrollContainer/VBoxContainer/HBoxContainer/ImportFromFolder,
 	'portrait_preview': $HBoxContainer/VBoxContainer/Control/TextureRect,
-	'image_label': $"HBoxContainer/VBoxContainer/Control/Label",
+	'image_label': $"HBoxContainer/VBoxContainer/Control/TLabel10",
 	'scale': $HBoxContainer/VBoxContainer/HBoxContainer/Scale,
 	'offset_x': $HBoxContainer/VBoxContainer/HBoxContainer/OffsetX,
 	'offset_y': $HBoxContainer/VBoxContainer/HBoxContainer/OffsetY,
@@ -27,6 +27,10 @@ onready var nodes = {
 
 
 func _ready():
+	$"HBoxContainer/Container/ScrollContainer/VBoxContainer/HBoxContainer/Button".text = DTS.translate("  Add new portrait")
+	$"HBoxContainer/Container/ScrollContainer/VBoxContainer/HBoxContainer/ImportFromFolder".text = DTS.translate("  Import images from folder")
+	
+	editor_reference = find_parent('EditorView')
 	nodes['new_portrait_button'].connect('pressed', self, '_on_New_Portrait_Button_pressed')
 	nodes['import_from_folder_button'].connect('pressed', self, '_on_Import_Portrait_Folder_Button_pressed')
 	nodes['display_name_checkbox'].connect('toggled', self, '_on_display_name_toggled')
