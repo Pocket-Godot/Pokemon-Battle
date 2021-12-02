@@ -1,6 +1,5 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://addons/dialogic/Dialog.tscn" type="PackedScene" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
@@ -22,6 +21,7 @@ default_font = SubResource( 1 )
 
 [node name="Node" type="Node"]
 script = ExtResource( 3 )
+timeline = "timeline-1627461926.json"
 
 [node name="FSM" type="Node" parent="."]
 script = ExtResource( 17 )
@@ -78,10 +78,6 @@ texture = ExtResource( 10 )
 anchor_mode = 0
 
 [node name="UI_Layer" type="CanvasLayer" parent="."]
-
-[node name="DialogNode" parent="UI_Layer" instance=ExtResource( 1 )]
-timeline = "timeline-1627461926.json"
-reset_saves = false
 
 [node name="MarginContainer" type="MarginContainer" parent="UI_Layer"]
 margin_right = 1024.0
@@ -249,5 +245,3 @@ custom_constants/margin_left = 200
 
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/To Moves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/Back to Commands" method="_condition"]
-
-[editable path="UI_Layer/DialogNode"]
