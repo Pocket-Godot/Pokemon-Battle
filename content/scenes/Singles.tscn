@@ -1,5 +1,6 @@
 [gd_scene load_steps=14 format=2]
 
+[ext_resource path="res://content/scenes/execution_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
@@ -8,7 +9,6 @@
 [ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=10]
 [ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=11]
 [ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=17]
-[ext_resource path="res://addons/fsm-node/nodes/state.gd" type="Script" id=18]
 [ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=19]
 [ext_resource path="res://content/scenes/menu_state.gd" type="Script" id=20]
 
@@ -41,9 +41,7 @@ np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Moves")
 np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Moves/List/Move1")
 
 [node name="Execution" type="Node" parent="FSM"]
-script = ExtResource( 18 )
-graph_offset = Vector2( 300, 440 )
-transitions = [ NodePath("../Back to Commands") ]
+script = ExtResource( 1 )
 
 [node name="To Moves" type="Node" parent="FSM"]
 script = ExtResource( 19 )
@@ -243,5 +241,7 @@ margin_right = 974.0
 margin_bottom = 520.0
 custom_constants/margin_left = 200
 
+[connection signal="dialogic_node_added" from="." to="FSM/Execution" method="_on_dialogic_node_added"]
+[connection signal="move_selected" from="." to="FSM/Move Selected" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/To Moves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/Back to Commands" method="_condition"]

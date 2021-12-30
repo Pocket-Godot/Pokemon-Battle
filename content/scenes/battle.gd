@@ -3,12 +3,16 @@ extends Node
 ## The timeline to load when starting the scene
 export(String, "TimelineDropdown") var timeline: String
 var dialogic_node
+signal dialogic_node_added
+
+signal move_selected
 
 func _ready():
 	dialogic_node = Dialogic.start(timeline)
 	add_child(dialogic_node)
 	move_child(dialogic_node, get_child_count() - 2)
 	dialogic_node.set_process_input(false)
+	emit_signal("dialogic_node_added", dialogic_node)
 	
 	#CONNECT MOVES
 	for i in 4:
@@ -20,3 +24,4 @@ func _on_dialog_completed():
 
 func _on_move_btn_pressed(i:int):
 	print(i)
+	emit_signal("move_selected")
