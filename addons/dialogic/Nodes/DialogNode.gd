@@ -626,6 +626,10 @@ func _process(delta):
 		if '[nw]' in current_event['text'] or '[nw=' in current_event['text']:
 			$TextBubble/NextIndicatorContainer/NextIndicator.visible = false
 	
+	# Hide if current event is the last and Don't Close After Last Event is checked
+	if dialog_index + 1 >= dialog_script['events'].size() and current_theme.get_value('settings', 'dont_close_after_last_event', false):
+		$TextBubble/NextIndicatorContainer/NextIndicator.visible = false
+	
 	# Hide if fading in
 	if while_dialog_animation:
 		$TextBubble/NextIndicatorContainer/NextIndicator.visible = false
@@ -639,7 +643,7 @@ func _input(event: InputEvent) -> void:
 			# Cut the voice 
 			$FX/CharacterVoice.stop_voice()
 		else:
-			if waiting_for_answer == false and waiting_for_input == false and while_dialog_animation == false:
+			if waiting_for_answer == false and waiting_for_input == false and while_dialog_animation == false and $TextBubble/NextIndicatorContainer/NextIndicator.is_visible():
 				$FX/CharacterVoice.stop_voice() # stop the current voice as well 
 				play_audio("passing")
 				_load_next_event()
