@@ -7,9 +7,8 @@ This project is made possible by the support of our [Patreons](https://www.patre
 
 # Index
 ## Events
-- [Text event](./Events/000.md)
-- [Character Join](./Events/001.md)
-- [Character Leave](./Events/002.md)
+- [Text Event](./Events/001.md)
+- [Character Event](./Events/001.md)
 - [Question Event](./Events/010.md)
 - [Choice Event](./Events/011.md)
 - [Condition Event](./Events/012.md)
@@ -43,7 +42,7 @@ This project is made possible by the support of our [Patreons](https://www.patre
 - [Getting started (video)](https://www.youtube.com/watch?v=sYjgDIgD7AY)
 - [Updating to 1.3](./Tutorials/Updating.md)
 - [Saving and Loading](./Tutorials/Saving.md)
-- [Creating Custom Events](./Events/Custom Events/CreateCustomEvents)
+- [Creating Custom Events](./Events/CustomEvents/CreateCustomEvents.md)
 - [Voice Line Support](./Tutorials/VoiceLines.md)
 
 
