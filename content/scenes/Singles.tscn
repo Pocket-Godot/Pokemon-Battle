@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://content/scenes/execution_state.gd" type="Script" id=1]
+[ext_resource path="res://content/scenes/dialog_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
@@ -40,8 +40,9 @@ transitions = [ NodePath("../Back to Commands"), NodePath("../Move Selected") ]
 np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Moves")
 np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Moves/List/Move1")
 
-[node name="Execution" type="Node" parent="FSM"]
+[node name="Dialog" type="Node" parent="FSM"]
 script = ExtResource( 1 )
+graph_offset = Vector2( 740, 480 )
 
 [node name="To Moves" type="Node" parent="FSM"]
 script = ExtResource( 19 )
@@ -50,13 +51,13 @@ target_state = NodePath("../Moves")
 
 [node name="Back to Commands" type="Node" parent="FSM"]
 script = ExtResource( 19 )
-graph_offset = Vector2( 140, 100 )
+graph_offset = Vector2( 40, 220 )
 target_state = NodePath("../Commands")
 
 [node name="Move Selected" type="Node" parent="FSM"]
 script = ExtResource( 19 )
 graph_offset = Vector2( 880, 220 )
-target_state = NodePath("../Execution")
+target_state = NodePath("../Dialog")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
@@ -241,7 +242,7 @@ margin_right = 974.0
 margin_bottom = 520.0
 custom_constants/margin_left = 200
 
-[connection signal="dialogic_node_added" from="." to="FSM/Execution" method="_on_dialogic_node_added"]
+[connection signal="dialogic_node_added" from="." to="FSM/Dialog" method="_on_dialogic_node_added"]
 [connection signal="move_selected" from="." to="FSM/Move Selected" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/To Moves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/Back to Commands" method="_condition"]

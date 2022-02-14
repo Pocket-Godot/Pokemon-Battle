@@ -121,6 +121,13 @@ window/stretch/aspect="keep"
 
 enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/fsm-node/plugin.cfg" )
 
+[input]
+
+blank={
+"deadzone": 0.5,
+"events": [  ]
+}
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
