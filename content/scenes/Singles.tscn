@@ -1,13 +1,14 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://content/scenes/dialog_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
 [ext_resource path="res://addons/fsm-node/nodes/state.gd" type="Script" id=4]
+[ext_resource path="res://content/unit_gameobjects/Foe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://content/unit_gameobjects/Ally.tscn" type="PackedScene" id=7]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
-[ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=10]
 [ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=11]
 [ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=17]
 [ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=19]
@@ -75,15 +76,14 @@ target_state = NodePath("../Animation")
 position = Vector2( 772.4, 160.025 )
 scale = Vector2( 2, 2 )
 
-[node name="Foe1" type="Sprite" parent="Foes"]
+[node name="Foe" parent="Foes" instance=ExtResource( 5 )]
 texture = ExtResource( 11 )
 
 [node name="Allies" type="Node2D" parent="."]
 position = Vector2( 309.049, 372.628 )
 scale = Vector2( 3, 3 )
 
-[node name="You" type="Sprite" parent="Allies"]
-texture = ExtResource( 10 )
+[node name="You" parent="Allies" instance=ExtResource( 7 )]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
