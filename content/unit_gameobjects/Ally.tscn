@@ -5,3 +5,6 @@
 
 [node name="Ally" instance=ExtResource( 1 )]
 texture = ExtResource( 2 )
+relative_forward = Vector2( 20, -20 )
+relative_backward = Vector2( -30, 30 )
+relative_right = 25.0
