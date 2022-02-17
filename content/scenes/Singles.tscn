@@ -78,12 +78,14 @@ scale = Vector2( 2, 2 )
 
 [node name="Foe" parent="Foes" instance=ExtResource( 5 )]
 texture = ExtResource( 11 )
+np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar")
 
 [node name="Allies" type="Node2D" parent="."]
 position = Vector2( 309.049, 372.628 )
 scale = Vector2( 3, 3 )
 
 [node name="You" parent="Allies" instance=ExtResource( 7 )]
+np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -125,7 +127,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Bar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes" instance=ExtResource( 6 )]
+[node name="FoeBar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes" instance=ExtResource( 6 )]
 margin_right = 189.0
 margin_bottom = 76.0
 
@@ -145,7 +147,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Bar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies" instance=ExtResource( 8 )]
+[node name="AllyBar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies" instance=ExtResource( 8 )]
 margin_right = 189.0
 margin_bottom = 113.0
 
