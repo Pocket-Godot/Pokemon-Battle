@@ -4,9 +4,9 @@
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
 [ext_resource path="res://addons/fsm-node/nodes/state.gd" type="Script" id=4]
-[ext_resource path="res://content/unit_gameobjects/Foe.tscn" type="PackedScene" id=5]
+[ext_resource path="res://content/gameobjects/units/Foe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
-[ext_resource path="res://content/unit_gameobjects/Ally.tscn" type="PackedScene" id=7]
+[ext_resource path="res://content/gameobjects/units/Ally.tscn" type="PackedScene" id=7]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
 [ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=11]
@@ -79,6 +79,8 @@ scale = Vector2( 2, 2 )
 [node name="Foe" parent="Foes" instance=ExtResource( 5 )]
 texture = ExtResource( 11 )
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar")
+
+[node name="In-Between" type="Node2D" parent="."]
 
 [node name="Allies" type="Node2D" parent="."]
 position = Vector2( 309.049, 372.628 )
