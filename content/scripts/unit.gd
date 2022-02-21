@@ -54,9 +54,8 @@ func set_np_associated_bar(val:NodePath):
 	np_associated_bar = val
 	
 	# If node is avaiable by the time the property is set
-	var new_node = get_node(val)
-	if new_node:
-		set_associated_bar(new_node)
+	if has_node(val):
+		set_associated_bar(get_node(val))
 
 func set_associated_bar(val):
 	if associated_bar and !Engine.editor_hint:
