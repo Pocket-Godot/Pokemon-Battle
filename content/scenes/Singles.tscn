@@ -3,7 +3,7 @@
 [ext_resource path="res://content/scenes/dialog_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
-[ext_resource path="res://addons/fsm-node/nodes/state.gd" type="Script" id=4]
+[ext_resource path="res://content/scenes/animation_state.gd" type="Script" id=4]
 [ext_resource path="res://content/gameobjects/units/Foe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
 [ext_resource path="res://content/gameobjects/units/Ally.tscn" type="PackedScene" id=7]
@@ -49,7 +49,6 @@ transitions = [ NodePath("../Play Anim") ]
 
 [node name="Animation" type="Node" parent="FSM"]
 script = ExtResource( 4 )
-graph_offset = Vector2( 160, 600 )
 transitions = [ NodePath("../To Dialog") ]
 
 [node name="To Moves" type="Node" parent="FSM"]
@@ -88,6 +87,8 @@ scale = Vector2( 3, 3 )
 
 [node name="You" parent="Allies" instance=ExtResource( 7 )]
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar")
+
+[node name="Effects" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -261,5 +262,6 @@ custom_constants/margin_left = 200
 [connection signal="dialogic_node_added" from="." to="FSM/Dialog" method="_on_dialogic_node_added"]
 [connection signal="move_selected" from="." to="FSM/To Dialog" method="_condition"]
 [connection signal="first_text_complete" from="FSM/Dialog" to="FSM/Play Anim" method="_condition"]
+[connection signal="animplayer_cleared" from="FSM/Animation" to="FSM/To Dialog" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/To Moves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/Back to Commands" method="_condition"]
