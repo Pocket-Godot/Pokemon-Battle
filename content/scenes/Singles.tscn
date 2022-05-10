@@ -49,7 +49,9 @@ transitions = [ NodePath("../Play Anim") ]
 
 [node name="Animation" type="Node" parent="FSM"]
 script = ExtResource( 4 )
+graph_offset = Vector2( 40, 420 )
 transitions = [ NodePath("../To Dialog") ]
+fp_hit_sprite = "res://content/gameobjects/battle_animations/front/Strike.tscn"
 
 [node name="To Moves" type="Node" parent="FSM"]
 script = ExtResource( 19 )
@@ -263,5 +265,7 @@ custom_constants/margin_left = 200
 [connection signal="move_selected" from="." to="FSM/To Dialog" method="_condition"]
 [connection signal="first_text_complete" from="FSM/Dialog" to="FSM/Play Anim" method="_condition"]
 [connection signal="animplayer_cleared" from="FSM/Animation" to="FSM/To Dialog" method="_condition"]
+[connection signal="curhp_iset" from="Foes/Foe" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar" method="_curhp_iset"]
+[connection signal="curhp_iset" from="Allies/You" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar" method="_curhp_iset"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/To Moves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/Back to Commands" method="_condition"]

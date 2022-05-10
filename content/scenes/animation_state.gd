@@ -5,12 +5,16 @@ var action_sequences = []
 var animplayer_pending = []
 signal animplayer_cleared
 
+var targets = []
+export(String, FILE, "*.tscn") var fp_hit_sprite
+var hit_sprite
+
 func _ready():
 	action_sequences = [
 		{"anim_node": get_node("../../Allies/You/AnimationPlayer"),
-			"track": "Tackle"},
-		{"anim_node": get_node("../../Foes/Foe/Hit/AnimationPlayer"),
-			"track": "Through"}]
+			"track": "Tackle"}]
+			
+	hit_sprite = load(fp_hit_sprite)
 
 func _activate():
 	for a in action_sequences:
@@ -20,6 +24,8 @@ func _activate():
 		
 		n.connect("next", self, "_anim_next")
 		n.connect("animation_finished", self, "_anim_finished", [n])
+	
+	targets = [get_node("../../Foes/Foe")]
 	
 	play_car()
 
@@ -37,6 +43,14 @@ func _anim_next():
 	
 	if action_sequences.size():
 		play_car()
+	else:
+		for t in targets:
+			# HIT EFFECTS
+			var inst_hitsprite = hit_sprite.instance()
+			t.add_child(inst_hitsprite)
+			
+			# HEALTH BAR
+			t.cur_hp -= 5
 		
 func play_car():
 	var action = action_sequences[0]
