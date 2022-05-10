@@ -1,12 +1,14 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://content/scenes/execution_state.gd" type="Script" id=1]
+[ext_resource path="res://content/scenes/dialog_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
+[ext_resource path="res://content/scenes/animation_state.gd" type="Script" id=4]
+[ext_resource path="res://content/gameobjects/units/Foe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://content/gameobjects/units/Ally.tscn" type="PackedScene" id=7]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
-[ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=10]
 [ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=11]
 [ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=17]
 [ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=19]
@@ -36,12 +38,18 @@ np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Commands/Fight")
 [node name="Moves" type="Node" parent="FSM"]
 script = ExtResource( 20 )
 graph_offset = Vector2( 700, 60 )
-transitions = [ NodePath("../Back to Commands"), NodePath("../Move Selected") ]
+transitions = [ NodePath("../Back to Commands"), NodePath("../To Dialog") ]
 np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Moves")
 np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Moves/List/Move1")
 
-[node name="Execution" type="Node" parent="FSM"]
+[node name="Dialog" type="Node" parent="FSM"]
 script = ExtResource( 1 )
+graph_offset = Vector2( 740, 480 )
+transitions = [ NodePath("../Play Anim") ]
+
+[node name="Animation" type="Node" parent="FSM"]
+script = ExtResource( 4 )
+transitions = [ NodePath("../To Dialog") ]
 
 [node name="To Moves" type="Node" parent="FSM"]
 script = ExtResource( 19 )
@@ -50,27 +58,37 @@ target_state = NodePath("../Moves")
 
 [node name="Back to Commands" type="Node" parent="FSM"]
 script = ExtResource( 19 )
-graph_offset = Vector2( 140, 100 )
+graph_offset = Vector2( 40, 220 )
 target_state = NodePath("../Commands")
 
-[node name="Move Selected" type="Node" parent="FSM"]
+[node name="To Dialog" type="Node" parent="FSM"]
 script = ExtResource( 19 )
-graph_offset = Vector2( 880, 220 )
-target_state = NodePath("../Execution")
+graph_offset = Vector2( 860, 240 )
+target_state = NodePath("../Dialog")
+
+[node name="Play Anim" type="Node" parent="FSM"]
+script = ExtResource( 19 )
+graph_offset = Vector2( 460, 560 )
+target_state = NodePath("../Animation")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
 scale = Vector2( 2, 2 )
 
-[node name="Foe1" type="Sprite" parent="Foes"]
+[node name="Foe" parent="Foes" instance=ExtResource( 5 )]
 texture = ExtResource( 11 )
+np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar")
+
+[node name="In-Between" type="Node2D" parent="."]
 
 [node name="Allies" type="Node2D" parent="."]
 position = Vector2( 309.049, 372.628 )
 scale = Vector2( 3, 3 )
 
-[node name="You" type="Sprite" parent="Allies"]
-texture = ExtResource( 10 )
+[node name="You" parent="Allies" instance=ExtResource( 7 )]
+np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar")
+
+[node name="Effects" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -112,7 +130,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Bar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes" instance=ExtResource( 6 )]
+[node name="FoeBar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes" instance=ExtResource( 6 )]
 margin_right = 189.0
 margin_bottom = 76.0
 
@@ -132,7 +150,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Bar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies" instance=ExtResource( 8 )]
+[node name="AllyBar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies" instance=ExtResource( 8 )]
 margin_right = 189.0
 margin_bottom = 113.0
 
@@ -241,7 +259,9 @@ margin_right = 974.0
 margin_bottom = 520.0
 custom_constants/margin_left = 200
 
-[connection signal="dialogic_node_added" from="." to="FSM/Execution" method="_on_dialogic_node_added"]
-[connection signal="move_selected" from="." to="FSM/Move Selected" method="_condition"]
+[connection signal="dialogic_node_added" from="." to="FSM/Dialog" method="_on_dialogic_node_added"]
+[connection signal="move_selected" from="." to="FSM/To Dialog" method="_condition"]
+[connection signal="first_text_complete" from="FSM/Dialog" to="FSM/Play Anim" method="_condition"]
+[connection signal="animplayer_cleared" from="FSM/Animation" to="FSM/To Dialog" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/To Moves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/Back to Commands" method="_condition"]

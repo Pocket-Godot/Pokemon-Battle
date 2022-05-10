@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://content/gameobjects/units/Base.tscn" type="PackedScene" id=1]
+[ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=2]
+
+[node name="Ally" instance=ExtResource( 1 )]
+texture = ExtResource( 2 )
+relative_forward = Vector2( 20, -20 )
+relative_backward = Vector2( -30, 30 )
+relative_right = 25.0

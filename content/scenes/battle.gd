@@ -18,10 +18,6 @@ func _ready():
 	for i in 4:
 		get_node("UI_Layer/MarginContainer/Moves/List/Move" + String(i+1) + "/Button").connect("pressed", self, "_on_move_btn_pressed", [i])
 
-func _on_dialog_completed():
-	if dialogic_node.current_event:
-		pass
-
 func _on_move_btn_pressed(i:int):
 	print(i)
 	emit_signal("move_selected")
