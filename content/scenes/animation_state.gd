@@ -29,14 +29,13 @@ func _activate():
 	
 	play_car()
 
-func _anim_finished(anim_player):
+func _anim_finished(_s, anim_player):
 	anim_player.disconnect("next", self, "_anim_next")
 	anim_player.disconnect("animation_finished", self, "_anim_finished")
 	
 	animplayer_pending.erase(anim_player)
 	
-	if animplayer_pending.empty():
-		emit_signal("animplayer_cleared")
+	is_animplayer_empty()
 
 func _anim_next():
 	action_sequences.remove(0)
@@ -49,9 +48,39 @@ func _anim_next():
 			var inst_hitsprite = hit_sprite.instance()
 			t.add_child(inst_hitsprite)
 			
+			var tanim_player = inst_hitsprite.get_node("AnimationPlayer")
+			animplayer_pending.append(tanim_player)
+			tanim_player.connect("animation_finished", self, "_hiteffect_finished", [tanim_player])
+			tanim_player.play("Strike")
+			
 			# HEALTH BAR
 			t.cur_hp -= 5
-		
+			
+			var heath_bar = t.associated_bar
+			var bar_tween = heath_bar.get_node("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Health/Tween")
+			animplayer_pending.append(bar_tween)
+			bar_tween.connect("tween_all_completed", self, "_bar_completed", [bar_tween])
+
+func _bar_completed(tween):
+	tween.disconnect("tween_all_completed", self, "_bar_completed")
+	
+	animplayer_pending.erase(tween)
+	
+	is_animplayer_empty()
+
+func _hiteffect_finished(_s, hiteffect_player):
+	hiteffect_player.disconnect("animation_finished", self, "_hiteffect_finished")
+	
+	animplayer_pending.erase(hiteffect_player)
+	
+	hiteffect_player.get_parent().queue_free()
+	
+	is_animplayer_empty()
+	
+func is_animplayer_empty():
+	if animplayer_pending.empty():
+		emit_signal("animplayer_cleared")
+
 func play_car():
 	var action = action_sequences[0]
 	
