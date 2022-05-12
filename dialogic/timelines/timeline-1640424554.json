@@ -4,7 +4,7 @@
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "Bulbasaur used Tackle!"
+			"text": "[user_name] used Tackle!"
 		}
 	],
 	"metadata": {

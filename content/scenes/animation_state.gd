@@ -3,20 +3,17 @@ extends State
 
 var action_sequences = []
 var animplayer_pending = []
-signal animplayer_cleared
+signal allanim_cleared
 
 var targets = []
 export(String, FILE, "*.tscn") var fp_hit_sprite
 var hit_sprite
 
 func _ready():
-	action_sequences = [
-		{"anim_node": get_node("../../Allies/You/AnimationPlayer"),
-			"track": "Tackle"}]
-			
 	hit_sprite = load(fp_hit_sprite)
 
 func _activate():
+	
 	for a in action_sequences:
 		var n = a["anim_node"]
 		
@@ -24,8 +21,6 @@ func _activate():
 		
 		n.connect("next", self, "_anim_next")
 		n.connect("animation_finished", self, "_anim_finished", [n])
-	
-	targets = [get_node("../../Foes/Foe")]
 	
 	play_car()
 
@@ -79,9 +74,16 @@ func _hiteffect_finished(_s, hiteffect_player):
 	
 func is_animplayer_empty():
 	if animplayer_pending.empty():
-		emit_signal("animplayer_cleared")
+		emit_signal("allanim_cleared")
 
 func play_car():
 	var action = action_sequences[0]
 	
 	action["anim_node"].play(action["track"])
+
+func set_animations(d:Dictionary):
+	action_sequences = [
+		{"anim_node": d["user"].get_node("AnimationPlayer"),
+			"track": "Tackle"}]
+			
+	targets = d["targets"]
