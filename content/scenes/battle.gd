@@ -30,7 +30,6 @@ func _allanim_cleared():
 		next_subturn()
 
 func _on_move_btn_pressed(i:int):
-	print(i)
 	
 	# PLAYER'S TURN
 	var player_turn = {
