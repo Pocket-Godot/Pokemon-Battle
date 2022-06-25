@@ -5,13 +5,25 @@
 	"variables": [
 		{
 			"id": "1645072671-648",
-			"name": " type_effectiveness",
+			"name": "type_effectiveness",
 			"type": 0,
 			"value": "1"
 		},
 		{
 			"id": "1652339442-648",
 			"name": "user_name",
+			"type": 0,
+			"value": ""
+		},
+		{
+			"id": "1656073377-648",
+			"name": "target_name",
+			"type": 0,
+			"value": ""
+		},
+		{
+			"id": "1656073436-787",
+			"name": "knock_out",
 			"type": 0,
 			"value": ""
 		}

@@ -7,7 +7,6 @@ signal dialogic_node_added
 
 signal move_selected
 
-var subturns = []
 signal end_turn
 
 func _ready():
@@ -21,39 +20,14 @@ func _ready():
 	for i in 4:
 		get_node("UI_Layer/MarginContainer/Moves/List/Move" + String(i+1) + "/Button").connect("pressed", self, "_on_move_btn_pressed", [i])
 
-func _allanim_cleared():
-	subturns.remove(0)
-	
-	if subturns.empty():
-		emit_signal("end_turn")
-	else:
-		next_subturn()
-
 func _on_move_btn_pressed(i:int):
 	
 	# PLAYER'S TURN
 	var player_turn = {
-		"user": get_node("Allies").get_child(0),
-		"targets": [get_node("Foes/Foe")]
+		"user": $Allies.get_child(0),
+		"targets": [$Foes/Foe]
 	}
 	
-	subturns.append(player_turn)
-	
-	# ENEMY'S TURN
-	for f in get_node("Foes").get_children():
-		var enemy_turn = {
-			"user": f,
-			"targets": [get_node("Allies").get_child(0)]
-		}
-		
-		subturns.append(enemy_turn)
-		
-	next_subturn()
-
-func next_subturn():
-	var user_name = subturns[0]["user"].name
-	Dialogic.set_variable("user_name", user_name)
-	
-	$FSM/Animation.set_animations(subturns[0])
+	$FSM/UsedMove.subturns.append(player_turn)
 	
 	emit_signal("move_selected")

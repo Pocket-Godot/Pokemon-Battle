@@ -5,6 +5,51 @@
 			"event_id": "dialogic_001",
 			"portrait": "",
 			"text": "[user_name] used Tackle!"
+		},
+		{
+			"condition": ">=",
+			"definition": "1645072671-648",
+			"event_id": "dialogic_012",
+			"value": "2"
+		},
+		{
+			"character": "",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "It's super effective!"
+		},
+		{
+			"event_id": "dialogic_013"
+		},
+		{
+			"condition": "<=",
+			"definition": "1645072671-648",
+			"event_id": "dialogic_012",
+			"value": "0.5"
+		},
+		{
+			"character": "",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "I's not very effective......"
+		},
+		{
+			"event_id": "dialogic_013"
+		},
+		{
+			"condition": "!=",
+			"definition": "1656073436-787",
+			"event_id": "dialogic_012",
+			"value": ""
+		},
+		{
+			"character": "",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "[target_name] fainted!"
+		},
+		{
+			"event_id": "dialogic_013"
 		}
 	],
 	"metadata": {

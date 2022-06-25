@@ -1,18 +1,73 @@
 tool
 extends State
 
+var node_dialog
+
+signal first_text_complete
+var subturns = []
+signal end_turn
+
+# BATTLE ANIMATIONS
+
 var action_sequences = []
 var animplayer_pending = []
-signal allanim_cleared
 
 var targets = []
 export(String, FILE, "*.tscn") var fp_hit_sprite
+var damage
 var hit_sprite
 
 func _ready():
 	hit_sprite = load(fp_hit_sprite)
 
 func _activate():
+	
+	# ENEMY'S TURN
+	var root_node = get_parent().get_parent()
+	var foes_node = root_node.get_node("Foes")
+	for f in foes_node.get_children():
+		var enemy_turn = {
+			"user": f,
+			"targets": [root_node.get_node("Allies").get_child(0)]
+		}
+		
+		subturns.append(enemy_turn)
+		
+	# DIALOGIC
+	node_dialog.connect("text_complete", self, "_on_text_complete")
+	
+	next_subturn()
+
+func _deactivate():
+	node_dialog.disconnect("text_complete", self, "_on_text_complete")
+
+func _on_dialogic_node_added(nd):
+	node_dialog = nd.get_node("DialogNode")
+
+func _on_text_complete(text_data):
+	if text_data["event_id"] == "dialogic_001":
+		play_car()
+
+func next_subturn():
+	var user_name = subturns[0]["user"].name
+	Dialogic.set_variable("user_name", user_name)
+	
+	var target_name = subturns[0]["targets"][0].name
+	Dialogic.set_variable("target_name", target_name)
+	
+	set_animations(subturns[0])
+	Dialogic.change_timeline('execute-move')
+
+# BATTLE ANIMATIONS
+
+func set_animations(d:Dictionary):
+	action_sequences = [
+		{"anim_node": d["user"].get_node("AnimationPlayer"),
+			"track": "Tackle"}]
+			
+	targets = d["targets"]
+	
+	damage = 5
 	
 	for a in action_sequences:
 		var n = a["anim_node"]
@@ -21,8 +76,6 @@ func _activate():
 		
 		n.connect("next", self, "_anim_next")
 		n.connect("animation_finished", self, "_anim_finished", [n])
-	
-	play_car()
 
 func _anim_finished(_s, anim_player):
 	anim_player.disconnect("next", self, "_anim_next")
@@ -30,14 +83,14 @@ func _anim_finished(_s, anim_player):
 	
 	animplayer_pending.erase(anim_player)
 	
-	is_animplayer_empty()
+	upon_empty_animation()
 
 func _anim_next():
 	action_sequences.remove(0)
 	
 	if action_sequences.size():
 		play_car()
-	else:
+	elif damage:
 		for t in targets:
 			# HIT EFFECTS
 			var inst_hitsprite = hit_sprite.instance()
@@ -49,7 +102,7 @@ func _anim_next():
 			tanim_player.play("Strike")
 			
 			# HEALTH BAR
-			t.cur_hp -= 5
+			t.cur_hp -= damage
 			
 			var heath_bar = t.associated_bar
 			var bar_tween = heath_bar.get_node("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Health/Tween")
@@ -61,7 +114,7 @@ func _bar_completed(tween):
 	
 	animplayer_pending.erase(tween)
 	
-	is_animplayer_empty()
+	upon_empty_animation()
 
 func _hiteffect_finished(_s, hiteffect_player):
 	hiteffect_player.disconnect("animation_finished", self, "_hiteffect_finished")
@@ -70,20 +123,21 @@ func _hiteffect_finished(_s, hiteffect_player):
 	
 	hiteffect_player.get_parent().queue_free()
 	
-	is_animplayer_empty()
+	upon_empty_animation()
 	
-func is_animplayer_empty():
+func upon_empty_animation():
 	if animplayer_pending.empty():
-		emit_signal("allanim_cleared")
+		subturns.remove(0)
+		
+		if subturns.empty():
+			emit_signal("end_turn")
+		else:
+			next_subturn()
 
 func play_car():
 	var action = action_sequences[0]
 	
 	action["anim_node"].play(action["track"])
 
-func set_animations(d:Dictionary):
-	action_sequences = [
-		{"anim_node": d["user"].get_node("AnimationPlayer"),
-			"track": "Tackle"}]
-			
-	targets = d["targets"]
+func knock_outs():
+	pass

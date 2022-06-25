@@ -17,11 +17,24 @@
 		},
 		"Definitions": {
 			"files": [
-				"1645072671-648",
-				"1652339442-648"
+
 			],
 			"folders": {
+				"Battles": {
+					"files": [
+						"1645072671-648",
+						"1652339442-648",
+						"1656073377-648",
+						"1656073436-787"
+					],
+					"folders": {
 
+					},
+					"metadata": {
+						"color": null,
+						"folded": false
+					}
+				}
 			},
 			"metadata": {
 				"color": null,
@@ -42,11 +55,22 @@
 		},
 		"Timelines": {
 			"files": [
-				"timeline-1627461926.json",
-				"timeline-1640424554.json"
+
 			],
 			"folders": {
+				"Battles": {
+					"files": [
+						"timeline-1627461926.json",
+						"timeline-1640424554.json"
+					],
+					"folders": {
 
+					},
+					"metadata": {
+						"color": null,
+						"folded": false
+					}
+				}
 			},
 			"metadata": {
 				"color": null,

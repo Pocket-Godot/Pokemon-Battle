@@ -1,9 +1,8 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://content/scenes/dialog_state.gd" type="Script" id=1]
+[ext_resource path="res://content/scenes/usedmove_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
-[ext_resource path="res://content/scenes/animation_state.gd" type="Script" id=4]
 [ext_resource path="res://content/gameobjects/units/Foe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
 [ext_resource path="res://content/gameobjects/units/Ally.tscn" type="PackedScene" id=7]
@@ -31,47 +30,37 @@ starting_state = NodePath("Commands")
 
 [node name="Commands" type="Node" parent="FSM"]
 script = ExtResource( 20 )
-transitions = [ NodePath("../To Moves") ]
+transitions = [ NodePath("../ToMoves") ]
 np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Commands")
 np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Commands/Fight")
 
 [node name="Moves" type="Node" parent="FSM"]
 script = ExtResource( 20 )
 graph_offset = Vector2( 700, 60 )
-transitions = [ NodePath("../Back to Commands"), NodePath("../To Dialog") ]
+transitions = [ NodePath("../BackToCommands"), NodePath("../ToUsedMove") ]
 np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Moves")
 np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Moves/List/Move1")
 
-[node name="Dialog" type="Node" parent="FSM"]
+[node name="UsedMove" type="Node" parent="FSM"]
 script = ExtResource( 1 )
-graph_offset = Vector2( 740, 480 )
-transitions = [ NodePath("../Play Anim") ]
-
-[node name="Animation" type="Node" parent="FSM"]
-script = ExtResource( 4 )
-graph_offset = Vector2( 40, 420 )
-transitions = [ NodePath("../To Dialog"), NodePath("../Back to Commands") ]
+graph_offset = Vector2( 460, 440 )
+transitions = [ NodePath("../BackToCommands") ]
 fp_hit_sprite = "res://content/gameobjects/battle_animations/front/Strike.tscn"
 
-[node name="To Moves" type="Node" parent="FSM"]
+[node name="ToMoves" type="Node" parent="FSM"]
 script = ExtResource( 19 )
 graph_offset = Vector2( 420, 20 )
 target_state = NodePath("../Moves")
 
-[node name="Back to Commands" type="Node" parent="FSM"]
+[node name="BackToCommands" type="Node" parent="FSM"]
 script = ExtResource( 19 )
 graph_offset = Vector2( 40, 220 )
 target_state = NodePath("../Commands")
 
-[node name="To Dialog" type="Node" parent="FSM"]
+[node name="ToUsedMove" type="Node" parent="FSM"]
 script = ExtResource( 19 )
 graph_offset = Vector2( 860, 240 )
-target_state = NodePath("../Dialog")
-
-[node name="Play Anim" type="Node" parent="FSM"]
-script = ExtResource( 19 )
-graph_offset = Vector2( 460, 560 )
-target_state = NodePath("../Animation")
+target_state = NodePath("../UsedMove")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
@@ -121,9 +110,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Foes" type="HBoxContainer" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer"]
 margin_right = 974.0
@@ -261,12 +247,11 @@ margin_right = 974.0
 margin_bottom = 520.0
 custom_constants/margin_left = 200
 
-[connection signal="dialogic_node_added" from="." to="FSM/Dialog" method="_on_dialogic_node_added"]
-[connection signal="end_turn" from="." to="FSM/Back to Commands" method="_condition"]
-[connection signal="move_selected" from="." to="FSM/To Dialog" method="_condition"]
-[connection signal="first_text_complete" from="FSM/Dialog" to="FSM/Play Anim" method="_condition"]
-[connection signal="allanim_cleared" from="FSM/Animation" to="." method="_allanim_cleared"]
+[connection signal="dialogic_node_added" from="." to="FSM/UsedMove" method="_on_dialogic_node_added"]
+[connection signal="end_turn" from="." to="FSM/BackToCommands" method="_condition"]
+[connection signal="move_selected" from="." to="FSM/ToUsedMove" method="_condition"]
+[connection signal="end_turn" from="FSM/UsedMove" to="FSM/BackToCommands" method="_condition"]
 [connection signal="curhp_iset" from="Foes/Foe" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar" method="_curhp_iset"]
 [connection signal="curhp_iset" from="Allies/You" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar" method="_curhp_iset"]
-[connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/To Moves" method="_condition"]
-[connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/Back to Commands" method="_condition"]
+[connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/ToMoves" method="_condition"]
+[connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/BackToCommands" method="_condition"]
