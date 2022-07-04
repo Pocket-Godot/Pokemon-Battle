@@ -54,12 +54,10 @@ target_state = NodePath("../Moves")
 
 [node name="BackToCommands" type="Node" parent="FSM"]
 script = ExtResource( 19 )
-graph_offset = Vector2( 40, 220 )
 target_state = NodePath("../Commands")
 
 [node name="ToUsedMove" type="Node" parent="FSM"]
 script = ExtResource( 19 )
-graph_offset = Vector2( 860, 240 )
 target_state = NodePath("../UsedMove")
 
 [node name="Foes" type="Node2D" parent="."]

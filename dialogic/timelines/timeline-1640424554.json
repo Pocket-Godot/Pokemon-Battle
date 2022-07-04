@@ -7,6 +7,9 @@
 			"text": "[user_name] used Tackle!"
 		},
 		{
+			"event_id": "pkmn_btl_001"
+		},
+		{
 			"condition": ">=",
 			"definition": "1645072671-648",
 			"event_id": "dialogic_012",
@@ -50,6 +53,16 @@
 		},
 		{
 			"event_id": "dialogic_013"
+		},
+		{
+			"call_node": {
+				"arguments": [
+
+				],
+				"method_name": "end_of_subturn",
+				"target_node_path": "Node/FSM/UsedMove"
+			},
+			"event_id": "dialogic_042"
 		}
 	],
 	"metadata": {

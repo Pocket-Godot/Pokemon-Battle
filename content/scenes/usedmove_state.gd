@@ -11,6 +11,7 @@ signal end_turn
 
 var action_sequences = []
 var animplayer_pending = []
+signal all_anims_finished
 
 var targets = []
 export(String, FILE, "*.tscn") var fp_hit_sprite
@@ -46,7 +47,7 @@ func _on_dialogic_node_added(nd):
 
 func _on_text_complete(text_data):
 	if text_data["event_id"] == "dialogic_001":
-		play_car()
+		Dialogic.next_event()
 
 func next_subturn():
 	var user_name = subturns[0]["user"].name
@@ -127,12 +128,19 @@ func _hiteffect_finished(_s, hiteffect_player):
 	
 func upon_empty_animation():
 	if animplayer_pending.empty():
+		emit_signal("all_anims_finished")
+		
+func end_of_subturn():
 		subturns.remove(0)
 		
 		if subturns.empty():
+			Dialogic.change_timeline('battle-commands')
 			emit_signal("end_turn")
 		else:
 			next_subturn()
+
+func play_battle_animation():
+	play_car()
 
 func play_car():
 	var action = action_sequences[0]
