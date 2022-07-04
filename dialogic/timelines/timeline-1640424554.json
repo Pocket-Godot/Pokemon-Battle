@@ -7,6 +7,7 @@
 			"text": "[user_name] used Tackle!"
 		},
 		{
+			"custom_method": "play_battle_animation",
 			"event_id": "pkmn_btl_001"
 		},
 		{

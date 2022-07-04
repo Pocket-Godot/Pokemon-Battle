@@ -19,7 +19,7 @@ func load_data(data:Dictionary):
 	
 	# Now update the ui nodes to display the data. 
 	# e.g. 
-	input_field.text = event_data['my_text_key']
+	input_field.text = event_data['custom_method']
 
  # has to return the wanted preview, only useful for body parts
 func get_preview():
@@ -27,7 +27,7 @@ func get_preview():
 
  ## EXAMPLE CHANGE IN ONE OF THE NODES
 func _on_InputField_text_changed(text):
-	event_data['my_text_key'] = text
+	event_data['custom_method'] = text
 	
 	# informs the parent about the changes!
 	data_changed()

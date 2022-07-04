@@ -18,8 +18,9 @@ func handle_event(event_data, dialog_node):
 	#dialog_node.set_state(dialog_node.state.WAITING_INPUT)
 	
 	#pass # fill with event action
+	var method_name = event_data["custom_method"]
 	associated_dialognode = dialog_node
-	state_tousedmove.play_battle_animation()
+	state_tousedmove.call(method_name)
 	
 func _all_anims_finished():
 	# once you want to continue with the next event
