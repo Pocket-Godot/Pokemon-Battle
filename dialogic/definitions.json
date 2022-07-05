@@ -4,14 +4,14 @@
 	],
 	"variables": [
 		{
-			"id": "1645072671-648",
-			"name": "type_effectiveness",
-			"type": 0,
-			"value": "1"
-		},
-		{
 			"id": "1652339442-648",
 			"name": "user_name",
+			"type": 0,
+			"value": ""
+		},
+		{
+			"id": "1656073436-787",
+			"name": "knock_outs",
 			"type": 0,
 			"value": ""
 		},
@@ -22,8 +22,14 @@
 			"value": ""
 		},
 		{
-			"id": "1656073436-787",
-			"name": "knock_out",
+			"id": "1657014774-648",
+			"name": "notvery_effectives",
+			"type": 0,
+			"value": ""
+		},
+		{
+			"id": "1645072671-648",
+			"name": "super_effectives",
 			"type": 0,
 			"value": ""
 		}

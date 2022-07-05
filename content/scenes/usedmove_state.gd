@@ -8,7 +8,6 @@ var subturns = []
 signal end_turn
 
 # BATTLE ANIMATIONS
-
 var action_sequences = []
 var animplayer_pending = []
 signal all_anims_finished
@@ -17,6 +16,7 @@ var targets = []
 export(String, FILE, "*.tscn") var fp_hit_sprite
 var damage
 var hit_sprite
+var knockedout_targets = []
 
 func _ready():
 	hit_sprite = load(fp_hit_sprite)
@@ -49,6 +49,8 @@ func _on_text_complete(text_data):
 	if text_data["event_id"] == "dialogic_001":
 		Dialogic.next_event()
 
+# TURNS
+
 func next_subturn():
 	var user_name = subturns[0]["user"].name
 	Dialogic.set_variable("user_name", user_name)
@@ -56,37 +58,49 @@ func next_subturn():
 	var target_name = subturns[0]["targets"][0].name
 	Dialogic.set_variable("target_name", target_name)
 	
-	set_animations(subturns[0])
+	set_move_animations(subturns[0])
 	Dialogic.change_timeline('execute-move')
+		
+func end_of_subturn():
+	subturns.remove(0)
+	
+	if subturns.empty():
+		Dialogic.change_timeline('battle-commands')
+		emit_signal("end_turn")
+	else:
+		next_subturn()
 
 # BATTLE ANIMATIONS
 
-func set_animations(d:Dictionary):
+func set_move_animations(d:Dictionary):
 	action_sequences = [
 		{"anim_node": d["user"].get_node("AnimationPlayer"),
 			"track": "Tackle"}]
 			
 	targets = d["targets"]
 	
-	damage = 5
+	damage = 10
 	
+	connect_within_action_sequences()
+	
+func connect_within_action_sequences():
 	for a in action_sequences:
 		var n = a["anim_node"]
 		
 		animplayer_pending.append(n)
 		
-		n.connect("next", self, "_anim_next")
-		n.connect("animation_finished", self, "_anim_finished", [n])
+		n.connect("next", self, "_move_anim_next")
+		n.connect("animation_finished", self, "_move_anim_finished", [n])
 
-func _anim_finished(_s, anim_player):
-	anim_player.disconnect("next", self, "_anim_next")
-	anim_player.disconnect("animation_finished", self, "_anim_finished")
+func _move_anim_finished(_s, anim_player):
+	anim_player.disconnect("next", self, "_move_anim_next")
+	anim_player.disconnect("animation_finished", self, "_move_anim_finished")
 	
 	animplayer_pending.erase(anim_player)
 	
 	upon_empty_animation()
 
-func _anim_next():
+func _move_anim_next():
 	action_sequences.remove(0)
 	
 	if action_sequences.size():
@@ -109,6 +123,19 @@ func _anim_next():
 			var bar_tween = heath_bar.get_node("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Health/Tween")
 			animplayer_pending.append(bar_tween)
 			bar_tween.connect("tween_all_completed", self, "_bar_completed", [bar_tween])
+			
+			# KNOCK OUTS
+			if t.cur_hp <= 0:
+				knockedout_targets.append(t)
+				
+		if knockedout_targets.size():
+			var knockedout_names = PoolStringArray([])
+			
+			for t in knockedout_targets:
+				knockedout_names.append(t.name)
+				
+			var str_knockedout_names = knockedout_names.join(", ")
+			Dialogic.set_variable("knock_outs", str_knockedout_names)
 
 func _bar_completed(tween):
 	tween.disconnect("tween_all_completed", self, "_bar_completed")
@@ -125,19 +152,6 @@ func _hiteffect_finished(_s, hiteffect_player):
 	hiteffect_player.get_parent().queue_free()
 	
 	upon_empty_animation()
-	
-func upon_empty_animation():
-	if animplayer_pending.empty():
-		emit_signal("all_anims_finished")
-		
-func end_of_subturn():
-		subturns.remove(0)
-		
-		if subturns.empty():
-			Dialogic.change_timeline('battle-commands')
-			emit_signal("end_turn")
-		else:
-			next_subturn()
 
 func play_battle_animation():
 	play_car()
@@ -146,6 +160,31 @@ func play_car():
 	var action = action_sequences[0]
 	
 	action["anim_node"].play(action["track"])
+	
+func upon_empty_animation():
+	if animplayer_pending.empty():
+		emit_signal("all_anims_finished")
+		
+func play_knockout_animation():
+	# SETTING UP
+	for t in knockedout_targets:
+		var action = {
+			"anim_node": t.get_node("AnimationPlayer"),
+			"track": "Faint"
+		}
+		
+		action_sequences.append(action)
+	
+		# REMOVE SUBTURNS WHERE THE USER IS THE FAINTED
+		for s in subturns:
+			if s['user'] == t:
+				subturns.erase(s)
+	
+	damage = 0
+	
+	connect_within_action_sequences()
+	
+	play_car()
 
-func knock_outs():
-	pass
+func upon_no_more_reserves():
+	emit_signal("foe_loses")

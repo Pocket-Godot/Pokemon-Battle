@@ -27,7 +27,7 @@
 		},
 		{
 			"condition": "<=",
-			"definition": "1645072671-648",
+			"definition": "1657014774-648",
 			"event_id": "dialogic_012",
 			"value": "0.5"
 		},
@@ -35,7 +35,7 @@
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "I's not very effective......"
+			"text": "It's not very effective......"
 		},
 		{
 			"event_id": "dialogic_013"
@@ -45,6 +45,10 @@
 			"definition": "1656073436-787",
 			"event_id": "dialogic_012",
 			"value": ""
+		},
+		{
+			"custom_method": "play_knockout_animation",
+			"event_id": "pkmn_btl_001"
 		},
 		{
 			"character": "",
