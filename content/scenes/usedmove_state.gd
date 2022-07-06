@@ -17,6 +17,8 @@ export(String, FILE, "*.tscn") var fp_hit_sprite
 var damage
 var hit_sprite
 var knockedout_targets = []
+signal you_lose
+signal foe_loses
 
 func _ready():
 	hit_sprite = load(fp_hit_sprite)
@@ -187,4 +189,7 @@ func play_knockout_animation():
 	play_car()
 
 func upon_no_more_reserves():
-	emit_signal("foe_loses")
+	if get_node("../../Allies/You").cur_hp <= 0:
+		emit_signal("you_lose")
+	elif get_node("../../Foes/Foe").cur_hp <= 0:
+		emit_signal("foe_loses")

@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://content/scenes/usedmove_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
+[ext_resource path="res://content/scenes/outcome_state.gd" type="Script" id=4]
 [ext_resource path="res://content/gameobjects/units/Foe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://content/ui_objects/FoeBar.tscn" type="PackedScene" id=6]
 [ext_resource path="res://content/gameobjects/units/Ally.tscn" type="PackedScene" id=7]
@@ -44,8 +45,17 @@ np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Moves/List/Move1")
 [node name="UsedMove" type="Node" parent="FSM"]
 script = ExtResource( 1 )
 graph_offset = Vector2( 460, 440 )
-transitions = [ NodePath("../BackToCommands") ]
+transitions = [ NodePath("../BackToCommands"), NodePath("../ToWin"), NodePath("../ToLose") ]
 fp_hit_sprite = "res://content/gameobjects/battle_animations/front/Strike.tscn"
+
+[node name="YouWin" type="Node" parent="FSM"]
+script = ExtResource( 4 )
+graph_offset = Vector2( 1120, 560 )
+
+[node name="YouLose" type="Node" parent="FSM"]
+script = ExtResource( 4 )
+graph_offset = Vector2( 1120, 760 )
+target_timeline = "you-lose"
 
 [node name="ToMoves" type="Node" parent="FSM"]
 script = ExtResource( 19 )
@@ -54,11 +64,23 @@ target_state = NodePath("../Moves")
 
 [node name="BackToCommands" type="Node" parent="FSM"]
 script = ExtResource( 19 )
+graph_offset = Vector2( 140, 240 )
 target_state = NodePath("../Commands")
 
 [node name="ToUsedMove" type="Node" parent="FSM"]
 script = ExtResource( 19 )
+graph_offset = Vector2( 840, 240 )
 target_state = NodePath("../UsedMove")
+
+[node name="ToWin" type="Node" parent="FSM"]
+script = ExtResource( 19 )
+graph_offset = Vector2( 800, 520 )
+target_state = NodePath("../YouWin")
+
+[node name="ToLose" type="Node" parent="FSM"]
+script = ExtResource( 19 )
+graph_offset = Vector2( 780, 740 )
+target_state = NodePath("../YouLose")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
@@ -249,6 +271,8 @@ custom_constants/margin_left = 200
 [connection signal="end_turn" from="." to="FSM/BackToCommands" method="_condition"]
 [connection signal="move_selected" from="." to="FSM/ToUsedMove" method="_condition"]
 [connection signal="end_turn" from="FSM/UsedMove" to="FSM/BackToCommands" method="_condition"]
+[connection signal="foe_loses" from="FSM/UsedMove" to="FSM/ToWin" method="_condition"]
+[connection signal="you_lose" from="FSM/UsedMove" to="FSM/ToLose" method="_condition"]
 [connection signal="curhp_iset" from="Foes/Foe" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar" method="_curhp_iset"]
 [connection signal="curhp_iset" from="Allies/You" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar" method="_curhp_iset"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/ToMoves" method="_condition"]

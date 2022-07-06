@@ -57,6 +57,16 @@
 			"text": "[target_name] fainted!"
 		},
 		{
+			"call_node": {
+				"arguments": [
+
+				],
+				"method_name": "upon_no_more_reserves",
+				"target_node_path": "Node/FSM/UsedMove"
+			},
+			"event_id": "dialogic_042"
+		},
+		{
 			"event_id": "dialogic_013"
 		},
 		{
