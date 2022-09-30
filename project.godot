@@ -14,6 +14,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/dialogic/Localization/translation_service.gd"
 }, {
+"base": "HBoxContainer",
+"class": "DataPropertyEditor",
+"language": "GDScript",
+"path": "res://addons/database/property_editor/property_editor.gd"
+}, {
+"base": "VBoxContainer",
+"class": "DataPropertyEditorWide",
+"language": "GDScript",
+"path": "res://addons/database/property_editor/property_editor_wide.gd"
+}, {
 "base": "Node",
 "class": "Dialogic",
 "language": "GDScript",
@@ -86,6 +96,8 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "DTS": "",
+"DataPropertyEditor": "",
+"DataPropertyEditorWide": "",
 "Dialogic": "",
 "DialogicAnimaPropertiesHelper": "",
 "DialogicAnimaResources": "",
@@ -119,7 +131,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/fsm-node/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/database/plugin.cfg", "res://addons/dialogic/plugin.cfg", "res://addons/fsm-node/plugin.cfg" )
 
 [input]
 

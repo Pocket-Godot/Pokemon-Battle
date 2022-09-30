@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/types/category.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+color = Color( 1, 0.619608, 0.807843, 1 )
+defensive_effectivenesses = {
+"dark": 0.5,
+"dragon": 0.0,
+"fighting": 0.5,
+"poison": 2.0,
+"steel": 2.0
+}

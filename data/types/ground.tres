@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/types/category.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+color = Color( 0.807843, 0.682353, 0.34902, 1 )
+defensive_effectivenesses = {
+"electric": 0.0,
+"grass": 2.0,
+"ice": 2.0,
+"poison": 0.5,
+"rock": 0.5,
+"water": 2.0
+}

@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/database/property_editor/sub_property/var_val.gd" type="Script" id=1]
+
+[node name="VBoxContainer" type="VBoxContainer"]
+margin_left = 514.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+script = ExtResource( 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 510.0
+margin_bottom = 20.0
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer"]
+margin_right = 510.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Nil"
+items = [ "Nil", null, false, 0, null, "bool", null, false, 1, null, "int", null, false, 2, null, "float", null, false, 3, null, "String", null, false, 4, null, "Color", null, false, 5, null ]
+selected = 0
+
+[node name="CheckBox" type="CheckBox" parent="."]
+visible = false
+margin_top = 24.0
+margin_right = 510.0
+margin_bottom = 48.0
+
+[node name="SpinBox" type="SpinBox" parent="."]
+visible = false
+margin_top = 24.0
+margin_right = 510.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+allow_greater = true
+allow_lesser = true
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_top = 24.0
+margin_right = 510.0
+margin_bottom = 48.0
+editable = false
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="."]
+visible = false
+margin_top = 24.0
+margin_right = 510.0
+margin_bottom = 44.0

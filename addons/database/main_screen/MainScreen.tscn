@@ -1,0 +1,199 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/database/main_screen/main_screen.gd" type="Script" id=2]
+[ext_resource path="res://addons/database/icons/CreateFolder.svg" type="Texture" id=5]
+[ext_resource path="res://addons/database/icons/CreateResource.svg" type="Texture" id=6]
+
+[node name="DatabaseContainer" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+script = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 5.0
+margin_right = 1019.0
+margin_bottom = 595.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 1014.0
+margin_bottom = 24.0
+
+[node name="NewCategory" type="ToolButton" parent="VBoxContainer/HBoxContainer"]
+margin_right = 28.0
+margin_bottom = 24.0
+hint_tooltip = "New Category"
+icon = ExtResource( 5 )
+
+[node name="NewResource" type="ToolButton" parent="VBoxContainer/HBoxContainer"]
+margin_left = 32.0
+margin_right = 60.0
+margin_bottom = 24.0
+hint_tooltip = "New Resource"
+icon = ExtResource( 6 )
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+margin_top = 28.0
+margin_right = 1014.0
+margin_bottom = 595.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+split_offset = -200
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
+margin_right = 301.0
+margin_bottom = 567.0
+size_flags_horizontal = 3
+
+[node name="Search" type="LineEdit" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+margin_right = 301.0
+margin_bottom = 24.0
+placeholder_text = "Filter resources"
+
+[node name="Tree" type="Tree" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 301.0
+margin_bottom = 567.0
+size_flags_vertical = 3
+hide_root = true
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer/HSplitContainer"]
+margin_left = 313.0
+margin_right = 1014.0
+margin_bottom = 567.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tabs_visible = false
+
+[node name="NewCategory" type="ConfirmationDialog" parent="."]
+margin_left = 412.0
+margin_top = 254.0
+margin_right = 612.0
+margin_bottom = 340.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+window_title = "Create New Category"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NewCategory"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 192.0
+margin_bottom = 50.0
+
+[node name="Label" type="Label" parent="NewCategory/VBoxContainer"]
+margin_right = 184.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+text = "Name:"
+
+[node name="LineEdit" type="LineEdit" parent="NewCategory/VBoxContainer"]
+margin_top = 18.0
+margin_right = 184.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+
+[node name="NewResource" type="ConfirmationDialog" parent="."]
+margin_left = 412.0
+margin_top = 251.0
+margin_right = 612.0
+margin_bottom = 343.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+window_title = "Create New Resource"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NewResource"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 192.0
+margin_bottom = 56.0
+
+[node name="Name" type="HBoxContainer" parent="NewResource/VBoxContainer"]
+margin_right = 184.0
+margin_bottom = 24.0
+
+[node name="Label" type="Label" parent="NewResource/VBoxContainer/Name"]
+margin_top = 5.0
+margin_right = 89.0
+margin_bottom = 19.0
+size_flags_horizontal = 3
+text = "Name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NewResource/VBoxContainer/Name"]
+margin_left = 93.0
+margin_right = 184.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="NewResource/VBoxContainer/Name/HBoxContainer"]
+margin_right = 58.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="NewResource/VBoxContainer/Name/HBoxContainer"]
+margin_left = 62.0
+margin_top = 5.0
+margin_right = 91.0
+margin_bottom = 19.0
+text = ".tres"
+
+[node name="Category" type="HBoxContainer" parent="NewResource/VBoxContainer"]
+margin_top = 28.0
+margin_right = 184.0
+margin_bottom = 48.0
+
+[node name="Label" type="Label" parent="NewResource/VBoxContainer/Category"]
+margin_top = 3.0
+margin_right = 90.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+text = "Category"
+
+[node name="OptionButton" type="OptionButton" parent="NewResource/VBoxContainer/Category"]
+margin_left = 94.0
+margin_right = 184.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Duplicate" type="AcceptDialog" parent="."]
+margin_left = 438.0
+margin_top = 268.0
+margin_right = 585.0
+margin_bottom = 326.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+window_title = "Warning!"
+dialog_text = "Duplicate file/folder."
+
+[node name="EmptyResourceOptions" type="PopupMenu" parent="."]
+margin_left = 5.0
+margin_right = 1019.0
+margin_bottom = 595.0
+
+[node name="EmptyWithCategory" type="PopupMenu" parent="."]
+margin_left = 5.0
+margin_right = 1019.0
+margin_bottom = 595.0
+
+[node name="ResourceOptions" type="PopupMenu" parent="."]
+margin_left = 5.0
+margin_right = 1019.0
+margin_bottom = 595.0
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/NewCategory" to="." method="_newcat_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/NewResource" to="." method="_newres_pressed"]
+[connection signal="text_changed" from="VBoxContainer/HSplitContainer/VBoxContainer/Search" to="." method="_on_search_changed"]
+[connection signal="item_selected" from="VBoxContainer/HSplitContainer/VBoxContainer/Tree" to="." method="_on_item_selected"]
+[connection signal="confirmed" from="NewCategory" to="." method="_newcat_confirmed"]
+[connection signal="confirmed" from="NewResource" to="." method="_newres_confirmed"]
+[connection signal="id_pressed" from="EmptyResourceOptions" to="." method="_option_pressed_by_id"]
+[connection signal="id_pressed" from="EmptyWithCategory" to="." method="_option_pressed_by_id"]
+[connection signal="id_pressed" from="ResourceOptions" to="." method="_option_pressed_by_id"]

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://data/types/category.gd" type="Script" id=1]
+[ext_resource path="res://content/palettes/types/water.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+color = Color( 0, 0.486275, 1, 1 )
+default_palette = ExtResource( 2 )
+defensive_effectivenesses = {
+"electric": 2.0,
+"fire": 0.5,
+"grass": 2.0,
+"ice": 0.5,
+"steel": 0.5,
+"water": 0.5
+}
