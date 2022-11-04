@@ -15,6 +15,7 @@ var class_hint = "Resource"
 onready var cat_filesystem = get_parent().get_node("ChooseCat")
 
 const RES_EXTS = ["res", "tres"]
+const IMG_EXTS = ["bmp", "dds", "exr", "hdr", "jpg", "jpeg", "png", "tga", "svg", "svgz", "webp"]
 signal resource_is_set
 
 func _draw():
@@ -53,8 +54,8 @@ func _item_selected(index:int):
 	
 	if id == main_screen.OPT_INSTALOAD:
 		#SETTING A RESOURCE
-		var file_name = get_item_text(index)
-		var full_path = get_category_folder().plus_file(file_name)
+		var full_path = get_item_tooltip(index)
+		set_tooltip(full_path)
 		emit_signal("resource_is_set", get_parent(), full_path)
 	else:
 		main_screen.item_id_effect(self, id)
@@ -79,7 +80,7 @@ func change_options(dir):
 		
 		match err:
 			OK:
-				go_through_folder_for_options(main_dir)
+				go_through_folder_for_options(main_dir, dir)
 			_:
 				print(err)
 
@@ -112,11 +113,30 @@ func go_through_folder_for_options(dir:Directory, base_folder:String = ""):
 			go_through_folder_for_options(sub_directory, folder)
 		
 		# ELSE, IF ITEM IS A FILE
-		elif file_name.get_extension() in RES_EXTS:
-			var final_filename = file_name
+		else:
+			var file_ext = file_name.get_extension()
+			var full_filename = file_name
 			if base_folder:
-				final_filename = base_folder.plus_file(file_name)
-			get_popup().add_item(final_filename, main_screen.OPT_INSTALOAD)
+				full_filename = base_folder.plus_file(file_name)
+			var has_entry = true
+			
+			# IF FILE IS AN IMAGE
+			if file_ext in IMG_EXTS:
+				var img_txt = get_image_texture(full_filename)
+				
+				get_popup().add_icon_item(img_txt, "", main_screen.OPT_INSTALOAD)
+			
+			# ELSE, IF FILE IS A RESOURCE
+			elif file_ext in RES_EXTS:
+				get_popup().add_item(file_name, main_screen.OPT_INSTALOAD)
+				
+			else:
+				has_entry = false
+				
+			# ADD FULL FILEPATH TO TOOLTIP
+			if has_entry:
+				var last_index = get_popup().get_item_count() - 1
+				get_popup().set_item_tooltip(last_index, full_filename)
 		
 		file_name = dir.get_next()
 		
@@ -133,6 +153,19 @@ func get_icon_name(cn)->String:
 			return "Image"
 		_:
 			return cn
+
+func get_image_texture(full_filename)->ImageTexture:
+	var img_txt = ImageTexture.new()
+	var res_img = load(full_filename)
+	var image: Image = res_img.get_data()
+	img_txt.create_from_image(image)
+				
+	# SCALE IMAGE TEXTURE TO x0.75 WIDTH OF OPTION BUTTON
+	var new_width = get_parent_area_size().x * 0.375
+	var new_height = image.get_height() / image.get_width() * new_width
+	img_txt.set_size_override(Vector2(new_width, new_height))
+				
+	return img_txt
 
 func get_property_name():
 	return get_parent().property_name
@@ -153,7 +186,7 @@ func is_compatable_with_file(file):
 	
 	match class_hint:
 		"Texture":
-			if extension in ["png", "jpeg", "svg"]:
+			if extension in IMG_EXTS:
 				return true
 		_:
 			if extension in RES_EXTS:
@@ -176,6 +209,9 @@ func reset_text():
 func set_dragdata(data):
 	drag_data = data
 	update()
+
+func set_img(string):
+	set_button_icon(get_image_texture(string))
 
 func setup_default_options():
 	var popup:PopupMenu = get_popup()

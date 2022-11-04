@@ -31,8 +31,13 @@ func _gui_input(event):
 			current_dragdata = null
 
 func augment_config(property_name, target_folder):
-	#print(category_folder)
-	var config = main_screen.cat_config[category_folder]
+	var dict_config = main_screen.cat_config
+	var config
+	
+	if category_folder in dict_config:
+		config = dict_config[category_folder]
+	else:
+		config = ConfigFile.new()
 	
 	config.set_value(PROPERTIES_SECTION, property_name, target_folder)
 	
@@ -144,8 +149,17 @@ func list_properties(c, cf:String, fn):
 					option_btn.setup_default_options()
 					
 					if value:
-						var res_name = value.get_path().rsplit("/")[-1]
-						option_btn.set_text(res_name)
+						var full_path = value.get_path()
+						var ext = full_path.get_extension()
+						
+						if ext in option_btn.IMG_EXTS:
+							option_btn.set_img(full_path)
+							option_btn.set_text("")
+						else:
+							var res_name = full_path.rsplit("/")[-1]
+							option_btn.set_text(res_name)
+							
+						option_btn.set_tooltip(full_path)
 					else:
 						option_btn.set_text(option_btn.NULL_VALUE_TEXT)
 					
