@@ -1,11 +1,11 @@
 [gd_resource type="Resource" load_steps=3 format=2]
 
 [ext_resource path="res://data/moves/category.gd" type="Script" id=1]
-[ext_resource path="res://data/types/normal.tres" type="Resource" id=2]
+[ext_resource path="res://data/types/grass.tres" type="Resource" id=2]
 
 [resource]
 script = ExtResource( 1 )
 type = ExtResource( 2 )
-power = 40.0
+power = 35.0
 accuracy = 100.0
 pp = 0
