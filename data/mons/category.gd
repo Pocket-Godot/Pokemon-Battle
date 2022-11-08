@@ -1,5 +1,8 @@
 extends Resource
 
+export(Texture) var front
+export(Texture) var back
+
 export(Resource) var type1
 export(Resource) var type2
 

@@ -95,8 +95,9 @@ func drop_data(_p, data):
 			get_parent().resource_container.augment_config(get_property_name(), data["files"][0])
 			change_options(data["files"][0])
 		"files":
-			set_text(data["files"][0].get_file())
-			emit_signal("resource_is_set", get_parent(), data["files"][0])
+			var filepath = data["files"][0]
+			set_by_filepath(filepath)
+			emit_signal("resource_is_set", get_parent(), filepath)
 
 func go_through_folder_for_options(dir:Directory, base_folder:String = ""):
 	dir.list_dir_begin(true, false)
@@ -159,11 +160,12 @@ func get_image_texture(full_filename)->ImageTexture:
 	var res_img = load(full_filename)
 	var image: Image = res_img.get_data()
 	img_txt.create_from_image(image)
-				
+	
 	# SCALE IMAGE TEXTURE TO x0.75 WIDTH OF OPTION BUTTON
-	var new_width = get_parent_area_size().x * 0.375
-	var new_height = image.get_height() / image.get_width() * new_width
-	img_txt.set_size_override(Vector2(new_width, new_height))
+	var new_width = get_global_rect().size.x * 0.75
+	if image.get_width() > new_width:
+		var new_height = image.get_height() / image.get_width() * new_width
+		img_txt.set_size_override(Vector2(new_width, new_height))
 				
 	return img_txt
 
@@ -205,6 +207,18 @@ func reset_text():
 	
 	set_button_icon(null)
 	set_text(final_text)
+
+func set_by_filepath(full_path):
+	var ext = full_path.get_extension()
+						
+	if ext in IMG_EXTS:
+		set_img(full_path)
+		set_text("")
+	else:
+		var res_name = full_path.rsplit("/")[-1]
+		set_text(res_name)
+		
+	set_tooltip(full_path)
 
 func set_dragdata(data):
 	drag_data = data

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=7 format=2]
+[gd_resource type="Resource" load_steps=8 format=2]
 
 [ext_resource path="res://data/mons/category.gd" type="Script" id=1]
 [ext_resource path="res://data/types/poison.tres" type="Resource" id=2]
@@ -6,9 +6,11 @@
 [ext_resource path="res://data/types/grass.tres" type="Resource" id=4]
 [ext_resource path="res://data/moves/growl.tres" type="Resource" id=5]
 [ext_resource path="res://data/moves/vinewhip.tres" type="Resource" id=6]
+[ext_resource path="res://content/sprites/pkmn/front/001.png" type="Texture" id=7]
 
 [resource]
 script = ExtResource( 1 )
+front = ExtResource( 7 )
 type1 = ExtResource( 4 )
 type2 = ExtResource( 2 )
 move1 = ExtResource( 3 )
