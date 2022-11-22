@@ -87,11 +87,13 @@ func set_associated_bar(val):
 
 func set_maxhp(val:int):
 	max_hp = val
-	emit_signal("maxhp_iset", val)
+	if !Engine.editor_hint:
+		emit_signal("maxhp_iset", val)
 
 func set_curhp(val:int, instant:bool=false):
 	cur_hp = val
-	emit_signal("curhp_iset", val, instant)
+	if !Engine.editor_hint:
+		emit_signal("curhp_iset", val, instant)
 
 # METHODS
 	
