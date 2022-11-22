@@ -14,3 +14,4 @@ type1 = ExtResource( 3 )
 move1 = ExtResource( 2 )
 move2 = ExtResource( 5 )
 move3 = ExtResource( 4 )
+hp = 10

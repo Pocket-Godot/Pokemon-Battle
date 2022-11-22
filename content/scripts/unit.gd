@@ -1,7 +1,10 @@
 tool
 extends Sprite
 
+export(Resource) var species
+
 # Animation
+export(bool) var is_facing_front
 export(Vector2) var proportional_offset setget set_proportional_offset
 export(Vector2) var relative_forward setget set_relative_forward
 export(Vector2) var relative_backward setget set_relative_backward
@@ -13,15 +16,25 @@ export(NodePath) var np_associated_bar setget set_np_associated_bar
 var associated_bar
 
 # Battle Parameters
-var max_hp := 20
+var max_hp:int setget set_maxhp
 signal maxhp_iset
-var cur_hp setget set_curhp
+var cur_hp:int setget set_curhp
 signal curhp_iset
 
 func _ready():
+	# ANIMATION
+	var new_texture
+	if is_facing_front:
+		new_texture = species.front
+	else:
+		new_texture = species.back
+	set_texture(new_texture)
+	
+	# UI
 	set_associated_bar(get_node(np_associated_bar))
 	
-	emit_signal("maxhp_iset", max_hp)
+	# BATTLE PARAMETERS
+	set_maxhp(species.hp)
 	set_curhp(max_hp, true)
 
 func _set(p, v):
@@ -65,6 +78,8 @@ func set_associated_bar(val):
 	if val:
 		associated_bar = val
 		if !Engine.editor_hint:
+			var unit_name = species.get_name()
+			associated_bar.set_name(unit_name)
 			connect("maxhp_iset", associated_bar, "_maxhp_iset")
 			connect("curhp_iset", associated_bar, "_curhp_iset")
 

@@ -10,3 +10,4 @@ script = ExtResource( 1 )
 type1 = ExtResource( 4 )
 move1 = ExtResource( 2 )
 move2 = ExtResource( 3 )
+hp = 10

@@ -8,3 +8,4 @@
 script = ExtResource( 1 )
 type1 = ExtResource( 3 )
 type2 = ExtResource( 2 )
+hp = 10

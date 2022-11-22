@@ -17,3 +17,6 @@ func _curhp_iset(val:int, instant:bool=false):
 		tween.interpolate_property(bar, "value", bar.get_value(), val, 1.0)
 		
 		tween.start()
+
+func set_name(s):
+	$PanelContainer/MarginContainer/VBoxContainer/HBox/Name.set_text(s)
