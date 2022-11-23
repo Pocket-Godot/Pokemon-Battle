@@ -5,6 +5,7 @@ export(String, "TimelineDropdown") var timeline: String
 var dialogic_node
 signal dialogic_node_added
 
+var moves_list
 signal move_selected
 
 signal end_turn
@@ -17,8 +18,12 @@ func _ready():
 	emit_signal("dialogic_node_added", dialogic_node)
 	
 	#CONNECT MOVES
-	for i in 4:
-		get_node("UI_Layer/MarginContainer/Moves/List/Move" + String(i+1) + "/Button").connect("pressed", self, "_on_move_btn_pressed", [i])
+	moves_list = $UI_Layer/MarginContainer/Moves/List
+	for i in range(1, moves_list.get_child_count()):
+		moves_list.get_child(i).connect("pressed", self, "_on_move_btn_pressed", [i])
+	
+	var moveset = $Allies/You.species.get_moveset()
+	update_moves_list(moveset)
 
 func _on_move_btn_pressed(i:int):
 	
@@ -31,3 +36,15 @@ func _on_move_btn_pressed(i:int):
 	$FSM/UsedMove.subturns.append(player_turn)
 	
 	emit_signal("move_selected")
+
+func update_moves_list(moveset):
+	for i in range(1, moves_list.get_child_count()):
+		var move_btn = moves_list.get_child(i)
+		
+		var h = i-1
+		var move = moveset[h]
+		if move == null:
+			move_btn.hide()
+		else:
+			move_btn.show()
+			move_btn.update_movedata(move)

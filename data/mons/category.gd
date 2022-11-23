@@ -15,3 +15,6 @@ export(int) var hp := 10
 
 func get_name()->String:
 	return resource_path.get_file().get_basename().capitalize()
+
+func get_moveset():
+	return [move1, move2, move3, move4]

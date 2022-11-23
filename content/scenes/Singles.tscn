@@ -9,7 +9,7 @@
 [ext_resource path="res://content/gameobjects/units/Ally.tscn" type="PackedScene" id=7]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
-[ext_resource path="res://content/scripts/unit.gd" type="Script" id=10]
+[ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=10]
 [ext_resource path="res://data/mons/bulbasaur.tres" type="Resource" id=12]
 [ext_resource path="res://data/mons/totodile.tres" type="Resource" id=13]
 [ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=17]
@@ -89,7 +89,7 @@ position = Vector2( 772.4, 160.025 )
 scale = Vector2( 2, 2 )
 
 [node name="Foe" parent="Foes" instance=ExtResource( 5 )]
-script = ExtResource( 10 )
+texture = ExtResource( 10 )
 species = ExtResource( 13 )
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar")
 
@@ -100,7 +100,6 @@ position = Vector2( 309.049, 372.628 )
 scale = Vector2( 3, 3 )
 
 [node name="You" parent="Allies" instance=ExtResource( 7 )]
-script = ExtResource( 10 )
 species = ExtResource( 12 )
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar")
 
