@@ -22,7 +22,7 @@ func _ready():
 	for i in range(1, moves_list.get_child_count()):
 		moves_list.get_child(i).connect("pressed", self, "_on_move_btn_pressed", [i])
 	
-	var moveset = $Allies/You.species.get_moveset()
+	var moveset = $Allies/You.moveset
 	update_moves_list(moveset)
 
 func _on_move_btn_pressed(i:int):
@@ -42,9 +42,13 @@ func update_moves_list(moveset):
 		var move_btn = moves_list.get_child(i)
 		
 		var h = i-1
-		var move = moveset[h]
+		var dict_move = moveset[h]
+		var move = dict_move["move"]
 		if move == null:
 			move_btn.hide()
 		else:
 			move_btn.show()
 			move_btn.update_movedata(move)
+			
+			var cur_pp = dict_move["pp"]
+			move_btn.update_power_points(cur_pp, move.power_points)

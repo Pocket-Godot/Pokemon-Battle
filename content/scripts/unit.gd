@@ -3,7 +3,7 @@ extends Sprite
 
 export(Resource) var species
 
-# Animation
+# ANIMATIONS
 export(bool) var is_facing_front
 export(Vector2) var proportional_offset setget set_proportional_offset
 export(Vector2) var relative_forward setget set_relative_forward
@@ -11,11 +11,14 @@ export(Vector2) var relative_backward setget set_relative_backward
 export(float) var relative_right setget set_relative_right
 var original_position:Vector2
 
+# MOVESETS
+var moveset = []
+
 # UI
 export(NodePath) var np_associated_bar setget set_np_associated_bar
 var associated_bar
 
-# Battle Parameters
+# BATTLE PARAMETERS
 var max_hp:int setget set_maxhp
 signal maxhp_iset
 var cur_hp:int setget set_curhp
@@ -29,6 +32,17 @@ func _ready():
 	else:
 		new_texture = species.back
 	set_texture(new_texture)
+	
+	# MOVESET
+	var moves = [species.move1, species.move2, species.move3, species.move4]
+	for m in moves:
+		var dict
+		if m:
+			dict = {"move": m,
+				"pp": m.power_points}
+		else:
+			dict = {"move": null}
+		moveset.append(dict)
 	
 	# UI
 	set_associated_bar(get_node(np_associated_bar))

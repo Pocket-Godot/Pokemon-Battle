@@ -11,6 +11,7 @@ func update_movedata(move):
 	
 	var type_name = move.type.get_key().capitalize()
 	label_type.set_text(type_name)
-	
-	var str_pp = String(move.power_points)
+
+func update_power_points(current, max_pp):
+	var str_pp = String(current) + "/" + String(max_pp)
 	label_pp.set_text(str_pp)
