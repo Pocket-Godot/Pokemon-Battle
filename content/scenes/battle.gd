@@ -20,16 +20,19 @@ func _ready():
 	#CONNECT MOVES
 	moves_list = $UI_Layer/MarginContainer/Moves/List
 	for i in range(1, moves_list.get_child_count()):
-		moves_list.get_child(i).connect("pressed", self, "_on_move_btn_pressed", [i])
+		var move_btn = moves_list.get_child(i).get_child(0)
+		move_btn.connect("pressed", self, "_on_move_btn_pressed", [i-1])
 	
 	var moveset = $Allies/You.moveset
 	update_moves_list(moveset)
 
 func _on_move_btn_pressed(i:int):
-	
+
 	# PLAYER'S TURN
+	var player = $Allies.get_child(0)
 	var player_turn = {
-		"user": $Allies.get_child(0),
+		"user": player,
+		"move": player.moveset[i]["move"],
 		"targets": [$Foes/Foe]
 	}
 	

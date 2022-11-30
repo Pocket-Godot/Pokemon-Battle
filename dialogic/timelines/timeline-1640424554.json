@@ -4,7 +4,7 @@
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "[user_name] used Tackle!"
+			"text": "[user_name] used [move_name]!"
 		},
 		{
 			"custom_method": "play_battle_animation",

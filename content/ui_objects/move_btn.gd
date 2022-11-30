@@ -6,7 +6,7 @@ onready var label_category = $MarginContainer/HBoxContainer/Category
 onready var label_pp = $MarginContainer/HBoxContainer/PP
 
 func update_movedata(move):
-	var move_name = move.resource_path.get_file().get_basename().capitalize()
+	var move_name = move.get_name()
 	label_name.set_text(move_name)
 	
 	var type_name = move.type.get_key().capitalize()

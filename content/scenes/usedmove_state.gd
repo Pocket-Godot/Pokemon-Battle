@@ -31,6 +31,7 @@ func _activate():
 	for f in foes_node.get_children():
 		var enemy_turn = {
 			"user": f,
+			"move": f.moveset[0]["move"],
 			"targets": [root_node.get_node("Allies").get_child(0)]
 		}
 		
@@ -56,6 +57,9 @@ func _on_text_complete(text_data):
 func next_subturn():
 	var user_name = subturns[0]["user"].name
 	Dialogic.set_variable("user_name", user_name)
+	
+	var move_name = subturns[0]["move"].get_name()
+	Dialogic.set_variable("move_name", move_name)
 	
 	var target_name = subturns[0]["targets"][0].name
 	Dialogic.set_variable("target_name", target_name)
