@@ -12,4 +12,4 @@ front = ExtResource( 4 )
 back = ExtResource( 5 )
 type1 = ExtResource( 3 )
 move1 = ExtResource( 2 )
-hp = 10
+hp = 80.0

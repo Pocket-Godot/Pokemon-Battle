@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource( 1 )
 type = ExtResource( 2 )
-base_power = 0
-accuracy = 100
+base_power = 35.0
+accuracy = 100.0
 power_points = 25.0

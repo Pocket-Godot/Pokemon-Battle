@@ -10,4 +10,4 @@ script = ExtResource( 1 )
 front = ExtResource( 4 )
 type1 = ExtResource( 2 )
 move1 = ExtResource( 3 )
-hp = 10
+hp = 80.0
