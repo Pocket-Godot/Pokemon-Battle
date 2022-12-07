@@ -79,13 +79,16 @@ func end_of_subturn():
 # BATTLE ANIMATIONS
 
 func set_move_animations(d:Dictionary):
-	action_sequences = [
-		{"anim_node": d["user"].get_node("AnimationPlayer"),
-			"track": "Tackle"}]
+	var move = d["move"]
+	var base_power = move.base_power
 			
 	targets = d["targets"]
 	
-	damage = 10
+	action_sequences = [
+		{"anim_node": d["user"].get_node("AnimationPlayer"),
+			"track": "Tackle"}]
+	
+	damage = base_power
 	
 	connect_within_action_sequences()
 	
