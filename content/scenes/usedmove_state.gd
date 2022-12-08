@@ -16,7 +16,9 @@ var targets = []
 export(String, FILE, "*.tscn") var fp_hit_sprite
 var damage
 var hit_sprite
+
 var knockedout_targets = []
+
 signal you_lose
 signal foe_loses
 
@@ -88,7 +90,43 @@ func set_move_animations(d:Dictionary):
 		{"anim_node": d["user"].get_node("AnimationPlayer"),
 			"track": "Tackle"}]
 	
-	damage = base_power
+	# MOVE TYPE
+	var move_type = move.type
+	
+	#	STAB
+	var stab = 1.0
+	var user_species = d["user"].species
+	if move_type == user_species.type1 or move_type == user_species.type2:
+		stab = 1.5
+	
+	#	MULTIPLIER
+	var type_key = move_type.get_key()
+	var tar = targets[0]
+	var type1_mul = tar.species.type1.get_def_eff(type_key)
+	var type2_mul = 1.0
+	var type2 = tar.species.type2
+	if type2:
+		type2_mul = type2.get_def_eff(type_key)
+	var overall_type_effectiveness = type1_mul * type2_mul
+	
+	#	TEXT
+	if overall_type_effectiveness > 1:
+		Dialogic.set_variable("super_effectives", "A")
+	else:
+		Dialogic.set_variable("super_effectives", "")
+		
+	if overall_type_effectiveness < 1 and overall_type_effectiveness > 0:
+		Dialogic.set_variable("notvery_effectives", "A")
+	else:
+		Dialogic.set_variable("notvery_effectives", "")
+		
+	if overall_type_effectiveness == 0:
+		Dialogic.set_variable("no_effects", "A")
+	else:
+		Dialogic.set_variable("no_effects", "")
+	
+	
+	damage = base_power * stab * overall_type_effectiveness
 	
 	connect_within_action_sequences()
 	

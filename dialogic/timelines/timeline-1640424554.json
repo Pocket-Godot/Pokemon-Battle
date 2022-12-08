@@ -11,10 +11,10 @@
 			"event_id": "pkmn_btl_001"
 		},
 		{
-			"condition": ">=",
+			"condition": "!=",
 			"definition": "1645072671-648",
 			"event_id": "dialogic_012",
-			"value": "2"
+			"value": ""
 		},
 		{
 			"character": "",
@@ -26,10 +26,10 @@
 			"event_id": "dialogic_013"
 		},
 		{
-			"condition": "<=",
+			"condition": "!=",
 			"definition": "1657014774-648",
 			"event_id": "dialogic_012",
-			"value": "0.5"
+			"value": ""
 		},
 		{
 			"character": "",

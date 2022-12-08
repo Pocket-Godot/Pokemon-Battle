@@ -4,14 +4,14 @@
 	],
 	"variables": [
 		{
-			"id": "1656073377-648",
-			"name": "target_name",
+			"id": "1656073436-787",
+			"name": "knock_outs",
 			"type": 0,
 			"value": ""
 		},
 		{
-			"id": "1645072671-648",
-			"name": "super_effectives",
+			"id": "1669794521-648",
+			"name": "move_name",
 			"type": 0,
 			"value": ""
 		},
@@ -22,8 +22,8 @@
 			"value": ""
 		},
 		{
-			"id": "1656073436-787",
-			"name": "knock_outs",
+			"id": "1656073377-648",
+			"name": "target_name",
 			"type": 0,
 			"value": ""
 		},
@@ -34,8 +34,14 @@
 			"value": ""
 		},
 		{
-			"id": "1669794521-648",
-			"name": "move_name",
+			"id": "1645072671-648",
+			"name": "super_effectives",
+			"type": 0,
+			"value": ""
+		},
+		{
+			"id": "1670477983-648",
+			"name": "no_effects",
 			"type": 0,
 			"value": ""
 		}
