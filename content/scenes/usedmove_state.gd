@@ -12,9 +12,15 @@ var action_sequences = []
 var animplayer_pending = []
 signal all_anims_finished
 
+# RANDOM FACTOR
+const MAXROLL_MOVEACC = 10000
+const MAXROLL_DMGDIFF = 16
+const MAXROLL_MOVECRIT = 10000
+const MAXROLL_EFFCHANC = 1000
+
 var targets = []
 export(String, FILE, "*.tscn") var fp_hit_sprite
-var damage
+var damages = []
 var hit_sprite
 
 var knockedout_targets = []
@@ -23,6 +29,7 @@ signal you_lose
 signal foe_loses
 
 func _ready():
+	randomize()
 	hit_sprite = load(fp_hit_sprite)
 
 func _activate():
@@ -83,6 +90,7 @@ func end_of_subturn():
 func set_move_animations(d:Dictionary):
 	var move = d["move"]
 	var base_power = move.base_power
+	var base_accuracy = move.accuracy
 			
 	targets = d["targets"]
 	
@@ -90,43 +98,91 @@ func set_move_animations(d:Dictionary):
 		{"anim_node": d["user"].get_node("AnimationPlayer"),
 			"track": "Tackle"}]
 	
-	# MOVE TYPE
-	var move_type = move.type
+	damages = []
+	var arr_misses = []
+	var arr_noeffects = []
+	var arr_crits = []
+	var arr_supereffectives = []
+	var arr_notveryeffectives = []
+	for t in targets:
+		# ACCURACY CHECK
+		var roll = randi()
+		"""
+		var move_hit
+		if base_accuracy >= 100:
+			move_hit = true
+		elif base_accuracy <= 0:
+			move_hit = false
+		else:
+			var move_accuracy = base_accuracy * 100
+			var roll_moveacc = roll % MAXROLL_MOVEACC
+			
+			move_hit = roll_moveacc <= move_accuracy
+		"""
+		var move_hit = true
+		if move_hit:
+			# CALCULATE DAMAGE
+			# 	MOVE TYPE
+			var move_type = move.type
+			
+			#	STAB
+			var stab = 1.0
+			var user_species = d["user"].species
+			if move_type == user_species.type1 or move_type == user_species.type2:
+				stab = 1.5
+			
+			#	MULTIPLIER
+			var type_key = move_type.get_key()
+			var tar = targets[0]
+			var type1_mul = tar.species.type1.get_def_eff(type_key)
+			var type2_mul = 1.0
+			var type2 = tar.species.type2
+			if type2:
+				type2_mul = type2.get_def_eff(type_key)
+			
+			var type_mul = type1_mul * type2_mul
+			var overall_type_effectiveness = stab * type_mul
+			
+			if type_mul:
+				#	FOR TEXT
+				if type_mul > 1:
+					arr_supereffectives.append(t)
+				elif type_mul < 1:
+					arr_notveryeffectives.append(t)
+				
+				# TO DO: CALCULATE RANDOM DIFFERENCE
+				roll /= MAXROLL_MOVEACC
+				var roll_randiff = roll % MAXROLL_DMGDIFF
+				
+				# TO DO: CRITICAL HIT
+				roll /= MAXROLL_DMGDIFF
+				var roll_crit = roll % MAXROLL_MOVECRIT
+				
+				var damage = base_power * overall_type_effectiveness
+				damages.append(damage)
+				
+				# TO DO: ADD ADITIONAL CHANCE
+				roll /= MAXROLL_MOVECRIT
+				var roll_effchance = roll % MAXROLL_EFFCHANC
+			else:
+				arr_noeffects.append(t)
+				damages.append(0)
+		else:
+			arr_misses.append(t)
+			damages.append(0)
 	
-	#	STAB
-	var stab = 1.0
-	var user_species = d["user"].species
-	if move_type == user_species.type1 or move_type == user_species.type2:
-		stab = 1.5
-	
-	#	MULTIPLIER
-	var type_key = move_type.get_key()
-	var tar = targets[0]
-	var type1_mul = tar.species.type1.get_def_eff(type_key)
-	var type2_mul = 1.0
-	var type2 = tar.species.type2
-	if type2:
-		type2_mul = type2.get_def_eff(type_key)
-	var overall_type_effectiveness = type1_mul * type2_mul
-	
-	#	TEXT
-	if overall_type_effectiveness > 1:
-		Dialogic.set_variable("super_effectives", "A")
-	else:
-		Dialogic.set_variable("super_effectives", "")
-		
-	if overall_type_effectiveness < 1 and overall_type_effectiveness > 0:
-		Dialogic.set_variable("notvery_effectives", "A")
-	else:
-		Dialogic.set_variable("notvery_effectives", "")
-		
-	if overall_type_effectiveness == 0:
-		Dialogic.set_variable("no_effects", "A")
-	else:
-		Dialogic.set_variable("no_effects", "")
-	
-	
-	damage = base_power * stab * overall_type_effectiveness
+	# OVERALL TEXT DIALOGUES
+	for v in ["misses", "no_effects", "super_effectives", "notvery_effectives"]:
+		Dialogic.set_variable(v, "")
+	if arr_misses.size() + arr_noeffects.size() + arr_supereffectives.size() + arr_notveryeffectives.size() == 1:
+		if !arr_misses.empty():
+			Dialogic.set_variable("misses", "A")
+		elif !arr_noeffects.empty():
+			Dialogic.set_variable("no_effects", "A")
+		elif !arr_supereffectives.empty():
+			Dialogic.set_variable("super_effectives", "A")
+		else:
+			Dialogic.set_variable("notvery_effectives", "A")
 	
 	connect_within_action_sequences()
 	
@@ -152,28 +208,32 @@ func _move_anim_next():
 	
 	if action_sequences.size():
 		play_car()
-	elif damage:
-		for t in targets:
-			# HIT EFFECTS
-			var inst_hitsprite = hit_sprite.instance()
-			t.add_child(inst_hitsprite)
+	else:
+		for i in damages.size():
+			var t = targets[i]
+			var d = damages[i]
 			
-			var tanim_player = inst_hitsprite.get_node("AnimationPlayer")
-			animplayer_pending.append(tanim_player)
-			tanim_player.connect("animation_finished", self, "_hiteffect_finished", [tanim_player])
-			tanim_player.play("Strike")
+			if d:
+				# HIT EFFECTS
+				var inst_hitsprite = hit_sprite.instance()
+				t.add_child(inst_hitsprite)
+				
+				var tanim_player = inst_hitsprite.get_node("AnimationPlayer")
+				animplayer_pending.append(tanim_player)
+				tanim_player.connect("animation_finished", self, "_hiteffect_finished", [tanim_player])
+				tanim_player.play("Strike")
 			
-			# HEALTH BAR
-			t.cur_hp -= damage
+				# HEALTH BAR
+				t.cur_hp -= d
+				
+				var heath_bar = t.associated_bar
+				var bar_tween = heath_bar.get_node("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Health/Tween")
+				animplayer_pending.append(bar_tween)
+				bar_tween.connect("tween_all_completed", self, "_bar_completed", [bar_tween])
 			
-			var heath_bar = t.associated_bar
-			var bar_tween = heath_bar.get_node("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Health/Tween")
-			animplayer_pending.append(bar_tween)
-			bar_tween.connect("tween_all_completed", self, "_bar_completed", [bar_tween])
-			
-			# KNOCK OUTS
-			if t.cur_hp <= 0:
-				knockedout_targets.append(t)
+				# KNOCK OUTS
+				if t.cur_hp <= 0:
+					knockedout_targets.append(t)
 				
 		if knockedout_targets.size():
 			var knockedout_names = PoolStringArray([])
@@ -227,7 +287,7 @@ func play_knockout_animation():
 			if s['user'] == t:
 				subturns.erase(s)
 	
-	damage = 0
+	damages = [0]
 	
 	connect_within_action_sequences()
 	
