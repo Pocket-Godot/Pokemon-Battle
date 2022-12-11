@@ -8,6 +8,7 @@ var subturns = []
 signal end_turn
 
 # BATTLE ANIMATIONS
+var move
 var action_sequences = []
 var animplayer_pending = []
 signal all_anims_finished
@@ -40,7 +41,7 @@ func _activate():
 	for f in foes_node.get_children():
 		var enemy_turn = {
 			"user": f,
-			"move": f.moveset[0]["move"],
+			"move_index": 0,
 			"targets": [root_node.get_node("Allies").get_child(0)]
 		}
 		
@@ -64,10 +65,15 @@ func _on_text_complete(text_data):
 # TURNS
 
 func next_subturn():
-	var user_name = subturns[0]["user"].name
+	var user = subturns[0]["user"]
+	var user_name = user.name
 	Dialogic.set_variable("user_name", user_name)
 	
-	var move_name = subturns[0]["move"].get_name()
+	var move_i = subturns[0]["move_index"]
+	var move_d = user.moveset[move_i]
+	move = move_d["move"]
+	move_d["pp"] -= 1
+	var move_name = move.get_name()
 	Dialogic.set_variable("move_name", move_name)
 	
 	var target_name = subturns[0]["targets"][0].name
@@ -88,7 +94,6 @@ func end_of_subturn():
 # BATTLE ANIMATIONS
 
 func set_move_animations(d:Dictionary):
-	var move = d["move"]
 	var base_power = move.base_power
 	var base_accuracy = move.accuracy
 			

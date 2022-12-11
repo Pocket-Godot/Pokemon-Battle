@@ -274,6 +274,7 @@ custom_constants/margin_left = 200
 [connection signal="dialogic_node_added" from="." to="FSM/UsedMove" method="_on_dialogic_node_added"]
 [connection signal="end_turn" from="." to="FSM/BackToCommands" method="_condition"]
 [connection signal="move_selected" from="." to="FSM/ToUsedMove" method="_condition"]
+[connection signal="activate" from="FSM/Commands" to="." method="_on_commands_activated"]
 [connection signal="end_turn" from="FSM/UsedMove" to="FSM/BackToCommands" method="_condition"]
 [connection signal="foe_loses" from="FSM/UsedMove" to="FSM/ToWin" method="_condition"]
 [connection signal="you_lose" from="FSM/UsedMove" to="FSM/ToLose" method="_condition"]

@@ -26,13 +26,18 @@ func _ready():
 	var moveset = $Allies/You.moveset
 	update_moves_list(moveset)
 
+func _on_commands_activated():
+	if $Allies/You.moveset:
+		var moveset = $Allies/You.moveset
+		update_moves_list(moveset)
+
 func _on_move_btn_pressed(i:int):
 
 	# PLAYER'S TURN
 	var player = $Allies.get_child(0)
 	var player_turn = {
 		"user": player,
-		"move": player.moveset[i]["move"],
+		"move_index": i,
 		"targets": [$Foes/Foe]
 	}
 	
@@ -55,3 +60,4 @@ func update_moves_list(moveset):
 			
 			var cur_pp = dict_move["pp"]
 			move_btn.update_power_points(cur_pp, move.power_points)
+			move_btn.set_disabled(cur_pp <= 0)
