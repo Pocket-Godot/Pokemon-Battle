@@ -1,6 +1,7 @@
 tool
 extends Sprite
 
+var display_name
 export(Resource) var species
 
 # ANIMATIONS
@@ -25,6 +26,8 @@ var cur_hp:int setget set_curhp
 signal curhp_iset
 
 func _ready():
+	display_name = species.get_name()
+	
 	# ANIMATION
 	var new_texture
 	if is_facing_front:
@@ -92,8 +95,7 @@ func set_associated_bar(val):
 	if val:
 		associated_bar = val
 		if !Engine.editor_hint:
-			var unit_name = species.get_name()
-			associated_bar.set_name(unit_name)
+			associated_bar.set_name(display_name)
 			connect("maxhp_iset", associated_bar, "_maxhp_iset")
 			connect("curhp_iset", associated_bar, "_curhp_iset")
 

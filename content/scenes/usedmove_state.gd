@@ -99,11 +99,11 @@ func set_move_animations(d:Dictionary):
 			"track": "Tackle"}]
 	
 	damages = []
-	var arr_misses = []
-	var arr_noeffects = []
-	var arr_crits = []
-	var arr_supereffectives = []
-	var arr_notveryeffectives = []
+	var arr_misses = PoolStringArray([])
+	var arr_noeffects = PoolStringArray([])
+	var arr_crits = PoolStringArray([])
+	var arr_supereffectives = PoolStringArray([])
+	var arr_notveryeffectives = PoolStringArray([])
 	for t in targets:
 		# ACCURACY CHECK
 		var roll = randi()
@@ -146,9 +146,9 @@ func set_move_animations(d:Dictionary):
 			if type_mul:
 				#	FOR TEXT
 				if type_mul > 1:
-					arr_supereffectives.append(t)
+					arr_supereffectives.append(t.display_name)
 				elif type_mul < 1:
-					arr_notveryeffectives.append(t)
+					arr_notveryeffectives.append(t.display_name)
 				
 				# TO DO: CALCULATE RANDOM DIFFERENCE
 				roll /= MAXROLL_MOVEACC
@@ -165,27 +165,43 @@ func set_move_animations(d:Dictionary):
 				roll /= MAXROLL_MOVECRIT
 				var roll_effchance = roll % MAXROLL_EFFCHANC
 			else:
-				arr_noeffects.append(t)
+				arr_noeffects.append(t.display_name)
 				damages.append(0)
 		else:
-			arr_misses.append(t)
+			arr_misses.append(t.display_name)
 			damages.append(0)
 	
 	# OVERALL TEXT DIALOGUES
 	for v in ["misses", "no_effects", "super_effectives", "notvery_effectives"]:
-		Dialogic.set_variable(v, "")
+		Dialogic.set_variable(v, "Skip")
+	
+	#	SINGLE-TARGET
 	if arr_misses.size() + arr_noeffects.size() + arr_supereffectives.size() + arr_notveryeffectives.size() == 1:
 		if !arr_misses.empty():
-			Dialogic.set_variable("misses", "A")
+			Dialogic.set_variable("misses", "")
 		elif !arr_noeffects.empty():
-			Dialogic.set_variable("no_effects", "A")
+			Dialogic.set_variable("no_effects", "")
 		elif !arr_supereffectives.empty():
-			Dialogic.set_variable("super_effectives", "A")
+			Dialogic.set_variable("super_effectives", "")
 		else:
-			Dialogic.set_variable("notvery_effectives", "A")
+			Dialogic.set_variable("notvery_effectives", "")
+	
+	#	MULTI-TARGETS
+	else:
+		if !arr_misses.empty():
+			var str_misses = join_list_en(arr_misses)
+		
+		if !arr_noeffects.empty():
+			var str_noeffects = join_list_en(arr_noeffects, " or ")
+		
+		if !arr_supereffectives.empty():
+			var str_supereffectives = on_list_en(arr_supereffectives)
+		
+		if !arr_notveryeffectives.empty():
+			pass
 	
 	connect_within_action_sequences()
-	
+
 func connect_within_action_sequences():
 	for a in action_sequences:
 		var n = a["anim_node"]
@@ -292,6 +308,29 @@ func play_knockout_animation():
 	connect_within_action_sequences()
 	
 	play_car()
+
+# CALCULATIONS
+
+# TEXTS
+
+func join_list_en(psa:PoolStringArray, last_delimiter:String = " and "):
+	var final_string = ""
+	
+	for i in psa.size():
+		if i > 0:
+			if i == psa.size() - 1:
+				final_string += last_delimiter
+			else:
+				final_string += ", "
+	
+	return final_string
+
+func on_list_en(psa:PoolStringArray):
+	var final_string = " on "
+	final_string += join_list_en(psa)
+	return final_string
+
+# BATTLE OUTCOME
 
 func upon_no_more_reserves():
 	if get_node("../../Allies/You").cur_hp <= 0:

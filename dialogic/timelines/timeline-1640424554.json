@@ -14,13 +14,13 @@
 			"condition": "!=",
 			"definition": "1645072671-648",
 			"event_id": "dialogic_012",
-			"value": ""
+			"value": "Skip"
 		},
 		{
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "It's super effective!"
+			"text": "It's super effective[super_effectives]!"
 		},
 		{
 			"event_id": "dialogic_013"
@@ -29,13 +29,13 @@
 			"condition": "!=",
 			"definition": "1657014774-648",
 			"event_id": "dialogic_012",
-			"value": ""
+			"value": "Skip"
 		},
 		{
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "It's not very effective......"
+			"text": "It's not very effective[notvery_effectives]......"
 		},
 		{
 			"event_id": "dialogic_013"
