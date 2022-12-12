@@ -24,6 +24,9 @@ export(String, FILE, "*.tscn") var fp_hit_sprite
 var damages = []
 var hit_sprite
 
+# TEXTS
+const SKIP = "SKIP"
+
 var knockedout_targets = []
 
 signal you_lose
@@ -76,13 +79,21 @@ func next_subturn():
 	var move_name = move.get_name()
 	Dialogic.set_variable("move_name", move_name)
 	
-	var target_name = subturns[0]["targets"][0].name
-	Dialogic.set_variable("target_name", target_name)
+	move_calculations(subturns[0])
 	
 	set_move_animations(subturns[0])
 	Dialogic.change_timeline('execute-move')
 		
 func end_of_subturn():
+	# RESET
+	damages = []
+	targets = []
+	knockedout_targets = []
+	
+	#	DIALOG VARS
+	for v in ["misses", "no_effects", "super_effectives", "notvery_effectives", "knock_outs"]:
+		Dialogic.set_variable(v, SKIP)
+	
 	subturns.remove(0)
 	
 	if subturns.empty():
@@ -94,116 +105,9 @@ func end_of_subturn():
 # BATTLE ANIMATIONS
 
 func set_move_animations(d:Dictionary):
-	var base_power = move.base_power
-	var base_accuracy = move.accuracy
-			
-	targets = d["targets"]
-	
 	action_sequences = [
 		{"anim_node": d["user"].get_node("AnimationPlayer"),
 			"track": "Tackle"}]
-	
-	damages = []
-	var arr_misses = PoolStringArray([])
-	var arr_noeffects = PoolStringArray([])
-	var arr_crits = PoolStringArray([])
-	var arr_supereffectives = PoolStringArray([])
-	var arr_notveryeffectives = PoolStringArray([])
-	for t in targets:
-		# ACCURACY CHECK
-		var roll = randi()
-		"""
-		var move_hit
-		if base_accuracy >= 100:
-			move_hit = true
-		elif base_accuracy <= 0:
-			move_hit = false
-		else:
-			var move_accuracy = base_accuracy * 100
-			var roll_moveacc = roll % MAXROLL_MOVEACC
-			
-			move_hit = roll_moveacc <= move_accuracy
-		"""
-		var move_hit = true
-		if move_hit:
-			# CALCULATE DAMAGE
-			# 	MOVE TYPE
-			var move_type = move.type
-			
-			#	STAB
-			var stab = 1.0
-			var user_species = d["user"].species
-			if move_type == user_species.type1 or move_type == user_species.type2:
-				stab = 1.5
-			
-			#	MULTIPLIER
-			var type_key = move_type.get_key()
-			var tar = targets[0]
-			var type1_mul = tar.species.type1.get_def_eff(type_key)
-			var type2_mul = 1.0
-			var type2 = tar.species.type2
-			if type2:
-				type2_mul = type2.get_def_eff(type_key)
-			
-			var type_mul = type1_mul * type2_mul
-			var overall_type_effectiveness = stab * type_mul
-			
-			if type_mul:
-				#	FOR TEXT
-				if type_mul > 1:
-					arr_supereffectives.append(t.display_name)
-				elif type_mul < 1:
-					arr_notveryeffectives.append(t.display_name)
-				
-				# TO DO: CALCULATE RANDOM DIFFERENCE
-				roll /= MAXROLL_MOVEACC
-				var roll_randiff = roll % MAXROLL_DMGDIFF
-				
-				# TO DO: CRITICAL HIT
-				roll /= MAXROLL_DMGDIFF
-				var roll_crit = roll % MAXROLL_MOVECRIT
-				
-				var damage = base_power * overall_type_effectiveness
-				damages.append(damage)
-				
-				# TO DO: ADD ADITIONAL CHANCE
-				roll /= MAXROLL_MOVECRIT
-				var roll_effchance = roll % MAXROLL_EFFCHANC
-			else:
-				arr_noeffects.append(t.display_name)
-				damages.append(0)
-		else:
-			arr_misses.append(t.display_name)
-			damages.append(0)
-	
-	# OVERALL TEXT DIALOGUES
-	for v in ["misses", "no_effects", "super_effectives", "notvery_effectives"]:
-		Dialogic.set_variable(v, "Skip")
-	
-	#	SINGLE-TARGET
-	if arr_misses.size() + arr_noeffects.size() + arr_supereffectives.size() + arr_notveryeffectives.size() == 1:
-		if !arr_misses.empty():
-			Dialogic.set_variable("misses", "")
-		elif !arr_noeffects.empty():
-			Dialogic.set_variable("no_effects", "")
-		elif !arr_supereffectives.empty():
-			Dialogic.set_variable("super_effectives", "")
-		else:
-			Dialogic.set_variable("notvery_effectives", "")
-	
-	#	MULTI-TARGETS
-	else:
-		if !arr_misses.empty():
-			var str_misses = join_list_en(arr_misses)
-		
-		if !arr_noeffects.empty():
-			var str_noeffects = join_list_en(arr_noeffects, " or ")
-		
-		if !arr_supereffectives.empty():
-			var str_supereffectives = on_list_en(arr_supereffectives)
-		
-		if !arr_notveryeffectives.empty():
-			pass
 	
 	connect_within_action_sequences()
 
@@ -315,6 +219,114 @@ func play_knockout_animation():
 	play_car()
 
 # CALCULATIONS
+
+func move_calculations(d:Dictionary):
+	var base_power = move.base_power
+	var base_accuracy = move.accuracy
+			
+	targets = d["targets"]
+	
+	var arr_misses = PoolStringArray([])
+	var arr_noeffects = PoolStringArray([])
+	var arr_crits = PoolStringArray([])
+	var arr_supereffectives = PoolStringArray([])
+	var arr_notveryeffectives = PoolStringArray([])
+	for t in targets:
+		# ACCURACY CHECK
+		var roll = randi()
+		var move_hit = true
+		
+		if move_hit:
+			# CALCULATE DAMAGE
+			# 	MOVE TYPE
+			var move_type = move.type
+			
+			#	STAB
+			var stab = 1.0
+			var user_species = d["user"].species
+			if move_type == user_species.type1 or move_type == user_species.type2:
+				stab = 1.5
+			
+			#	MULTIPLIER
+			var type_key = move_type.get_key()
+			var tar = targets[0]
+			var type1_mul = tar.species.type1.get_def_eff(type_key)
+			var type2_mul = 1.0
+			var type2 = tar.species.type2
+			if type2:
+				type2_mul = type2.get_def_eff(type_key)
+			
+			var type_mul = type1_mul * type2_mul
+			var overall_type_effectiveness = stab * type_mul
+			
+			if type_mul:
+				#	FOR TEXT
+				if type_mul > 1:
+					arr_supereffectives.append(t.display_name)
+				elif type_mul < 1:
+					arr_notveryeffectives.append(t.display_name)
+				
+				# TO DO: CALCULATE RANDOM DIFFERENCE
+				roll /= MAXROLL_MOVEACC
+				var roll_randiff = roll % MAXROLL_DMGDIFF
+				
+				# TO DO: CRITICAL HIT
+				roll /= MAXROLL_DMGDIFF
+				var roll_crit = roll % MAXROLL_MOVECRIT
+				
+				var damage = base_power * overall_type_effectiveness
+				damages.append(damage)
+				
+				# TO DO: ADD ADITIONAL CHANCE
+				roll /= MAXROLL_MOVECRIT
+				var roll_effchance = roll % MAXROLL_EFFCHANC
+			else:
+				arr_noeffects.append(t.display_name)
+				damages.append(0)
+		else:
+			arr_misses.append(t.display_name)
+			damages.append(0)
+	
+	# TEXT DIALOGUES VARS
+	#	SINGLE-TARGET
+	if arr_misses.size() + arr_noeffects.size() + arr_supereffectives.size() + arr_notveryeffectives.size() == 1:
+		if !arr_misses.empty():
+			Dialogic.set_variable("misses", arr_misses[0])
+		elif !arr_noeffects.empty():
+			Dialogic.set_variable("no_effects", "")
+		elif !arr_supereffectives.empty():
+			Dialogic.set_variable("super_effectives", "")
+		else:
+			Dialogic.set_variable("notvery_effectives", "")
+	
+	#	MULTI-TARGETS
+	else:
+		if !arr_misses.empty():
+			var str_misses = join_list_en(arr_misses)
+			Dialogic.set_variable("misses", str_misses)
+		
+		if !arr_noeffects.empty():
+			var str_noeffects = join_list_en(arr_noeffects, " or ")
+			Dialogic.set_variable("no_effects", arr_noeffects)
+		
+		if !arr_supereffectives.empty():
+			var str_supereffectives = on_list_en(arr_supereffectives)
+			Dialogic.set_variable("super_effectives", arr_supereffectives)
+		
+		if !arr_notveryeffectives.empty():
+			var str_notveryeffectives = join_list_en(arr_notveryeffectives, " or ")
+			Dialogic.set_variable("notvery_effectives", arr_notveryeffectives)
+
+func sucessful_hit(roll, base_accuracy):
+	if base_accuracy >= 100:
+		return true
+	elif base_accuracy <= 0:
+		return false
+	else:
+		var move_accuracy = base_accuracy * 100
+		var roll_moveacc = roll % MAXROLL_MOVEACC
+		
+		return roll_moveacc <= move_accuracy
 
 # TEXTS
 

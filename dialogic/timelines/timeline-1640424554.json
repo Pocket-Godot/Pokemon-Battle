@@ -7,6 +7,36 @@
 			"text": "[user_name] used [move_name]!"
 		},
 		{
+			"condition": "!=",
+			"definition": "1670659213-648",
+			"event_id": "dialogic_012",
+			"value": "SKIP"
+		},
+		{
+			"character": "",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "[misses] evaded the attack!"
+		},
+		{
+			"event_id": "dialogic_013"
+		},
+		{
+			"condition": "!=",
+			"definition": "1670477983-648",
+			"event_id": "dialogic_012",
+			"value": "SKIP"
+		},
+		{
+			"character": "",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "It doesn't affect [no_effects]!"
+		},
+		{
+			"event_id": "dialogic_013"
+		},
+		{
 			"custom_method": "play_battle_animation",
 			"event_id": "pkmn_btl_001"
 		},
@@ -14,7 +44,7 @@
 			"condition": "!=",
 			"definition": "1645072671-648",
 			"event_id": "dialogic_012",
-			"value": "Skip"
+			"value": "SKIP"
 		},
 		{
 			"character": "",
@@ -29,7 +59,7 @@
 			"condition": "!=",
 			"definition": "1657014774-648",
 			"event_id": "dialogic_012",
-			"value": "Skip"
+			"value": "SKIP"
 		},
 		{
 			"character": "",
@@ -44,7 +74,7 @@
 			"condition": "!=",
 			"definition": "1656073436-787",
 			"event_id": "dialogic_012",
-			"value": ""
+			"value": "SKIP"
 		},
 		{
 			"custom_method": "play_knockout_animation",
@@ -54,7 +84,7 @@
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "[target_name] fainted!"
+			"text": "[knock_outs] fainted!"
 		},
 		{
 			"call_node": {

@@ -60,4 +60,4 @@ func update_moves_list(moveset):
 			
 			var cur_pp = dict_move["pp"]
 			move_btn.update_power_points(cur_pp, move.power_points)
-			move_btn.set_disabled(cur_pp <= 0)
+			move_btn.get_node("Button").set_disabled(cur_pp <= 0)
