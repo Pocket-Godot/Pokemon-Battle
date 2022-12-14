@@ -43,6 +43,9 @@ func _ready():
 		if m:
 			dict = {"move": m,
 				"pp": m.power_points}
+				
+			if m.type.fp_hit_effect:
+				dict["hit_effect"] = load(m.type.fp_hit_effect)
 		else:
 			dict = {"move": null}
 		moveset.append(dict)

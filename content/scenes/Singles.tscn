@@ -48,7 +48,7 @@ np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Moves/List/Move1")
 script = ExtResource( 1 )
 graph_offset = Vector2( 460, 440 )
 transitions = [ NodePath("../BackToCommands"), NodePath("../ToWin"), NodePath("../ToLose") ]
-fp_hit_sprite = "res://content/gameobjects/battle_animations/front/Strike.tscn"
+fp_hit_effect = "res://content/gameobjects/battle_animations/hit_effects/Default.tscn"
 
 [node name="YouWin" type="Node" parent="FSM"]
 script = ExtResource( 4 )

@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource( 1 )
 color = Color( 0.176471, 0.176471, 0.176471, 1 )
+fp_hit_effect = ""
 defensive_effectivenesses = {
 "bug": 2.0,
 "dark": 0.5,

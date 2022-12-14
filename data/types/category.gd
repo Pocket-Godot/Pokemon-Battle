@@ -3,6 +3,7 @@ extends Resource
 
 export (Color) var color
 export (Texture) var default_palette
+export (String, FILE, "*.tscn") var fp_hit_effect
 
 export (Dictionary) var defensive_effectivenesses
 

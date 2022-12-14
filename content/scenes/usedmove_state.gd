@@ -20,9 +20,10 @@ const MAXROLL_MOVECRIT = 10000
 const MAXROLL_EFFCHANC = 1000
 
 var targets = []
-export(String, FILE, "*.tscn") var fp_hit_sprite
+export(String, FILE, "*.tscn") var fp_hit_effect
 var damages = []
-var hit_sprite
+var default_hit_effect
+var hit_effects = {}
 
 # TEXTS
 const SKIP = "SKIP"
@@ -34,7 +35,7 @@ signal foe_loses
 
 func _ready():
 	randomize()
-	hit_sprite = load(fp_hit_sprite)
+	default_hit_effect = load(fp_hit_effect)
 
 func _activate():
 	
@@ -86,9 +87,10 @@ func next_subturn():
 		
 func end_of_subturn():
 	# RESET
-	damages = []
-	targets = []
-	knockedout_targets = []
+	damages.clear()
+	targets.clear()
+	hit_effects.clear()
+	knockedout_targets.clear()
 	
 	#	DIALOG VARS
 	for v in ["misses", "no_effects", "super_effectives", "notvery_effectives", "knock_outs"]:
@@ -135,12 +137,13 @@ func _move_anim_next():
 		play_car()
 	else:
 		for i in damages.size():
-			var t = targets[i]
 			var d = damages[i]
 			
 			if d:
+				var t = targets[i]
+				
 				# HIT EFFECTS
-				var inst_hitsprite = hit_sprite.instance()
+				var inst_hitsprite = hit_effects[i].instance()
 				t.add_child(inst_hitsprite)
 				
 				var tanim_player = inst_hitsprite.get_node("AnimationPlayer")
@@ -231,7 +234,9 @@ func move_calculations(d:Dictionary):
 	var arr_crits = PoolStringArray([])
 	var arr_supereffectives = PoolStringArray([])
 	var arr_notveryeffectives = PoolStringArray([])
-	for t in targets:
+	for i in targets.size():
+		var t = targets[i]
+		
 		# ACCURACY CHECK
 		var roll = randi()
 		var move_hit = true
@@ -274,8 +279,14 @@ func move_calculations(d:Dictionary):
 				roll /= MAXROLL_DMGDIFF
 				var roll_crit = roll % MAXROLL_MOVECRIT
 				
+				# OVERALL DAMAGE
 				var damage = base_power * overall_type_effectiveness
 				damages.append(damage)
+				var move_data = d["user"].moveset[d["move_index"]]
+				if move_data.has("hit_effect"):
+					hit_effects[i] = move_data["hit_effect"]
+				else:
+					hit_effects[i] = default_hit_effect
 				
 				# TO DO: ADD ADITIONAL CHANCE
 				roll /= MAXROLL_MOVECRIT
