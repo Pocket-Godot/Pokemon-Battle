@@ -149,7 +149,6 @@ func _move_anim_next():
 				var tanim_player = inst_hitsprite.get_node("AnimationPlayer")
 				animplayer_pending.append(tanim_player)
 				tanim_player.connect("animation_finished", self, "_hiteffect_finished", [tanim_player])
-				tanim_player.play("Strike")
 			
 				# HEALTH BAR
 				t.cur_hp -= d
