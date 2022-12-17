@@ -1,8 +1,27 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://content/scripts/unit.gd" type="Script" id=1]
 [ext_resource path="res://content/sprites/pkmn/front/001.png" type="Texture" id=2]
 [ext_resource path="res://content/gameobjects/anim_player.gd" type="Script" id=3]
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+uniform vec3 glow_color;
+uniform float extent;
+
+void fragment(){
+	COLOR = texture(TEXTURE, UV);
+	float nega_extent = 1.0 - extent;
+	COLOR.rgb *= nega_extent;
+	COLOR.rgb += glow_color * extent;
+}"
+
+[sub_resource type="ShaderMaterial" id=7]
+resource_local_to_scene = true
+shader = SubResource( 8 )
+shader_param/glow_color = Vector3( 1, 1, 1 )
+shader_param/extent = 0.0
 
 [sub_resource type="Animation" id=4]
 resource_name = "Faint"
@@ -97,6 +116,18 @@ tracks/3/keys = {
 "update": 0,
 "values": [ Vector2( 1, 1 ) ]
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:glow_extent")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
 
 [sub_resource type="Animation" id=5]
 resource_name = "Recall"
@@ -111,6 +142,45 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1, 1 ), Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:glow_extent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "Send Out"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:glow_extent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.0 ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -143,13 +213,16 @@ tracks/1/keys = {
 }
 
 [node name="Base" type="Sprite"]
+material = SubResource( 7 )
 texture = ExtResource( 2 )
 script = ExtResource( 1 )
+glow_color = Color( 1, 1, 1, 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Faint = SubResource( 4 )
 anims/None = SubResource( 1 )
 anims/RESET = SubResource( 2 )
 anims/Recall = SubResource( 5 )
+"anims/Send Out" = SubResource( 9 )
 anims/Tackle = SubResource( 3 )
 script = ExtResource( 3 )

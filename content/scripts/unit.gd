@@ -12,6 +12,10 @@ export(Vector2) var relative_backward setget set_relative_backward
 export(float) var relative_right setget set_relative_right
 var original_position:Vector2
 
+#	MATERIALS
+export(Color, RGB) var glow_color setget set_glow_color
+export(float) var glow_extent setget set_glow_extent
+
 # MOVESETS
 var moveset = []
 
@@ -80,6 +84,17 @@ func set_relative_backward(val:Vector2):
 func set_relative_right(val:float):
 	relative_right = val
 	update_position()
+
+#	MATERIALS
+
+func set_glow_color(val:Color):
+	glow_color = val
+	var v3 = Vector3(glow_color.r, glow_color.g, glow_color.b)
+	get_material().set_shader_param("glow_color", v3)
+	
+func set_glow_extent(val:float):
+	glow_extent = val
+	get_material().set_shader_param("extent", glow_extent)
 
 #	UI
 
