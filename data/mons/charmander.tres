@@ -1,13 +1,15 @@
-[gd_resource type="Resource" load_steps=5 format=2]
+[gd_resource type="Resource" load_steps=6 format=2]
 
 [ext_resource path="res://data/mons/category.gd" type="Script" id=1]
 [ext_resource path="res://data/types/fire.tres" type="Resource" id=2]
 [ext_resource path="res://data/moves/ember.tres" type="Resource" id=3]
 [ext_resource path="res://content/sprites/pkmn/front/004.png" type="Texture" id=4]
+[ext_resource path="res://content/sprites/pkmn/back/004.png" type="Texture" id=5]
 
 [resource]
 script = ExtResource( 1 )
 front = ExtResource( 4 )
+back = ExtResource( 5 )
 type1 = ExtResource( 2 )
 move1 = ExtResource( 3 )
 hp = 80.0
