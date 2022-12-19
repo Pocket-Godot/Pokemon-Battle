@@ -199,12 +199,12 @@ func upon_empty_animation():
 	if animplayer_pending.empty():
 		emit_signal("all_anims_finished")
 		
-func play_knockout_animation():
+func play_animations(anim: String):
 	# SETTING UP
 	for t in knockedout_targets:
 		var action = {
 			"anim_node": t.get_node("AnimationPlayer"),
-			"track": "Faint"
+			"track": anim
 		}
 		
 		action_sequences.append(action)

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_sketch.svg-9576f10038c82478b886df26c58065ee.stex"
+path="res://.import/icon.svg-0a9fcbcd88c543869a46b6f858ba7238.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogic/custom-events/battle_anim/icon_sketch.svg"
-dest_files=[ "res://.import/icon_sketch.svg-9576f10038c82478b886df26c58065ee.stex" ]
+source_file="res://dialogic/custom-events/play_move/icon.svg"
+dest_files=[ "res://.import/icon.svg-0a9fcbcd88c543869a46b6f858ba7238.stex" ]
 
 [params]
 

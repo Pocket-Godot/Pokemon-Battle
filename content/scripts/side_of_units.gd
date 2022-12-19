@@ -10,4 +10,4 @@ func _ready():
 		dict['species'] = r
 		dict['cur_hp'] = r.hp
 		
-		units += dict
+		units.append(dict)

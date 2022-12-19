@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,18 +41,25 @@
      inkscape:window-width="1440"
      inkscape:window-height="837"
      id="namedview6"
-     showgrid="false"
-     inkscape:zoom="5.1908066"
-     inkscape:cx="-1.3095776"
-     inkscape:cy="24.138267"
+     showgrid="true"
+     inkscape:zoom="14.681818"
+     inkscape:cx="29.767875"
+     inkscape:cy="32.940129"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer2" />
+     inkscape:current-layer="layer2"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid833" />
+  </sodipodi:namedview>
   <g
      inkscape:groupmode="layer"
      id="layer1"
-     inkscape:label="Circle">
+     inkscape:label="Circle"
+     sodipodi:insensitive="true"
+     style="display:inline">
     <path
        fill-rule="evenodd"
        clip-rule="evenodd"
@@ -65,9 +72,26 @@
      id="layer2"
      inkscape:label="Content">
     <path
-       d="m 12,12 v 40 h 2 v -4 h 2 v 4 h 32 v -4 h 2 v 4 h 2 V 12 h -2 v 4 H 48 V 12 H 16 v 4 h -2 v -4 z m 2,6 h 2 v 4 h -2 z m 34,0 h 2 v 4 h -2 z m -8,2 c 6,0 6,6 6,6 -4,2 -8,2 -12,0 0,0 0,-6 6,-6 z m -4,2 v 3.0312 c 0,0.53668 0.43902,0.96876 0.98438,0.96876 h 0.03124 C 37.56098,25.99996 38,25.56792 38,25.0312 v -1.89062 z m 6,0 -2,1.14062 v 1.89062 C 40,25.56792 40.43902,26 40.98438,26 h 0.03124 C 41.56098,26 42,25.56796 42,25.03124 Z m -28,2 h 2 v 4 h -2 z m 34,0 h 2 v 4 h -2 z m -34,6 h 2 v 4 h -2 z m 34,0 h 2 v 4 h -2 z m -20,4 c 7.125,0 8,8 8,8 -2,4 -14,4 -16,0 0,0 0.875,-8 8,-8 z m -14,2 h 2 v 4 h -2 z m 34,0 h 2 v 4 h -2 z m -34,6 h 2 v 4 h -2 z m 34,0 h 2 v 4 h -2 z"
-       fill="#ffffff"
        id="path2"
-       style="stroke-width:1" />
+       style="stroke-width:1;fill:#ffffff;fill-opacity:1"
+       d="M 12 12 L 12 52 L 14 52 L 14 48 L 16 48 L 16 52 L 48 52 L 48 48 L 50 48 L 50 52 L 52 52 L 52 12 L 50 12 L 50 16 L 48 16 L 48 12 L 16 12 L 16 16 L 14 16 L 14 12 L 12 12 z M 28 15 L 37 22.5 L 28 30 L 28 15 z M 14 18 L 16 18 L 16 22 L 14 22 L 14 18 z M 48 18 L 50 18 L 50 22 L 48 22 L 48 18 z M 14 24 L 16 24 L 16 28 L 14 28 L 14 24 z M 48 24 L 50 24 L 50 28 L 48 28 L 48 24 z M 14 30 L 16 30 L 16 34 L 14 34 L 14 30 z M 48 30 L 50 30 L 50 34 L 48 34 L 48 30 z M 32.527344 32.021484 C 42.00011 32.0631 42 41.978516 42 41.978516 C 40 45.978516 25 45.978516 23 41.978516 C 23 41.978516 23.000109 31.979629 32.527344 32.021484 z M 14 36 L 16 36 L 16 40 L 14 40 L 14 36 z M 48 36 L 50 36 L 50 40 L 48 40 L 48 36 z M 14 42 L 16 42 L 16 46 L 14 46 L 14 42 z M 48 42 L 50 42 L 50 46 L 48 46 L 48 42 z " />
+    <rect
+       style="fill:#ffffff;stroke-width:4;stroke-linecap:square;stop-color:#000000"
+       id="rect835"
+       width="2"
+       height="4.9999995"
+       x="27"
+       y="36"
+       ry="1"
+       rx="1" />
+    <rect
+       style="fill:#ffffff;stroke-width:4;stroke-linecap:square;stop-color:#000000"
+       id="rect835-0"
+       width="2"
+       height="4.9999995"
+       x="32"
+       y="36"
+       ry="1"
+       rx="1" />
   </g>
 </svg>
