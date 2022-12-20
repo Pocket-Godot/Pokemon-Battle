@@ -61,9 +61,6 @@ margin_top = 399.0
 margin_right = 455.0
 margin_bottom = 560.0
 script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
@@ -74,15 +71,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="NinePatchRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 2 )
-expand = true
-stretch_mode = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0

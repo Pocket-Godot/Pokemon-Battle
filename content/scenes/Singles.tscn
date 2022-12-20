@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://content/scenes/usedmove_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
@@ -15,6 +15,31 @@
 [ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=17]
 [ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=19]
 [ext_resource path="res://content/scenes/menu_state.gd" type="Script" id=20]
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+uniform vec3 glow_color;
+uniform float extent;
+
+void fragment(){
+	COLOR = texture(TEXTURE, UV);
+	float nega_extent = 1.0 - extent;
+	COLOR.rgb *= nega_extent;
+	COLOR.rgb += glow_color * extent;
+}"
+
+[sub_resource type="ShaderMaterial" id=9]
+resource_local_to_scene = true
+shader = SubResource( 8 )
+shader_param/glow_color = Vector3( 1, 1, 1 )
+shader_param/extent = 0.0
+
+[sub_resource type="ShaderMaterial" id=10]
+resource_local_to_scene = true
+shader = SubResource( 8 )
+shader_param/glow_color = Vector3( 1, 1, 1 )
+shader_param/extent = 0.0
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -89,6 +114,7 @@ position = Vector2( 772.4, 160.025 )
 scale = Vector2( 2, 2 )
 
 [node name="Foe" parent="Foes" instance=ExtResource( 5 )]
+material = SubResource( 9 )
 texture = ExtResource( 10 )
 species = ExtResource( 13 )
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar")
@@ -100,6 +126,7 @@ position = Vector2( 309.049, 372.628 )
 scale = Vector2( 3, 3 )
 
 [node name="You" parent="Allies" instance=ExtResource( 7 )]
+material = SubResource( 10 )
 species = ExtResource( 12 )
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar")
 

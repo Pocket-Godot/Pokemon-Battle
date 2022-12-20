@@ -72,6 +72,7 @@ static func start(timeline: String = '', default_timeline: String ='', dialog_sc
 		for t in DialogicUtil.get_timeline_list():
 			if t['file'] == timeline:
 				dialog_node.timeline = t['file']
+				dialog_node.timeline_name = timeline
 				return returned_dialog_node
 		# No file found. Show error
 		dialog_node.dialog_script = {
@@ -88,6 +89,7 @@ static func start(timeline: String = '', default_timeline: String ='', dialog_sc
 	var timeline_file = _get_timeline_file_from_name(timeline)
 	if timeline_file:
 		dialog_node.timeline = timeline_file
+		dialog_node.timeline_name = timeline
 		return returned_dialog_node
 	
 	# Just in case everything else fails.
@@ -327,8 +329,18 @@ static func toggle_history():
 		var dialog_node = Engine.get_main_loop().get_meta('latest_dialogic_node')
 		dialog_node.HistoryTimeline._on_toggle_history()
 	else:
-		print('No dialog node yet')
+		print('[D] Tried to toggle history, but no dialog node exists.')
 
+################################################################################
+## 					AUTO-ADVANCE
+################################################################################
+static func auto_advance_on(toggle: bool, delay : float=2):
+	if has_current_dialog_node():
+		var dialog_node = Engine.get_main_loop().get_meta('latest_dialogic_node')
+		dialog_node.autoPlayMode = toggle
+		dialog_node.autoWaitTime = float(delay)
+	else:
+		print('[D] Tried to toggle auto advance mode, but no dialog node exists.')
 
 ################################################################################
 ## 					COULD BE USED
@@ -360,7 +372,7 @@ static func get_current_timeline():
 
 # Returns a string with the action button set on the project settings
 static func get_action_button():
-	return DialogicResources.get_settings_value('input', 'default_action_key', 'ui_accept')
+	return DialogicResources.get_settings_value('input', 'default_action_key', 'dialogic_default_action')
 
 ################################################################################
 ## 					NOT TO BE USED FROM OUTSIDE

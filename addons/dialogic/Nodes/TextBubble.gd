@@ -20,7 +20,7 @@ var _finished := false
 var _theme
 
 signal text_completed()
-signal letter_written()
+signal letter_written(lastLetter)
 signal signal_request(arg)
 
 ## *****************************************************************************
@@ -35,7 +35,6 @@ func update_name(name: String, color: Color = Color.white, autocolor: bool=false
 		return
 	
 	if not name.empty():
-		name_label.visible = true
 		# Hack to reset the size
 		name_label.rect_min_size = Vector2(0, 0)
 		name_label.rect_size = Vector2(-1, 40)
@@ -45,9 +44,15 @@ func update_name(name: String, color: Color = Color.white, autocolor: bool=false
 		call_deferred('align_name_label')
 		if autocolor:
 			name_label.set('custom_colors/font_color', color)
+		
+		name_label.visible = true
 	else:
 		name_label.visible = false
 
+func clear():
+	text_label.bbcode_text = ""
+	name_label.text = ""
+	$WritingTimer.stop()
 
 func update_text(text:String):
 	
@@ -99,6 +104,7 @@ func update_text(text:String):
 	# for this reason the RichTextLabel ist first set to just go for the size it needs,
 	# even if this might be more than available.
 	text_label.size_flags_vertical = 0
+	text_label.rect_clip_content = 0
 	text_label.fit_content_height = true
 	# a frame later, when the sizes have been updated, it will check if there 
 	# is enough space or the scrollbar should be activated.
@@ -138,9 +144,12 @@ func handle_command(command:Array):
 			$sounds.play()
 	elif(command[1] == "pause"):
 		$WritingTimer.stop()
+		var x = text_label.visible_characters
 		get_parent().get_node("DialogicTimer").start(float(command[2]))
 		yield(get_parent().get_node("DialogicTimer"), "timeout")
-		start_text_timer()
+		# only continue, if no skip was performed
+		if text_label.visible_characters == x: 
+			start_text_timer()
 		
 
 func skip():
@@ -191,11 +200,10 @@ func load_theme(theme: ConfigFile):
 	theme_text_speed = text_speed
 
 	# Margin
-	var text_margin = theme.get_value('text', 'margin', Vector2(20, 10))
-	text_container.set('margin_left', text_margin.x)
-	text_container.set('margin_right', text_margin.x * -1)
-	text_container.set('margin_top', text_margin.y)
-	text_container.set('margin_bottom', text_margin.y * -1)
+	text_container.set('margin_left', theme.get_value('text', 'text_margin_left', 20))
+	text_container.set('margin_right', theme.get_value('text', 'text_margin_right', -20))
+	text_container.set('margin_top', theme.get_value('text', 'text_margin_top', 10))
+	text_container.set('margin_bottom', theme.get_value('text', 'text_margin_bottom', -10))
 
 	# Backgrounds
 	$TextureRect.texture = DialogicUtil.path_fixer_load(theme.get_value('background','image', "res://addons/dialogic/Example Assets/backgrounds/background-2.png"))
@@ -208,6 +216,11 @@ func load_theme(theme: ConfigFile):
 
 	$ColorRect.visible = theme.get_value('background', 'use_color', false)
 	$TextureRect.visible = theme.get_value('background', 'use_image', true)
+	$TextureRect.visible = theme.get_value('background', 'use_image', true)
+	$TextureRect.patch_margin_left = theme.get_value('ninepatch', 'ninepatch_margin_left', 0)
+	$TextureRect.patch_margin_right = theme.get_value('ninepatch', 'ninepatch_margin_right', 0)
+	$TextureRect.patch_margin_top = theme.get_value('ninepatch', 'ninepatch_margin_top', 0)
+	$TextureRect.patch_margin_bottom = theme.get_value('ninepatch', 'ninepatch_margin_bottom', 0)
 
 	# Next image
 	$NextIndicatorContainer.rect_position = Vector2(0,0)
@@ -264,23 +277,20 @@ func load_theme(theme: ConfigFile):
 
 
 func _on_writing_timer_timeout():
-	# Checks for the 'fade_in_tween_show_time' which only exists during the fade in animation
-	# if that node doesn't exists, it won't start the letter by letter animation.
-	if get_parent().has_node('fade_in_tween_show_time') == false:
-		if _finished == false:
-			text_label.visible_characters += 1
-			if(commands.size()>0 && commands[0][0] <= text_label.visible_characters):
-				handle_command(commands.pop_front()) #handles the command, and removes it from the queue
-			if text_label.visible_characters > text_label.get_total_character_count():
-				_handle_text_completed()
-			elif (
-				text_label.visible_characters > 0 and 
-				#text_label.text.length() > text_label.visible_characters-1 and 
-				text_label.text[text_label.visible_characters-1] != " "
-			):
-				emit_signal('letter_written')
-		else:
-			$WritingTimer.stop()
+	if _finished == false:
+		text_label.visible_characters += 1
+		if(commands.size()>0 && commands[0][0] <= text_label.visible_characters):
+			handle_command(commands.pop_front()) #handles the command, and removes it from the queue
+		if text_label.visible_characters > text_label.get_total_character_count():
+			_handle_text_completed()
+		elif (
+			text_label.visible_characters > 0 #and 
+			#text_label.text.length() > text_label.visible_characters-1 and 
+			#text_label.text[text_label.visible_characters-1] != " "
+		):
+			emit_signal('letter_written', text_label.text[text_label.visible_characters-1] )
+	else:
+		$WritingTimer.stop()
 
 
 func start_text_timer():

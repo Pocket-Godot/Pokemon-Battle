@@ -53,6 +53,8 @@ var id_to_scene_name = {
 	'dialogic_040':'EmitSignal',
 	'dialogic_041':'ChangeScene',
 	'dialogic_042':'CallNode',
+	#Afterlife
+	'dialogic_050':'NoSkipEvent',
 	}
 
 var event_data
@@ -101,6 +103,7 @@ func _ready():
 			button.set_icon(b['event_icon'])
 			button.event_color = b['event_color']
 			button.event_category = b.get('event_category', 0)
+			button.sorting_index = b.get('sorting_index', 9999)
 			# Connecting the signal
 			if button.event_id == 'dialogic_010':
 				button.connect('pressed', self, "_on_ButtonQuestion_pressed", [])
@@ -110,6 +113,8 @@ func _ready():
 				button.connect('pressed', self, "_create_event_button_pressed", [button.event_id])
 			# Adding it to its section
 			get_node("ScrollContainer/EventContainer/FlexContainer" + str(button.event_category + 1)).add_child(button)
+			while button.get_index() != 0 and button.sorting_index < get_node("ScrollContainer/EventContainer/FlexContainer" + str(button.event_category + 1)).get_child(button.get_index()-1).sorting_index:
+				get_node("ScrollContainer/EventContainer/FlexContainer" + str(button.event_category + 1)).move_child(button, button.get_index()-1)
 
 # handles dragging/moving of events
 func _process(delta):
@@ -774,6 +779,7 @@ func drop_event():
 		piece_was_dragged = false
 		indent_events()
 		add_extra_scroll_area_to_timeline()
+		
 
 
 func cancel_drop_event():
@@ -828,10 +834,14 @@ func create_event(event_id: String, data: Dictionary = {'no-data': true} , inden
 	# Indent on create
 	if indent:
 		indent_events()
+	
+	if not building_timeline:
+		piece.focus()
+	
 	return piece
 
 
-func load_timeline(filename: String):
+func load_timeline(filename: String): 
 	clear_timeline()
 	update_custom_events()
 	if timeline_file != filename:
@@ -854,6 +864,7 @@ func load_timeline(filename: String):
 	load_batch(batches)
 	# Reset the scroll position
 	$TimelineArea.scroll_vertical = 0
+	
 
 
 func batch_events(array, size, batch_number):
@@ -879,6 +890,7 @@ func _on_batch_loaded():
 		building_timeline = false
 		emit_signal("timeline_loaded")
 	add_extra_scroll_area_to_timeline()
+	
 
 
 func clear_timeline():
@@ -930,9 +942,11 @@ func move_block(block, direction):
 	if direction == 'up':
 		if block_index > 0:
 			timeline.move_child(block, block_index - 1)
+			$TimelineArea.update()
 			return true
 	if direction == 'down':
 		timeline.move_child(block, block_index + 1)
+		$TimelineArea.update()
 		return true
 	return false
 
@@ -998,7 +1012,8 @@ func scroll_to_piece(piece_index) -> void:
 	var height = 0
 	for i in range(0, piece_index):
 		height += $TimelineArea/TimeLine.get_child(i).rect_size.y
-	$TimelineArea.scroll_vertical = height
+	if height < $TimelineArea.scroll_vertical or height > $TimelineArea.scroll_vertical+$TimelineArea.rect_size.y-(200*DialogicUtil.get_editor_scale(self)):
+		$TimelineArea.scroll_vertical = height
 
 # Event Indenting
 func indent_events() -> void:
@@ -1052,6 +1067,7 @@ func indent_events() -> void:
 			else:
 				event.set_indent(indent)
 		starter = false
+	$TimelineArea.update()
 
 
 # called from the toolbar
@@ -1101,3 +1117,8 @@ func _read_event_data():
 					c[scene.get_node_property_name(0,p)] = scene.get_node_property_value(0, p)
 				events_data.append(c)
 	return events_data
+
+
+func play_timeline():
+	DialogicResources.set_settings_value('QuickTimelineTest', 'timeline_file', timeline_file)
+	editor_reference.editor_interface.play_custom_scene('res://addons/dialogic/Editor/TimelineEditor/TimelineTestingScene.tscn')
