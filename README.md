@@ -20,4 +20,4 @@ It is recommended to remove all Pokemon references, especially when using this a
 ## Acknowledgements
 The following assets and plugins are used:
 * [Database](https://github.com/mechPenSketch/database) by mechPenSketch
-* [Dialogic 1.2.5](https://github.com/coppolaemilio/dialogic) by [Emilio Coppola](https://github.com/coppolaemilio) and other contributors.
+* [Dialogic 1.4.5](https://github.com/coppolaemilio/dialogic) by [Emilio Coppola](https://github.com/coppolaemilio) and other contributors.
