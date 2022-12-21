@@ -30,7 +30,15 @@ func load_data(data:Dictionary):
 
  # has to return the wanted preview, only useful for body parts
 func get_preview():
-	return ''
+	if KEY_ANIMNAME in event_data:
+		var final = "Play \"" + event_data[KEY_ANIMNAME] + "\""
+		
+		if KEY_TARGETARRAY in event_data:
+			final += " on units in Array " + event_data[KEY_TARGETARRAY]
+		
+		return final
+	else:
+		return ''
 
  ## EXAMPLE CHANGE IN ONE OF THE NODES
 func _on_InputField_text_changed(text, key):

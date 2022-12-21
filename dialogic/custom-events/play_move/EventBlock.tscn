@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/dialogic/Editor/Events/Templates/EventTemplate.tscn" type="PackedScene" id=1]
 [ext_resource path="res://dialogic/custom-events/play_move/icon.svg" type="Texture" id=3]
-[ext_resource path="res://dialogic/custom-events/play_move/EventPart.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Image" id=5]
 data = {
@@ -28,7 +27,6 @@ event_data = {
 }
 event_color = Color( 1, 0.819608, 0, 1 )
 event_icon = ExtResource( 3 )
-body_scene = ExtResource( 4 )
 
 [node name="PanelContainer" parent="." index="1"]
 margin_right = 135.0
