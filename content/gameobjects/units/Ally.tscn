@@ -1,9 +1,29 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://content/gameobjects/units/Base.tscn" type="PackedScene" id=1]
 [ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture" id=2]
 
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+uniform vec3 glow_color;
+uniform float extent;
+
+void fragment(){
+	COLOR = texture(TEXTURE, UV);
+	float nega_extent = 1.0 - extent;
+	COLOR.rgb *= nega_extent;
+	COLOR.rgb += glow_color * extent;
+}"
+
+[sub_resource type="ShaderMaterial" id=9]
+resource_local_to_scene = true
+shader = SubResource( 8 )
+shader_param/glow_color = Vector3( 1, 1, 1 )
+shader_param/extent = 0.0
+
 [node name="Ally" instance=ExtResource( 1 )]
+material = SubResource( 9 )
 texture = ExtResource( 2 )
 relative_forward = Vector2( 20, -20 )
 relative_backward = Vector2( -30, 30 )

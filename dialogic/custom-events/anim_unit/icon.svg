@@ -1,0 +1,10 @@
+<svg width="64" height="64" fill="none" version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+ <g display="none">
+  <path d="m32 63c17.121 0 31-13.879 31-31s-13.879-31-31-31-31 13.879-31 31 13.879 31 31 31zm0-4.2759c14.759 0 26.724-11.965 26.724-26.724s-11.965-26.724-26.724-26.724-26.724 11.965-26.724 26.724 11.965 26.724 26.724 26.724z" clip-rule="evenodd" fill="#fff" fill-rule="evenodd"/>
+ </g>
+ <g fill="#fff">
+  <path d="m12 12v40h2v-4h2v4h32v-4h2v4h2v-40h-2v4h-2v-4h-32v4h-2v-4h-2zm16 3 9 7.5-9 7.5v-15zm-14 3h2v4h-2v-4zm34 0h2v4h-2v-4zm-34 6h2v4h-2v-4zm34 0h2v4h-2v-4zm-34 6h2v4h-2v-4zm34 0h2v4h-2v-4zm-15.473 2.0215c9.4728 0.041616 9.4727 9.957 9.4727 9.957-2 4-17 4-19 0 0 0 1.09e-4 -9.9989 9.5273-9.957zm-18.527 3.9785h2v4h-2v-4zm34 0h2v4h-2v-4zm-34 6h2v4h-2v-4zm34 0h2v4h-2v-4z"/>
+  <rect x="27" y="36" width="2" height="5" rx="1" ry="1" stop-color="#000000" stroke-linecap="square" stroke-width="4"/>
+  <rect x="32" y="36" width="2" height="5" rx="1" ry="1" stop-color="#000000" stroke-linecap="square" stroke-width="4"/>
+ </g>
+</svg>

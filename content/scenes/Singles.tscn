@@ -10,9 +10,14 @@
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
 [ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=10]
+[ext_resource path="res://content/scripts/side_of_units.gd" type="Script" id=11]
 [ext_resource path="res://data/mons/bulbasaur.tres" type="Resource" id=12]
 [ext_resource path="res://data/mons/totodile.tres" type="Resource" id=13]
+[ext_resource path="res://data/mons/chikorita.tres" type="Resource" id=14]
+[ext_resource path="res://data/mons/cyndaquil.tres" type="Resource" id=15]
+[ext_resource path="res://data/mons/squirtle.tres" type="Resource" id=16]
 [ext_resource path="res://addons/fsm-node/nodes/fsm.gd" type="Script" id=17]
+[ext_resource path="res://data/mons/charmander.tres" type="Resource" id=18]
 [ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=19]
 [ext_resource path="res://content/scenes/menu_state.gd" type="Script" id=20]
 
@@ -112,10 +117,13 @@ target_state = NodePath("../YouLose")
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
 scale = Vector2( 2, 2 )
+script = ExtResource( 11 )
+species = [ ExtResource( 13 ), ExtResource( 15 ), ExtResource( 14 ) ]
 
 [node name="Foe" parent="Foes" instance=ExtResource( 5 )]
 material = SubResource( 9 )
 texture = ExtResource( 10 )
+script = SubResource( 10 )
 species = ExtResource( 13 )
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar")
 
@@ -124,6 +132,8 @@ np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxCont
 [node name="Allies" type="Node2D" parent="."]
 position = Vector2( 309.049, 372.628 )
 scale = Vector2( 3, 3 )
+script = ExtResource( 11 )
+species = [ ExtResource( 12 ), ExtResource( 18 ), ExtResource( 16 ) ]
 
 [node name="You" parent="Allies" instance=ExtResource( 7 )]
 material = SubResource( 10 )

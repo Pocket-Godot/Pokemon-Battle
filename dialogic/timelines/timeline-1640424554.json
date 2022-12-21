@@ -37,8 +37,9 @@
 			"event_id": "dialogic_013"
 		},
 		{
-			"custom_method": "play_battle_animation",
-			"event_id": "pkmn_btl_001"
+			"custom_method": "play_knockout_animation",
+			"event_id": "pkmn_btl_001",
+			"target_anim": "Faint"
 		},
 		{
 			"condition": "!=",
@@ -77,8 +78,9 @@
 			"value": "SKIP"
 		},
 		{
-			"custom_method": "play_knockout_animation",
-			"event_id": "pkmn_btl_001"
+			"anime_name": "Faint",
+			"event_id": "pkmn_btl_002",
+			"target_anim": "Faint"
 		},
 		{
 			"character": "",
