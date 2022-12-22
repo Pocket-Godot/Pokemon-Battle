@@ -78,7 +78,7 @@
 			"value": "SKIP"
 		},
 		{
-			"anime_name": "Faint",
+			"anim_name": "Faint",
 			"event_id": "pkmn_btl_002",
 			"target_anim": "Faint"
 		},
@@ -113,7 +113,7 @@
 		}
 	],
 	"metadata": {
-		"dialogic-version": "1.4 - DEV",
+		"dialogic-version": "1.4.5",
 		"file": "timeline-1640424554.json",
 		"name": "execute-move"
 	}

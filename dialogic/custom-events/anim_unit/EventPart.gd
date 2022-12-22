@@ -4,17 +4,17 @@ extends "res://addons/dialogic/Editor/Events/Parts/EventPart.gd"
 
  ## node references
  # e.g. 
-onready var txt_targetanim = $VBoxContainer/HBoxContainer/InputField
-onready var txt_effscene = $VBoxContainer/HBoxContainer2/InputField
+onready var txt_aniname = $VBoxContainer/HBoxContainer/InputField
+onready var txt_tarray = $VBoxContainer/HBoxContainer2/InputField
 
-const KEY_ANIMNAME = "anime_name"
+const KEY_ANIMNAME = "anim_name"
 const KEY_TARGETARRAY = "target_array"
 
  # used to connect the signals
 func _ready():
 	# e.g. 
-	txt_targetanim.connect("text_changed", self, "_on_InputField_text_changed", [KEY_ANIMNAME])
-	txt_targetanim.connect("text_changed", self, "_on_InputField_text_changed", [KEY_TARGETARRAY])
+	txt_aniname.connect("text_changed", self, "_on_InputField_text_changed", [KEY_ANIMNAME])
+	txt_tarray.connect("text_changed", self, "_on_InputField_text_changed", [KEY_TARGETARRAY])
 
  # called by the event block
 func load_data(data:Dictionary):
@@ -24,9 +24,9 @@ func load_data(data:Dictionary):
 	# Now update the ui nodes to display the data. 
 	# e.g. 
 	if KEY_ANIMNAME in event_data:
-		txt_targetanim.text = event_data[KEY_ANIMNAME]
+		txt_aniname.text = event_data[KEY_ANIMNAME]
 	if KEY_TARGETARRAY in event_data:
-		txt_effscene.text = event_data[KEY_TARGETARRAY]
+		txt_tarray.text = event_data[KEY_TARGETARRAY]
 
  # has to return the wanted preview, only useful for body parts
 func get_preview():
