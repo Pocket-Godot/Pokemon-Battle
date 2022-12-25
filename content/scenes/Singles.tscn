@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://content/scenes/usedmove_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://data/mons/charmander.tres" type="Resource" id=18]
 [ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=19]
 [ext_resource path="res://content/scenes/menu_state.gd" type="Script" id=20]
+[ext_resource path="res://content/ui_objects/UnitReserve.tscn" type="PackedScene" id=21]
 
 [sub_resource type="Shader" id=8]
 code = "shader_type canvas_item;
@@ -304,9 +305,6 @@ custom_constants/margin_right = 25
 custom_constants/margin_top = 40
 custom_constants/margin_left = 25
 custom_constants/margin_bottom = 40
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="StatusBars" type="Control" parent="UI_Layer/MarginContainer"]
 margin_left = 25.0
@@ -455,6 +453,51 @@ margin_left = 774.0
 margin_right = 974.0
 margin_bottom = 520.0
 custom_constants/margin_left = 200
+
+[node name="ColorRect" type="ColorRect" parent="UI_Layer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.392157 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI_Layer/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/ColorRect/HBoxContainer"]
+margin_right = 340.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="PanelContainer" parent="UI_Layer/ColorRect/HBoxContainer/VBoxContainer" instance=ExtResource( 21 )]
+margin_bottom = 100.0
+
+[node name="PanelContainer2" parent="UI_Layer/ColorRect/HBoxContainer/VBoxContainer" instance=ExtResource( 21 )]
+margin_top = 100.0
+margin_bottom = 200.0
+
+[node name="PanelContainer3" parent="UI_Layer/ColorRect/HBoxContainer/VBoxContainer" instance=ExtResource( 21 )]
+margin_top = 200.0
+margin_bottom = 300.0
+
+[node name="PanelContainer4" parent="UI_Layer/ColorRect/HBoxContainer/VBoxContainer" instance=ExtResource( 21 )]
+margin_top = 300.0
+margin_bottom = 400.0
+
+[node name="PanelContainer5" parent="UI_Layer/ColorRect/HBoxContainer/VBoxContainer" instance=ExtResource( 21 )]
+margin_top = 400.0
+margin_bottom = 500.0
+
+[node name="PanelContainer6" parent="UI_Layer/ColorRect/HBoxContainer/VBoxContainer" instance=ExtResource( 21 )]
+margin_top = 500.0
+
+[node name="Control" type="Control" parent="UI_Layer/ColorRect/HBoxContainer"]
+margin_left = 344.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 
 [connection signal="dialogic_node_added" from="." to="FSM/UsedMove" method="_on_dialogic_node_added"]
 [connection signal="end_turn" from="." to="FSM/BackToCommands" method="_condition"]

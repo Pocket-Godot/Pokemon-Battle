@@ -1,0 +1,37 @@
+[gd_scene format=2]
+
+[node name="PanelContainer" type="PanelContainer"]
+margin_right = 340.0
+margin_bottom = 600.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 333.0
+margin_bottom = 593.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_right = 326.0
+margin_bottom = 586.0
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_right = 326.0
+margin_bottom = 14.0
+text = "Bulbasaur"
+
+[node name="HPBar" type="ProgressBar" parent="HBoxContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 326.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+percent_visible = false
+
+[node name="HP" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_left = 289.0
+margin_top = 24.0
+margin_right = 326.0
+margin_bottom = 38.0
+size_flags_horizontal = 8
+text = "20/20"
