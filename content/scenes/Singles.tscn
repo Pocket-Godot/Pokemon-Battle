@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://content/scenes/usedmove_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
@@ -21,6 +21,7 @@
 [ext_resource path="res://addons/fsm-node/nodes/transition.gd" type="Script" id=19]
 [ext_resource path="res://content/scenes/menu_state.gd" type="Script" id=20]
 [ext_resource path="res://content/ui_objects/UnitReserve.tscn" type="PackedScene" id=21]
+[ext_resource path="res://addons/fsm-node/nodes/state.gd" type="Script" id=22]
 
 [sub_resource type="Shader" id=8]
 code = "shader_type canvas_item;
@@ -211,7 +212,7 @@ starting_state = NodePath("Commands")
 
 [node name="Commands" type="Node" parent="FSM"]
 script = ExtResource( 20 )
-transitions = [ NodePath("../ToMoves") ]
+transitions = [ NodePath("../ToMoves"), NodePath("../ToSwitch") ]
 np_associated_menu = NodePath("../../UI_Layer/MarginContainer/Commands")
 np_focus_btn = NodePath("../../UI_Layer/MarginContainer/Commands/Fight")
 
@@ -261,6 +262,16 @@ target_state = NodePath("../YouWin")
 script = ExtResource( 19 )
 graph_offset = Vector2( 780, 740 )
 target_state = NodePath("../YouLose")
+
+[node name="Switch" type="Node" parent="FSM"]
+script = ExtResource( 22 )
+graph_offset = Vector2( 940, -100 )
+transitions = [ NodePath("../BackToCommands") ]
+
+[node name="ToSwitch" type="Node" parent="FSM"]
+script = ExtResource( 19 )
+graph_offset = Vector2( 620, -100 )
+target_state = NodePath("../Switch")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
