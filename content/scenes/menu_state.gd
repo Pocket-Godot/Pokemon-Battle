@@ -1,6 +1,8 @@
 tool
 extends State
 
+class_name MenuState
+
 export(NodePath) var np_associated_menu
 export(NodePath) var np_focus_btn
 var associated_menu

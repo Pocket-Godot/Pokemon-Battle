@@ -84,6 +84,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/dialogic/Example Assets/History/HistoryRow.gd"
 }, {
+"base": "State",
+"class": "MenuState",
+"language": "GDScript",
+"path": "res://content/scenes/menu_state.gd"
+}, {
 "base": "FSM_Component",
 "class": "State",
 "language": "GDScript",
@@ -110,6 +115,7 @@ _global_script_class_icons={
 "FSM": "res://addons/fsm-node/nodes/icons/fsm.svg",
 "FSM_Component": "",
 "HistoryRow": "",
+"MenuState": "",
 "State": "res://addons/fsm-node/nodes/icons/state.svg",
 "Transition": "res://addons/fsm-node/nodes/icons/transition.svg"
 }
