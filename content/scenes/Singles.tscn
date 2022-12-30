@@ -477,6 +477,7 @@ color = Color( 0, 0, 0, 0.392157 )
 [node name="Switch" type="HBoxContainer" parent="UI_Layer/ShadowBg"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = SubResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/ShadowBg/Switch"]
 margin_right = 340.0
@@ -506,12 +507,25 @@ margin_bottom = 500.0
 [node name="PanelContainer6" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 500.0
 
-[node name="Control" type="Control" parent="UI_Layer/ShadowBg/Switch"]
+[node name="MarginContainer" type="MarginContainer" parent="UI_Layer/ShadowBg/Switch"]
 margin_left = 344.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/ShadowBg/Switch/MarginContainer"]
+margin_right = 680.0
+margin_bottom = 600.0
+
+[node name="Button" type="Button" parent="UI_Layer/ShadowBg/Switch/MarginContainer/VBoxContainer"]
+margin_left = 638.0
+margin_top = 580.0
+margin_right = 680.0
+margin_bottom = 600.0
+size_flags_horizontal = 8
+size_flags_vertical = 10
+text = "Back"
 
 [connection signal="dialogic_node_added" from="." to="FSM/UsedMove" method="_on_dialogic_node_added"]
 [connection signal="end_turn" from="." to="FSM/BackToCommands" method="_condition"]
@@ -525,3 +539,4 @@ size_flags_stretch_ratio = 2.0
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/ToMoves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Switch" to="FSM/ToSwitch" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/BackToCommands" method="_condition"]
+[connection signal="pressed" from="UI_Layer/ShadowBg/Switch/MarginContainer/VBoxContainer/Button" to="FSM/BackToCommands" method="_condition"]
