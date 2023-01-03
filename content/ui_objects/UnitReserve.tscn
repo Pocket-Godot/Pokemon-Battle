@@ -1,9 +1,12 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=2]
 
-[node name="PanelContainer" type="PanelContainer"]
+[ext_resource path="res://content/ui_objects/unit_reserve.gd" type="Script" id=1]
+
+[node name="UnitReserve" type="Button"]
 margin_right = 340.0
 margin_bottom = 600.0
 size_flags_vertical = 3
+script = ExtResource( 1 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 7.0
@@ -26,6 +29,8 @@ margin_top = 18.0
 margin_right = 326.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
+size_flags_vertical = 1
+value = 50.0
 percent_visible = false
 
 [node name="HP" type="Label" parent="HBoxContainer/VBoxContainer"]
@@ -35,3 +40,8 @@ margin_right = 326.0
 margin_bottom = 38.0
 size_flags_horizontal = 8
 text = "20/20"
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+margin_right = 80.0
+margin_bottom = 56.0
+items = [ "Summary", null, 0, false, false, 0, 0, null, "", false, "Switch", null, 0, false, false, 1, 0, null, "", false ]

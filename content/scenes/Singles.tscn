@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://content/scenes/usedmove_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
@@ -195,12 +195,21 @@ shader = SubResource( 8 )
 shader_param/glow_color = Vector3( 1, 1, 1 )
 shader_param/extent = 0.0
 
+[sub_resource type="StyleBoxFlat" id=12]
+
 [sub_resource type="DynamicFont" id=1]
 size = 20
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=2]
 default_font = SubResource( 1 )
+MenuButton/styles/normal = SubResource( 12 )
+
+[sub_resource type="StyleBoxFlat" id=13]
+bg_color = Color( 0.482353, 0.482353, 0.482353, 1 )
+
+[sub_resource type="Theme" id=14]
+MenuButton/styles/normal = SubResource( 13 )
 
 [node name="Node" type="Node"]
 script = ExtResource( 3 )
@@ -229,7 +238,7 @@ script = ExtResource( 22 )
 graph_offset = Vector2( 940, -100 )
 transitions = [ NodePath("../ToUsedMove"), NodePath("../BackToCommands") ]
 np_associated_menu = NodePath("../../UI_Layer/ShadowBg/Switch")
-np_focus_btn = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer/PanelContainer")
+np_focus_btn = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton")
 
 [node name="UsedMove" type="Node" parent="FSM"]
 script = ExtResource( 1 )
@@ -469,7 +478,6 @@ custom_constants/margin_left = 200
 
 [node name="ShadowBg" type="ColorRect" parent="UI_Layer"]
 unique_name_in_owner = true
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 0.392157 )
@@ -477,34 +485,34 @@ color = Color( 0, 0, 0, 0.392157 )
 [node name="Switch" type="HBoxContainer" parent="UI_Layer/ShadowBg"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/ShadowBg/Switch"]
 margin_right = 340.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
+theme = SubResource( 14 )
 custom_constants/separation = 0
 
-[node name="PanelContainer" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_bottom = 100.0
 
-[node name="PanelContainer2" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton2" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 100.0
 margin_bottom = 200.0
 
-[node name="PanelContainer3" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton3" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 200.0
 margin_bottom = 300.0
 
-[node name="PanelContainer4" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton4" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 300.0
 margin_bottom = 400.0
 
-[node name="PanelContainer5" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton5" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 400.0
 margin_bottom = 500.0
 
-[node name="PanelContainer6" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton6" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 500.0
 
 [node name="MarginContainer" type="MarginContainer" parent="UI_Layer/ShadowBg/Switch"]
