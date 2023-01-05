@@ -8,6 +8,8 @@ signal dialogic_node_added
 var moves_list
 signal move_selected
 
+onready var ally_list = $Allies.species
+
 signal end_turn
 
 func _ready():
@@ -25,6 +27,10 @@ func _ready():
 	
 	var moveset = $Allies/You.moveset
 	update_moves_list(moveset)
+	
+	# SWITCHING
+	for i in ally_list.size():
+		$UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(i).set_data(ally_list[i])
 
 func _on_commands_activated():
 	if $Allies/You.moveset:
@@ -44,6 +50,9 @@ func _on_move_btn_pressed(i:int):
 	$FSM/UsedMove.subturns.append(player_turn)
 	
 	emit_signal("move_selected")
+	
+func _on_switch_popmenu_pressed(item_i, unit_i):
+	pass
 
 func update_moves_list(moveset):
 	for i in range(1, moves_list.get_child_count()):

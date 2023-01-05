@@ -478,6 +478,7 @@ custom_constants/margin_left = 200
 
 [node name="ShadowBg" type="ColorRect" parent="UI_Layer"]
 unique_name_in_owner = true
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 0.392157 )
@@ -496,23 +497,23 @@ custom_constants/separation = 0
 [node name="MenuButton" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_bottom = 100.0
 
-[node name="MenuButton2" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton1" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 100.0
 margin_bottom = 200.0
 
-[node name="MenuButton3" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton2" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 200.0
 margin_bottom = 300.0
 
-[node name="MenuButton4" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton3" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 300.0
 margin_bottom = 400.0
 
-[node name="MenuButton5" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton4" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 400.0
 margin_bottom = 500.0
 
-[node name="MenuButton6" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
+[node name="MenuButton5" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
 margin_top = 500.0
 
 [node name="MarginContainer" type="MarginContainer" parent="UI_Layer/ShadowBg/Switch"]
