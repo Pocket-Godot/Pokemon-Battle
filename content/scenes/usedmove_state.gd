@@ -25,6 +25,12 @@ var damages = []
 var default_hit_effect
 var hit_effects = {}
 
+# SWITCHING
+export(NodePath) var np_allies
+var nd_allies
+export(NodePath) var np_foes
+var nd_foes
+
 # TEXTS
 const SKIP = "SKIP"
 
@@ -36,6 +42,9 @@ signal foe_loses
 func _ready():
 	randomize()
 	default_hit_effect = load(fp_hit_effect)
+	
+	nd_allies = get_node(np_allies)
+	nd_foes = get_node(np_foes)
 
 func _activate():
 	
@@ -69,21 +78,37 @@ func _on_text_complete(text_data):
 # TURNS
 
 func next_subturn():
-	var user = subturns[0]["user"]
-	var user_name = user.name
-	Dialogic.set_variable("user_name", user_name)
+	var subturn_car = subturns[0]
+	var subturn_timeline = subturn_car["timeline"]
 	
-	var move_i = subturns[0]["move_index"]
-	var move_d = user.moveset[move_i]
-	move = move_d["move"]
-	move_d["pp"] -= 1
-	var move_name = move.get_name()
-	Dialogic.set_variable("move_name", move_name)
+	match subturn_timeline:
+		"execute-move":
+			var user = subturn_car["user"]
+			var user_name = user.name
+			Dialogic.set_variable("user_name", user_name)
+			
+			var move_i = subturn_car["move_index"]
+			var move_d = user.moveset[move_i]
+			move = move_d["move"]
+			move_d["pp"] -= 1
+			var move_name = move.get_name()
+			Dialogic.set_variable("move_name", move_name)
+			
+			move_calculations(subturn_car)
+			
+			set_move_animations(subturn_car)
+			
+		"we-switch", "they-switch":
+			var user = subturn_car["user"]
+			var user_name = user.name
+			Dialogic.set_variable("user_name", user_name)
+			
+			var ti = subturn_car["reserve_index"]
+			var target = nd_allies.species[ti]
+			var target_name = target.get_name()
+			Dialogic.set_variable("user_name", target_name)
 	
-	move_calculations(subturns[0])
-	
-	set_move_animations(subturns[0])
-	Dialogic.change_timeline('execute-move')
+	Dialogic.change_timeline(subturn_timeline)
 		
 func end_of_subturn():
 	# RESET

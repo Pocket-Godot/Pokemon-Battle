@@ -1,5 +1,7 @@
 extends Node
 
+onready var fsm_usedmove = $FSM/UsedMove
+
 ## The timeline to load when starting the scene
 export(String, "TimelineDropdown") var timeline: String
 var dialogic_node
@@ -30,7 +32,9 @@ func _ready():
 	
 	# SWITCHING
 	for i in ally_list.size():
-		$UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(i).set_data(ally_list[i])
+		var unit_reserve = $UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(i)
+		unit_reserve.set_data(ally_list[i])
+		unit_reserve.get_node("PopupMenu").connect("index_pressed", self, "_on_switch_popmenu_pressed", [i])
 
 func _on_commands_activated():
 	if $Allies/You.moveset:
@@ -43,16 +47,31 @@ func _on_move_btn_pressed(i:int):
 	var player = $Allies.get_child(0)
 	var player_turn = {
 		"user": player,
+		"timeline": "execute-move",
 		"move_index": i,
 		"targets": [$Foes/Foe]
 	}
 	
-	$FSM/UsedMove.subturns.append(player_turn)
+	fsm_usedmove.subturns.append(player_turn)
 	
 	emit_signal("move_selected")
 	
 func _on_switch_popmenu_pressed(item_i, unit_i):
-	pass
+	match item_i:
+		1:	# SWITCH IN
+			var player = $Allies.get_child(0)
+			var player_turn = {
+				"user": player,
+				"timeline": "we-switch",
+				"reserve_index": unit_i,
+			}
+	
+			fsm_usedmove.subturns.append(player_turn)
+	
+			emit_signal("move_selected")
+		
+		_:	# CHECK SUMMARY
+			pass
 
 func update_moves_list(moveset):
 	for i in range(1, moves_list.get_child_count()):

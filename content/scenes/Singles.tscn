@@ -245,6 +245,8 @@ script = ExtResource( 1 )
 graph_offset = Vector2( 460, 440 )
 transitions = [ NodePath("../BackToCommands"), NodePath("../ToWin"), NodePath("../ToLose") ]
 fp_hit_effect = "res://content/gameobjects/battle_animations/hit_effects/Default.tscn"
+np_allies = NodePath("../../Allies")
+np_foes = NodePath("../../Foes")
 
 [node name="YouWin" type="Node" parent="FSM"]
 script = ExtResource( 4 )
