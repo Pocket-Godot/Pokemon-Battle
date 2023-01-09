@@ -30,11 +30,21 @@ func _ready():
 	var moveset = $Allies/You.moveset
 	update_moves_list(moveset)
 	
+	var ally_indexes = []
+	for n in $Allies.get_children():
+		ally_indexes.append(n.reserve_index)
+	
 	# SWITCHING
 	for i in ally_list.size():
 		var unit_reserve = $UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(i)
 		unit_reserve.set_data(ally_list[i])
 		unit_reserve.get_node("PopupMenu").connect("index_pressed", self, "_on_switch_popmenu_pressed", [i])
+		
+		for j in ally_indexes:
+			if j == i:
+				unit_reserve.disable_switch_option()
+				ally_indexes.erase(j)
+				break
 
 func _on_commands_activated():
 	if $Allies/You.moveset:

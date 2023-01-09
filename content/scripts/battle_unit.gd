@@ -1,8 +1,9 @@
 tool
 extends Sprite
 
+var reserve_index := 0
 var display_name
-export(Resource) var species
+var species
 
 # ANIMATIONS
 export(bool) var is_facing_front
@@ -30,6 +31,7 @@ var cur_hp:int setget set_curhp
 signal curhp_iset
 
 func _ready():
+	species = get_parent().species[reserve_index]
 	display_name = species.get_name()
 	
 	# ANIMATION

@@ -33,3 +33,6 @@ func set_hp_text():
 	var txt_cur_hp = String(hp_bar.get_value())
 	
 	$HBoxContainer/VBoxContainer/HP.set_text(txt_cur_hp + "/" + txt_max_hp)
+
+func disable_switch_option():
+	popup.set_item_disabled(1, true)
