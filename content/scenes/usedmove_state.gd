@@ -56,6 +56,7 @@ func _activate():
 	for f in foes_node.get_children():
 		var enemy_turn = {
 			"user": f,
+			"timeline": "execute-move",
 			"move_index": 0,
 			"targets": [root_node.get_node("Allies").get_child(0)]
 		}
