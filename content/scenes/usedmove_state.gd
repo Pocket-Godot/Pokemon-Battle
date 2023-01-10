@@ -7,6 +7,8 @@ signal first_text_complete
 var subturns = []
 signal end_turn
 
+var user
+
 # BATTLE ANIMATIONS
 var move
 var action_sequences = []
@@ -80,10 +82,10 @@ func _on_text_complete(text_data):
 func next_subturn():
 	var subturn_car = subturns[0]
 	var subturn_timeline = subturn_car["timeline"]
+	user = subturn_car["user"]
 	
 	match subturn_timeline:
 		"execute-move":
-			var user = subturn_car["user"]
 			var user_name = user.name
 			Dialogic.set_variable("user_name", user_name)
 			
@@ -99,7 +101,6 @@ func next_subturn():
 			set_move_animations(subturn_car)
 			
 		"we-switch", "they-switch":
-			var user = subturn_car["user"]
 			var user_name = user.name
 			Dialogic.set_variable("user_name", user_name)
 			
@@ -224,16 +225,22 @@ func upon_empty_animation():
 	if animplayer_pending.empty():
 		emit_signal("all_anims_finished")
 		
-func play_animations(anim: String):
+func play_animations(anim: String, nm_arr: String = ""):
+	var array_targets
+	if nm_arr:
+		array_targets = get(nm_arr)
+	else:
+		array_targets = [user]
+	
 	# SETTING UP
-	for t in knockedout_targets:
+	for t in array_targets:
 		var action = {
 			"anim_node": t.get_node("AnimationPlayer"),
 			"track": anim
 		}
 		
 		action_sequences.append(action)
-	
+		
 		# REMOVE SUBTURNS WHERE THE USER IS THE FAINTED
 		for s in subturns:
 			if s['user'] == t:

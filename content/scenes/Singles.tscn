@@ -153,6 +153,7 @@ relative_forward = Vector2( 0, 0 )
 relative_backward = Vector2( 0, 0 )
 relative_right = 0.0
 glow_color = Color( 0, 0, 0, 1 )
+np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar")
 
 [node name="In-Between" type="Node2D" parent="."]
 
@@ -168,6 +169,7 @@ relative_forward = Vector2( 0, 0 )
 relative_backward = Vector2( 0, 0 )
 relative_right = 0.0
 glow_color = Color( 0, 0, 0, 1 )
+np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar")
 
 [node name="Effects" type="Node2D" parent="."]
 

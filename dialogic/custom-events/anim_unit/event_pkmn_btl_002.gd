@@ -16,12 +16,15 @@ func handle_event(event_data, dialog_node):
 	#dialog_node.set_state(dialog_node.state.WAITING_INPUT)
 	
 	#pass # fill with event action
-	var anim_name = event_data["target_anim"]
+	var anim_name = event_data["anim_name"]
+	var target_array = ""
+	if event_data.has("target_array"):
+		target_array = event_data["target_array"]
 	
 	associated_dialognode = dialog_node
 	state_tousedmove.connect("all_anims_finished", self, "_all_anims_finished")
 	
-	state_tousedmove.play_animations(anim_name)
+	state_tousedmove.play_animations(anim_name, target_array)
 	
 func _all_anims_finished():
 	# once you want to continue with the next event

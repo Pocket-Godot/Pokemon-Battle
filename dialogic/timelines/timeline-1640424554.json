@@ -80,7 +80,8 @@
 		{
 			"anim_name": "Faint",
 			"event_id": "pkmn_btl_002",
-			"target_anim": "Faint"
+			"target_anim": "Faint",
+			"target_array": "knockedout_targets"
 		},
 		{
 			"character": "",

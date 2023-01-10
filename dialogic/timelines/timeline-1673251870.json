@@ -7,6 +7,10 @@
 			"text": "Bulbasaur, return!"
 		},
 		{
+			"anim_name": "Recall",
+			"event_id": "pkmn_btl_002"
+		},
+		{
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
