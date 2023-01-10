@@ -39,13 +39,13 @@ void fragment(){
 [sub_resource type="ShaderMaterial" id=9]
 resource_local_to_scene = true
 shader = SubResource( 8 )
-shader_param/glow_color = Vector3( 0, 0, 0 )
+shader_param/glow_color = Vector3( 1, 1, 1 )
 shader_param/extent = 0.0
 
 [sub_resource type="ShaderMaterial" id=11]
 resource_local_to_scene = true
 shader = SubResource( 8 )
-shader_param/glow_color = Vector3( 0, 0, 0 )
+shader_param/glow_color = Vector3( 1, 1, 1 )
 shader_param/extent = 0.0
 
 [sub_resource type="StyleBoxFlat" id=12]
@@ -149,10 +149,6 @@ species = [ ExtResource( 13 ), ExtResource( 15 ), ExtResource( 14 ) ]
 [node name="Foe" parent="Foes" instance=ExtResource( 5 )]
 material = SubResource( 9 )
 texture = ExtResource( 10 )
-relative_forward = Vector2( 0, 0 )
-relative_backward = Vector2( 0, 0 )
-relative_right = 0.0
-glow_color = Color( 0, 0, 0, 1 )
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar")
 
 [node name="In-Between" type="Node2D" parent="."]
@@ -165,10 +161,6 @@ species = [ ExtResource( 12 ), ExtResource( 18 ), ExtResource( 16 ) ]
 
 [node name="You" parent="Allies" instance=ExtResource( 7 )]
 material = SubResource( 11 )
-relative_forward = Vector2( 0, 0 )
-relative_backward = Vector2( 0, 0 )
-relative_right = 0.0
-glow_color = Color( 0, 0, 0, 1 )
 np_associated_bar = NodePath("../../UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar")
 
 [node name="Effects" type="Node2D" parent="."]
