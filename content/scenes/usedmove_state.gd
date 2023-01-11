@@ -227,7 +227,7 @@ func play_battle_animation():
 
 func play_car():
 	var action = action_sequences[0]
-	print(action["track"])
+	
 	action["anim_node"].play(action["track"])
 	
 func upon_empty_animation():
@@ -248,7 +248,7 @@ func play_animations(anim: String, nm_arr: String = ""):
 			"track": anim
 		}
 		
-		action_sequences.append(action)
+		action_sequences = [action]
 		
 		# REMOVE SUBTURNS WHERE THE USER IS THE FAINTED
 		for s in subturns:
