@@ -1,8 +1,9 @@
 tool
 extends Sprite
 
-var reserve_index := 0
+var reserve_index := 0 setget set_reserve_index
 var display_name
+var reserve_list
 var species
 
 # ANIMATIONS
@@ -31,7 +32,24 @@ var cur_hp:int setget set_curhp
 signal curhp_iset
 
 func _ready():
-	species = get_parent().species[reserve_index]
+	reserve_list = get_parent().species
+	set_species(reserve_index)
+	
+	# UI
+	set_associated_bar(get_node(np_associated_bar))
+
+func _set(p, v):
+	if p == "position":
+		original_position = v
+		update_position()
+
+# SET PROPTERTIES
+func set_reserve_index(v):
+	reserve_index = v
+	set_species(v)
+	
+func set_species(i):
+	species = reserve_list[i]
 	display_name = species.get_name()
 	
 	# ANIMATION
@@ -56,19 +74,10 @@ func _ready():
 			dict = {"move": null}
 		moveset.append(dict)
 	
-	# UI
-	set_associated_bar(get_node(np_associated_bar))
-	
 	# BATTLE PARAMETERS
 	set_maxhp(species.hp)
 	set_curhp(max_hp, true)
 
-func _set(p, v):
-	if p == "position":
-		original_position = v
-		update_position()
-
-# SET PROPTERTIES
 #	ANIMATION
 
 func set_proportional_offset(val:Vector2):

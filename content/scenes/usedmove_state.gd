@@ -32,6 +32,7 @@ export(NodePath) var np_allies
 var nd_allies
 export(NodePath) var np_foes
 var nd_foes
+var target_reserve_index
 
 # TEXTS
 const SKIP = "SKIP"
@@ -109,6 +110,8 @@ func next_subturn():
 			var target = nd_allies.species[ti]
 			var target_name = target.get_name()
 			Dialogic.set_variable("user_name", target_name)
+			
+			target_reserve_index = ti
 	
 	Dialogic.change_timeline(subturn_timeline)
 		
@@ -130,6 +133,11 @@ func end_of_subturn():
 		emit_signal("end_turn")
 	else:
 		next_subturn()
+
+#	SWITCH
+
+func switch_unit():
+	user.set_reserve_index(target_reserve_index)
 
 # BATTLE ANIMATIONS
 
@@ -219,7 +227,7 @@ func play_battle_animation():
 
 func play_car():
 	var action = action_sequences[0]
-	
+	print(action["track"])
 	action["anim_node"].play(action["track"])
 	
 func upon_empty_animation():

@@ -11,10 +11,24 @@
 			"event_id": "pkmn_btl_002"
 		},
 		{
+			"call_node": {
+				"arguments": [
+
+				],
+				"method_name": "switch_unit",
+				"target_node_path": "Node/FSM/UsedMove"
+			},
+			"event_id": "dialogic_042"
+		},
+		{
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
 			"text": "Go, Charmander!"
+		},
+		{
+			"anim_name": "Send Out",
+			"event_id": "pkmn_btl_002"
 		}
 	],
 	"metadata": {
