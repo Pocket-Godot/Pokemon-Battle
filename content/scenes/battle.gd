@@ -38,7 +38,7 @@ func _ready():
 	for i in ally_list.size():
 		var unit_reserve = $UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(i)
 		unit_reserve.set_data(ally_list[i])
-		unit_reserve.get_node("PopupMenu").connect("index_pressed", self, "_on_switch_popmenu_pressed", [i])
+		unit_reserve.connect_popup(self, i)
 		
 		for j in ally_indexes:
 			if j == i:

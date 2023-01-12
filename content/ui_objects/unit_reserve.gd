@@ -1,8 +1,9 @@
-extends Button
+extends MarginContainer
 
-onready var hp_bar = $HBoxContainer/VBoxContainer/HPBar
+onready var hp_bar = $MarginContainer/HBoxContainer/VBoxContainer/HPBar
+onready var hp_txt = $MarginContainer/HBoxContainer/VBoxContainer/HP
 
-onready var popup = $PopupMenu
+onready var popup = $Button/PopupMenu
 var popup_rect
 
 func _ready():
@@ -10,14 +11,14 @@ func _ready():
 	popup_rect.position.x = get_rect().position.x + get_rect().size.x
 	popup_rect.position.y = get_rect().position.y
 
-func _pressed():
+func _on_btn_pressed():
 	popup.popup(popup_rect)
 
 func set_data(unit):
-	set_disabled(false)
+	$Button.set_disabled(false)
 	
-	$HBoxContainer.show()
-	$HBoxContainer/VBoxContainer/HBoxContainer/Name.set_text(unit.get_name())
+	$MarginContainer.show()
+	$MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Name.set_text(unit.get_name())
 	set_health(unit.hp, unit.hp)
 	
 func set_health(max_hp, cur_hp):
@@ -32,7 +33,10 @@ func set_hp_text():
 	var txt_max_hp = String(hp_bar.get_max())
 	var txt_cur_hp = String(hp_bar.get_value())
 	
-	$HBoxContainer/VBoxContainer/HP.set_text(txt_cur_hp + "/" + txt_max_hp)
+	hp_txt.set_text(txt_cur_hp + "/" + txt_max_hp)
+
+func connect_popup(n, i):
+	popup.connect("index_pressed", n, "_on_switch_popmenu_pressed", [i])
 
 func disable_switch_option():
 	popup.set_item_disabled(1, true)
