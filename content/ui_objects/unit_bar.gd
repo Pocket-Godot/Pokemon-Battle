@@ -13,10 +13,13 @@ func _curhp_iset(val:int, instant:bool=false):
 	if instant:
 		bar.set_value(val)
 	else:
-		var tween = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Health/Tween
+		var tween = get_node("%HPBar")
 		tween.interpolate_property(bar, "value", bar.get_value(), val, 1.0)
 		
 		tween.start()
+
+func get_hpbar_tween():
+	return get_node("%HPBar")
 
 func set_name(s):
 	$PanelContainer/MarginContainer/VBoxContainer/HBox/Name.set_text(s)

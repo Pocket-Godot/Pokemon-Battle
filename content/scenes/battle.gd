@@ -12,6 +12,8 @@ signal move_selected
 
 onready var ally_list = $Allies.species
 
+onready var ally_battlebars = $UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies
+
 signal end_turn
 
 func _ready():
@@ -44,6 +46,10 @@ func _ready():
 			if j == i:
 				unit_reserve.disable_switch_option()
 				ally_indexes.erase(j)
+				
+				# BATTLE HP BAR
+				var battlebar = ally_battlebars.get_child(j)
+				battlebar.get_hpbar_tween().connect("tween_completed", unit_reserve, "_on_hp_tween_completed")
 				break
 
 func _on_commands_activated():

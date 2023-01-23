@@ -189,7 +189,7 @@ func _move_anim_next():
 				t.cur_hp -= d
 				
 				var heath_bar = t.associated_bar
-				var bar_tween = heath_bar.get_node("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/Health/Tween")
+				var bar_tween = heath_bar.get_node("%HPBar")
 				animplayer_pending.append(bar_tween)
 				bar_tween.connect("tween_all_completed", self, "_bar_completed", [bar_tween])
 			

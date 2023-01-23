@@ -14,6 +14,10 @@ func _ready():
 func _on_btn_pressed():
 	popup.popup(popup_rect)
 
+func _on_hp_tween_completed(hpbar, _n):
+	var v = hpbar.get_value()
+	set_cur_hp(v)
+
 func set_data(unit):
 	$Button.set_disabled(false)
 	
