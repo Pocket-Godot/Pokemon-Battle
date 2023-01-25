@@ -29,6 +29,16 @@
 		{
 			"anim_name": "Send Out",
 			"event_id": "pkmn_btl_002"
+		},
+		{
+			"call_node": {
+				"arguments": [
+
+				],
+				"method_name": "end_of_subturn",
+				"target_node_path": "Battle/FSM/UsedMove"
+			},
+			"event_id": "dialogic_042"
 		}
 	],
 	"metadata": {
