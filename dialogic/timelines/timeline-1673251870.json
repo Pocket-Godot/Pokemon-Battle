@@ -16,7 +16,7 @@
 
 				],
 				"method_name": "switch_unit",
-				"target_node_path": "Node/FSM/UsedMove"
+				"target_node_path": "Battle/FSM/UsedMove"
 			},
 			"event_id": "dialogic_042"
 		},

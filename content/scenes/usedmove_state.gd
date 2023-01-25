@@ -1,6 +1,8 @@
 tool
 extends State
 
+var root_node
+
 var node_dialog
 
 signal first_text_complete
@@ -43,6 +45,8 @@ signal you_lose
 signal foe_loses
 
 func _ready():
+	root_node = get_node("/root/Battle")
+	
 	randomize()
 	default_hit_effect = load(fp_hit_effect)
 	
@@ -52,7 +56,6 @@ func _ready():
 func _activate():
 	
 	# ENEMY'S TURN
-	var root_node = get_parent().get_parent()
 	var foes_node = root_node.get_node("Foes")
 	for f in foes_node.get_children():
 		var enemy_turn = {
@@ -137,7 +140,12 @@ func end_of_subturn():
 #	SWITCH
 
 func switch_unit():
+	var battle_hpbar = user.associated_bar
+	var before_reserve_index = user.reserve_index
+	
+	root_node.disconnect_from_reserve(before_reserve_index, battle_hpbar)
 	user.set_reserve_index(target_reserve_index)
+	root_node.connect_to_reserve(target_reserve_index, battle_hpbar)
 
 # BATTLE ANIMATIONS
 

@@ -88,7 +88,7 @@ func _on_switch_popmenu_pressed(item_i, unit_i):
 		_:	# CHECK SUMMARY
 			pass
 
-func connect_to_reserve(u, i:int):
+func connect_to_reserve(u, i):
 	# u CAN BE THE INDEX OR THE UNIT RESERVE BAR ITSELF
 	var unit_reserve
 	if u is int:
@@ -96,12 +96,27 @@ func connect_to_reserve(u, i:int):
 	else:
 		unit_reserve = u
 	
-	var battlebar_tween = ally_battlebars.get_child(i).get_hpbar_tween()
+	# i CAN BE THE INDEX OR THE BATTLE BAR ITSELF
+	var battlebar
+	if i is int:
+		battlebar = ally_battlebars.get_child(i)
+	else:
+		battlebar = i
+	
+	var battlebar_tween = battlebar.get_hpbar_tween()
 	battlebar_tween.connect("tween_completed", unit_reserve, "_on_hp_tween_completed")
 
-func disconnect_from_reserve(i:int, j:int):
+func disconnect_from_reserve(i:int, j):
 	var unit_reserve = $UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(i)
-	var battlebar_tween = ally_battlebars.get_child(j).get_hpbar_tween()
+	
+	# i CAN BE THE INDEX OR THE BATTLE BAR ITSELF
+	var battlebar
+	if j is int:
+		battlebar = ally_battlebars.get_child(j)
+	else:
+		battlebar = j
+	
+	var battlebar_tween = battlebar.get_hpbar_tween()
 	
 	battlebar_tween.disconnect("tween_completed", unit_reserve, "_on_hp_tween_completed")
 

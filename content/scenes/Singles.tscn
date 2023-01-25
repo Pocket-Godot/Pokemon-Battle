@@ -64,7 +64,7 @@ bg_color = Color( 0.482353, 0.482353, 0.482353, 1 )
 [sub_resource type="Theme" id=14]
 MenuButton/styles/normal = SubResource( 13 )
 
-[node name="Node" type="Node"]
+[node name="Battle" type="Node"]
 script = ExtResource( 3 )
 timeline = "timeline-1627461926.json"
 

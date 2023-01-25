@@ -4,7 +4,7 @@ var state_tousedmove
 var associated_dialognode
 
 func _ready():
-	state_tousedmove = get_node("/root/Node/FSM/UsedMove")
+	state_tousedmove = get_node("/root/Battle/FSM/UsedMove")
 
 func handle_event(event_data, dialog_node):
 	""" 

@@ -74,3 +74,5 @@ margin_right = 1004.0
 margin_bottom = 580.0
 size_flags_horizontal = 8
 text = "20/20"
+
+[connection signal="pressed" from="Button" to="." method="_on_btn_pressed"]
