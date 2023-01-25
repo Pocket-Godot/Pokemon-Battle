@@ -48,8 +48,7 @@ func _ready():
 				ally_indexes.erase(j)
 				
 				# BATTLE HP BAR
-				var battlebar = ally_battlebars.get_child(j)
-				battlebar.get_hpbar_tween().connect("tween_completed", unit_reserve, "_on_hp_tween_completed")
+				connect_to_reserve(unit_reserve, j)
 				break
 
 func _on_commands_activated():
@@ -88,6 +87,23 @@ func _on_switch_popmenu_pressed(item_i, unit_i):
 		
 		_:	# CHECK SUMMARY
 			pass
+
+func connect_to_reserve(u, i:int):
+	# u CAN BE THE INDEX OR THE UNIT RESERVE BAR ITSELF
+	var unit_reserve
+	if u is int:
+		unit_reserve = $UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(u)
+	else:
+		unit_reserve = u
+	
+	var battlebar_tween = ally_battlebars.get_child(i).get_hpbar_tween()
+	battlebar_tween.connect("tween_completed", unit_reserve, "_on_hp_tween_completed")
+
+func disconnect_from_reserve(i:int, j:int):
+	var unit_reserve = $UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(i)
+	var battlebar_tween = ally_battlebars.get_child(j).get_hpbar_tween()
+	
+	battlebar_tween.disconnect("tween_completed", unit_reserve, "_on_hp_tween_completed")
 
 func update_moves_list(moveset):
 	for i in range(1, moves_list.get_child_count()):
