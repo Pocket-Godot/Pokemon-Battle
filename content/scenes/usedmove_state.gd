@@ -259,9 +259,10 @@ func play_animations(anim: String, nm_arr: String = ""):
 		action_sequences = [action]
 		
 		# REMOVE SUBTURNS WHERE THE USER IS THE FAINTED
-		for s in subturns:
-			if s['user'] == t:
-				subturns.erase(s)
+		if anim == "Faint":
+			for s in subturns:
+				if s['user'] == t:
+					subturns.erase(s)
 	
 	damages = [0]
 	
