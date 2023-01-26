@@ -127,6 +127,8 @@ func set_associated_bar(val):
 			associated_bar.set_name(display_name)
 			connect("maxhp_iset", associated_bar, "_maxhp_iset")
 			connect("curhp_iset", associated_bar, "_curhp_iset")
+			associated_bar._maxhp_iset(max_hp)
+			associated_bar._curhp_iset(cur_hp, true)
 
 #	BATTLE ANIMATIONS
 

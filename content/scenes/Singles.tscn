@@ -206,12 +206,12 @@ margin_bottom = 76.0
 [node name="MidMargin" type="MarginContainer" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer"]
 margin_top = 80.0
 margin_right = 974.0
-margin_bottom = 224.0
+margin_bottom = 229.0
 size_flags_vertical = 3
 
 [node name="Allies" type="HBoxContainer" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer"]
 margin_left = 785.0
-margin_top = 228.0
+margin_top = 233.0
 margin_right = 974.0
 margin_bottom = 341.0
 size_flags_horizontal = 8
@@ -221,7 +221,7 @@ __meta__ = {
 
 [node name="AllyBar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies" instance=ExtResource( 8 )]
 margin_right = 189.0
-margin_bottom = 113.0
+margin_bottom = 108.0
 
 [node name="EndMargin" type="MarginContainer" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer"]
 margin_top = 345.0
