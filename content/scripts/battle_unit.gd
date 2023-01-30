@@ -73,10 +73,6 @@ func set_species(i):
 		else:
 			dict = {"move": null}
 		moveset.append(dict)
-	
-	# BATTLE PARAMETERS
-	set_maxhp(species.hp)
-	set_curhp(max_hp, true)
 
 #	ANIMATION
 
@@ -127,8 +123,10 @@ func set_associated_bar(val):
 			associated_bar.set_name(display_name)
 			connect("maxhp_iset", associated_bar, "_maxhp_iset")
 			connect("curhp_iset", associated_bar, "_curhp_iset")
-			associated_bar._maxhp_iset(max_hp)
-			associated_bar._curhp_iset(cur_hp, true)
+	
+			# HEALTH
+			set_maxhp(species.hp)
+			set_curhp(max_hp, true)
 
 #	BATTLE ANIMATIONS
 

@@ -5,7 +5,6 @@ var max_hp = 1
 
 func _on_bar_value_changed(value):
 	cur_hp = value
-	print("L  ", value)
 	set_text_by_hp()
 
 func _on_maxhp_is_set(value):

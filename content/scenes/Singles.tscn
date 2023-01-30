@@ -395,7 +395,6 @@ text = "Back"
 [connection signal="foe_loses" from="FSM/UsedMove" to="FSM/ToWin" method="_condition"]
 [connection signal="you_lose" from="FSM/UsedMove" to="FSM/ToLose" method="_condition"]
 [connection signal="curhp_iset" from="Foes/Foe" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar" method="_curhp_iset"]
-[connection signal="curhp_iset" from="Allies/You" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies/AllyBar" method="_curhp_iset"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/ToMoves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Switch" to="FSM/ToSwitch" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Moves/List/Button" to="FSM/BackToCommands" method="_condition"]

@@ -45,13 +45,14 @@ signal you_lose
 signal foe_loses
 
 func _ready():
-	root_node = get_node("/root/Battle")
-	
-	randomize()
-	default_hit_effect = load(fp_hit_effect)
-	
-	nd_allies = get_node(np_allies)
-	nd_foes = get_node(np_foes)
+	if !Engine.editor_hint:
+		root_node = get_node("/root/Battle")
+		
+		randomize()
+		default_hit_effect = load(fp_hit_effect)
+		
+		nd_allies = get_node(np_allies)
+		nd_foes = get_node(np_foes)
 
 func _activate():
 	
