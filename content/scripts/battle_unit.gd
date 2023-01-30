@@ -32,11 +32,11 @@ var cur_hp:int setget set_curhp
 signal curhp_iset
 
 func _ready():
-	reserve_list = get_parent().species
-	set_species(reserve_index)
-	
 	# UI
 	set_associated_bar(get_node(np_associated_bar))
+	
+	reserve_list = get_parent().species
+	set_species(reserve_index)
 
 func _set(p, v):
 	if p == "position":
@@ -51,6 +51,7 @@ func set_reserve_index(v):
 func set_species(i):
 	species = reserve_list[i]
 	display_name = species.get_name()
+	associated_bar.set_name(display_name)
 	
 	# ANIMATION
 	var new_texture
@@ -73,6 +74,10 @@ func set_species(i):
 		else:
 			dict = {"move": null}
 		moveset.append(dict)
+	
+	# BATTLE PARAMETERS
+	set_maxhp(species.hp)
+	set_curhp(max_hp, true)
 
 #	ANIMATION
 
@@ -120,15 +125,10 @@ func set_associated_bar(val):
 	if val:
 		associated_bar = val
 		if !Engine.editor_hint:
-			associated_bar.set_name(display_name)
 			connect("maxhp_iset", associated_bar, "_maxhp_iset")
 			connect("curhp_iset", associated_bar, "_curhp_iset")
-	
-			# HEALTH
-			set_maxhp(species.hp)
-			set_curhp(max_hp, true)
 
-#	BATTLE ANIMATIONS
+#		HEALTH
 
 func set_maxhp(val:int):
 	max_hp = val
