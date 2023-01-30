@@ -32,6 +32,8 @@ var hit_effects = {}
 # SWITCHING
 export(NodePath) var np_allies
 var nd_allies
+export(NodePath) var np_reserves
+var nd_reserves
 export(NodePath) var np_foes
 var nd_foes
 var target_reserve_index
@@ -52,6 +54,7 @@ func _ready():
 		default_hit_effect = load(fp_hit_effect)
 		
 		nd_allies = get_node(np_allies)
+		nd_reserves = get_node(np_reserves)
 		nd_foes = get_node(np_foes)
 
 func _activate():
@@ -145,8 +148,12 @@ func switch_unit():
 	var before_reserve_index = user.reserve_index
 	
 	root_node.disconnect_from_reserve(before_reserve_index, battle_hpbar)
+	nd_reserves.get_child(before_reserve_index).enable_switch_option()
+	
 	user.set_reserve_index(target_reserve_index)
+	
 	root_node.connect_to_reserve(target_reserve_index, battle_hpbar)
+	nd_reserves.get_child(target_reserve_index).disable_switch_option()
 
 # BATTLE ANIMATIONS
 

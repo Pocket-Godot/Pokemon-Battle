@@ -44,3 +44,6 @@ func connect_popup(n, i):
 
 func disable_switch_option():
 	popup.set_item_disabled(1, true)
+
+func enable_switch_option():
+	popup.set_item_disabled(1, false)

@@ -99,6 +99,7 @@ graph_offset = Vector2( 460, 440 )
 transitions = [ NodePath("../BackToCommands"), NodePath("../ToWin"), NodePath("../ToLose") ]
 fp_hit_effect = "res://content/gameobjects/battle_animations/hit_effects/Default.tscn"
 np_allies = NodePath("../../Allies")
+np_reserves = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer")
 np_foes = NodePath("../../Foes")
 
 [node name="YouWin" type="Node" parent="FSM"]
