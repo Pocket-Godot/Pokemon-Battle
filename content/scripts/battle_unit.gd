@@ -19,7 +19,7 @@ export(Color, RGB) var glow_color setget set_glow_color
 export(float) var glow_extent setget set_glow_extent
 
 # MOVESETS
-var moveset = []
+var moveset
 
 # UI
 export(NodePath) var np_associated_bar setget set_np_associated_bar
@@ -62,6 +62,7 @@ func set_species(i):
 	set_texture(new_texture)
 	
 	# MOVESET
+	moveset = []
 	var moves = [species.move1, species.move2, species.move3, species.move4]
 	for m in moves:
 		var dict
