@@ -3,7 +3,6 @@ extends Sprite
 
 var reserve_index := 0 setget set_reserve_index
 var display_name
-var reserve_list
 var species
 
 # ANIMATIONS
@@ -34,9 +33,6 @@ signal curhp_iset
 func _ready():
 	# UI
 	set_associated_bar(get_node(np_associated_bar))
-	
-	reserve_list = get_parent().species
-	set_species(reserve_index)
 
 func _set(p, v):
 	if p == "position":
@@ -46,10 +42,12 @@ func _set(p, v):
 # SET PROPTERTIES
 func set_reserve_index(v):
 	reserve_index = v
-	set_species(v)
+	set_unit(v)
 	
-func set_species(i):
-	species = reserve_list[i]
+func set_unit(i):
+	var unit = get_parent().units[i]
+	
+	species = unit["species"]
 	display_name = species.get_name()
 	associated_bar.set_name(display_name)
 	
@@ -62,23 +60,11 @@ func set_species(i):
 	set_texture(new_texture)
 	
 	# MOVESET
-	moveset = []
-	var moves = [species.move1, species.move2, species.move3, species.move4]
-	for m in moves:
-		var dict
-		if m:
-			dict = {"move": m,
-				"pp": m.power_points}
-				
-			if m.type.fp_hit_effect:
-				dict["hit_effect"] = load(m.type.fp_hit_effect)
-		else:
-			dict = {"move": null}
-		moveset.append(dict)
+	moveset = unit["moveset"]
 	
 	# BATTLE PARAMETERS
 	set_maxhp(species.hp)
-	set_curhp(max_hp, true)
+	set_curhp(unit["cur_hp"], true)
 
 #	ANIMATION
 
