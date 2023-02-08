@@ -52,8 +52,11 @@ func _ready():
 				break
 
 func _on_commands_activated():
-	if $Allies/You.moveset:
-		var moveset = $Allies/You.moveset
+	var unit = $Allies/You
+	Dialogic.set_variable("user_name", unit.display_name)
+	
+	if unit.moveset:
+		var moveset = unit.moveset
 		update_moves_list(moveset)
 
 func _on_move_btn_pressed(i:int):

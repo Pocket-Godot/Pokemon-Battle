@@ -50,6 +50,7 @@ func set_unit(i):
 	species = unit["species"]
 	display_name = species.get_name()
 	associated_bar.set_name(display_name)
+	Dialogic.set_variable("user_name", display_name)
 	
 	# ANIMATION
 	var new_texture

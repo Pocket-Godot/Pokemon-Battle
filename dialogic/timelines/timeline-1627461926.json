@@ -4,7 +4,7 @@
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "What should Bulbasaur do?"
+			"text": "What should [user_name] do?"
 		}
 	],
 	"metadata": {

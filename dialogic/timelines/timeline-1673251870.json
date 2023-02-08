@@ -4,7 +4,7 @@
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "Bulbasaur, return!"
+			"text": "[user_name], return!"
 		},
 		{
 			"anim_name": "Recall",
@@ -24,7 +24,7 @@
 			"character": "",
 			"event_id": "dialogic_001",
 			"portrait": "",
-			"text": "Go, Charmander!"
+			"text": "Go, [user_name]!"
 		},
 		{
 			"anim_name": "Send Out",

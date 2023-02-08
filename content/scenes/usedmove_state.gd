@@ -110,14 +110,10 @@ func next_subturn():
 			set_move_animations(subturn_car)
 			
 		"we-switch", "they-switch":
-			var user_name = user.name
+			var user_name = user.display_name
 			Dialogic.set_variable("user_name", user_name)
 			
 			var ti = subturn_car["reserve_index"]
-			var target = nd_allies.species[ti]
-			var target_name = target.get_name()
-			Dialogic.set_variable("user_name", target_name)
-			
 			target_reserve_index = ti
 	
 	Dialogic.change_timeline(subturn_timeline)
@@ -136,8 +132,8 @@ func end_of_subturn():
 	subturns.remove(0)
 	
 	if subturns.empty():
-		Dialogic.change_timeline('battle-commands')
 		emit_signal("end_turn")
+		Dialogic.change_timeline('battle-commands')
 	else:
 		next_subturn()
 
