@@ -9,9 +9,9 @@ func _ready():
 	._ready()
 
 func _activate():
-	np_backbtn.set_disable(true)
+	backbtn.set_disabled(true)
 	._activate()
 
 func _deactivate():
 	._deactivate()
-	np_backbtn.set_disable(false)
+	backbtn.set_disabled(false)

@@ -95,7 +95,8 @@ func _on_text_complete(text_data):
 func next_subturn():
 	var subturn_car = subturns[0]
 	var subturn_timeline = subturn_car["timeline"]
-	user = subturn_car["user"]
+	if "user" in subturn_car:
+		user = subturn_car["user"]
 	
 	match subturn_timeline:
 		"execute-move":
@@ -269,7 +270,8 @@ func play_animations(anim: String, nm_arr: String = ""):
 		# REMOVE SUBTURNS WHERE THE USER IS THE FAINTED
 		if anim == "Faint":
 			for s in subturns:
-				if s['user'] == t:
+				var key_user = "user"
+				if key_user in s and s[key_user] == t:
 					subturns.erase(s)
 	
 	damages = [0]
