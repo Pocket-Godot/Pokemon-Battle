@@ -1,0 +1,19 @@
+{
+	"events": [
+		{
+			"call_node": {
+				"arguments": [
+
+				],
+				"method_name": "switch_out_koed_allies",
+				"target_node_path": "Battle/FSM/UsedMove"
+			},
+			"event_id": "dialogic_042"
+		}
+	],
+	"metadata": {
+		"dialogic-version": "1.4.5",
+		"file": "timeline-1676297252.json",
+		"name": "switch-out-any-koes"
+	}
+}

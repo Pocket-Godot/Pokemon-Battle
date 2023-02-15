@@ -43,6 +43,8 @@ const SKIP = "SKIP"
 
 var knockedout_targets = []
 
+signal switch_out_koeds
+
 signal you_lose
 signal foe_loses
 
@@ -70,7 +72,9 @@ func _activate():
 		}
 		
 		subturns.append(enemy_turn)
-		
+	
+	subturns.append({"timeline": "switch-out-any-koes"})
+	
 	# DIALOGIC
 	node_dialog.connect("text_complete", self, "_on_text_complete")
 	
@@ -414,7 +418,11 @@ func on_list_en(psa:PoolStringArray):
 # BATTLE OUTCOME
 
 func upon_no_more_reserves():
-	if get_node("../../Allies/You").cur_hp <= 0:
+	if nd_allies.all_reserves_are_koed():
 		emit_signal("you_lose")
-	elif get_node("../../Foes/Foe").cur_hp <= 0:
+	elif nd_foes.all_reserves_are_koed():
 		emit_signal("foe_loses")
+
+func switch_out_koed_allies():
+	if nd_allies.some_units_are_koed():
+		emit_signal("switch_out_koeds")

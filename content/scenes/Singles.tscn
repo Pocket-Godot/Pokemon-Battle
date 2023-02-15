@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://content/scenes/usedmove_state.gd" type="Script" id=1]
 [ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://content/scenes/menu_state.gd" type="Script" id=20]
 [ext_resource path="res://content/ui_objects/UnitReserve.tscn" type="PackedScene" id=21]
 [ext_resource path="res://content/scenes/menu_state_blkbg.gd" type="Script" id=22]
+[ext_resource path="res://content/scenes/menu_state_blkbg_disback.gd" type="Script" id=23]
 
 [sub_resource type="Shader" id=8]
 code = "shader_type canvas_item;
@@ -96,11 +97,19 @@ np_focus_btn = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton
 [node name="UsedMove" type="Node" parent="FSM"]
 script = ExtResource( 1 )
 graph_offset = Vector2( 460, 440 )
-transitions = [ NodePath("../BackToCommands"), NodePath("../ToWin"), NodePath("../ToLose") ]
+transitions = [ NodePath("../BackToCommands"), NodePath("../ToWin"), NodePath("../ToLose"), NodePath("../OnKOedUnits"), NodePath("../OnKOedUnits") ]
 fp_hit_effect = "res://content/gameobjects/battle_animations/hit_effects/Default.tscn"
 np_allies = NodePath("../../Allies")
 np_reserves = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer")
 np_foes = NodePath("../../Foes")
+
+[node name="SwitchOutKoed" type="Node" parent="FSM"]
+script = ExtResource( 23 )
+graph_offset = Vector2( 100, 560 )
+transitions = [ NodePath("../ToUsedMove") ]
+np_associated_menu = NodePath("../../UI_Layer/ShadowBg/Switch")
+np_focus_btn = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton")
+np_backbtn = NodePath("../../UI_Layer/ShadowBg/Switch/MarginContainer/VBoxContainer/Button")
 
 [node name="YouWin" type="Node" parent="FSM"]
 script = ExtResource( 4 )
@@ -140,6 +149,11 @@ target_state = NodePath("../YouWin")
 script = ExtResource( 19 )
 graph_offset = Vector2( 780, 740 )
 target_state = NodePath("../YouLose")
+
+[node name="OnKOedUnits" type="Node" parent="FSM"]
+script = ExtResource( 19 )
+graph_offset = Vector2( 460, 720 )
+target_state = NodePath("../SwitchOutKoed")
 
 [node name="Foes" type="Node2D" parent="."]
 position = Vector2( 772.4, 160.025 )
@@ -394,6 +408,7 @@ text = "Back"
 [connection signal="activate" from="FSM/Commands" to="." method="_on_commands_activated"]
 [connection signal="end_turn" from="FSM/UsedMove" to="FSM/BackToCommands" method="_condition"]
 [connection signal="foe_loses" from="FSM/UsedMove" to="FSM/ToWin" method="_condition"]
+[connection signal="switch_out_koeds" from="FSM/UsedMove" to="FSM/OnKOedUnits" method="_condition"]
 [connection signal="you_lose" from="FSM/UsedMove" to="FSM/ToLose" method="_condition"]
 [connection signal="curhp_iset" from="Foes/Foe" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar" method="_curhp_iset"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/ToMoves" method="_condition"]
