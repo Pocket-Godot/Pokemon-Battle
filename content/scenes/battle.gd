@@ -77,16 +77,20 @@ func _on_move_btn_pressed(i:int):
 func _on_switch_popmenu_pressed(item_i, unit_i):
 	match item_i:
 		1:	# SWITCH IN
-			var player = $Allies.get_child(0)
-			var player_turn = {
-				"user": player,
-				"timeline": "we-switch",
-				"reserve_index": unit_i,
-			}
-	
-			fsm_usedmove.subturns.append(player_turn)
-	
-			emit_signal("move_selected")
+			match $FSM.current_state.get_name():
+				"SwitchOutKoed":
+					print(90)
+				_:
+					var player = $Allies.get_child(0)
+					var player_turn = {
+						"user": player,
+						"timeline": "we-switch",
+						"reserve_index": unit_i,
+					}
+			
+					fsm_usedmove.subturns.append(player_turn)
+			
+					emit_signal("move_selected")
 		
 		_:	# CHECK SUMMARY
 			pass
