@@ -94,7 +94,7 @@ transitions = [ NodePath("../ToUsedMove"), NodePath("../BackToCommands") ]
 np_associated_menu = NodePath("../../UI_Layer/ShadowBg/Switch")
 np_focus_btn = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton")
 
-[node name="UsedMove" type="Node" parent="FSM"]
+[node name="DialogTurn" type="Node" parent="FSM"]
 script = ExtResource( 1 )
 graph_offset = Vector2( 460, 440 )
 transitions = [ NodePath("../BackToCommands"), NodePath("../ToWin"), NodePath("../ToLose"), NodePath("../OnKOedUnits"), NodePath("../OnKOedUnits") ]
@@ -138,7 +138,7 @@ target_state = NodePath("../Commands")
 [node name="ToUsedMove" type="Node" parent="FSM"]
 script = ExtResource( 19 )
 graph_offset = Vector2( 840, 240 )
-target_state = NodePath("../UsedMove")
+target_state = NodePath("../DialogTurn")
 
 [node name="ToWin" type="Node" parent="FSM"]
 script = ExtResource( 19 )
@@ -402,14 +402,14 @@ size_flags_horizontal = 8
 size_flags_vertical = 10
 text = "Back"
 
-[connection signal="dialogic_node_added" from="." to="FSM/UsedMove" method="_on_dialogic_node_added"]
+[connection signal="dialogic_node_added" from="." to="FSM/DialogTurn" method="_on_dialogic_node_added"]
 [connection signal="end_turn" from="." to="FSM/BackToCommands" method="_condition"]
 [connection signal="move_selected" from="." to="FSM/ToUsedMove" method="_condition"]
 [connection signal="activate" from="FSM/Commands" to="." method="_on_commands_activated"]
-[connection signal="end_turn" from="FSM/UsedMove" to="FSM/BackToCommands" method="_condition"]
-[connection signal="foe_loses" from="FSM/UsedMove" to="FSM/ToWin" method="_condition"]
-[connection signal="switch_out_koeds" from="FSM/UsedMove" to="FSM/OnKOedUnits" method="_condition"]
-[connection signal="you_lose" from="FSM/UsedMove" to="FSM/ToLose" method="_condition"]
+[connection signal="end_turn" from="FSM/DialogTurn" to="FSM/BackToCommands" method="_condition"]
+[connection signal="foe_loses" from="FSM/DialogTurn" to="FSM/ToWin" method="_condition"]
+[connection signal="switch_out_koeds" from="FSM/DialogTurn" to="FSM/OnKOedUnits" method="_condition"]
+[connection signal="you_lose" from="FSM/DialogTurn" to="FSM/ToLose" method="_condition"]
 [connection signal="curhp_iset" from="Foes/Foe" to="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes/FoeBar" method="_curhp_iset"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Fight" to="FSM/ToMoves" method="_condition"]
 [connection signal="pressed" from="UI_Layer/MarginContainer/Commands/Switch" to="FSM/ToSwitch" method="_condition"]
