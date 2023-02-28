@@ -23,9 +23,6 @@ func _ready():
 func get_class():
 	return "State"
 
-func is_class(c):
-	return c == get_class() or .is_class(c)
-
 func set_active(b:bool):
 	print(String(b), get_name())
 	active = b

@@ -31,8 +31,8 @@ func _on_connection_request(str_from, from_port, str_to, to_port):
 			
 			#	FOR EVERY CONNECTIONS
 			for c in get_connection_list():
-				# IF EITHER SIDE MATCHES
-				if c["from"] == str_from or c["to"] == str_to:
+				# IF FROM SIDE IS THE SAME
+				if c["from"] == str_from:
 					
 					# DISCONNECT FROM THAT NODE
 					_on_disconnection_request(c["from"], c["from_port"], c["to"], c["to_port"])

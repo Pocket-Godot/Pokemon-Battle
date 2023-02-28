@@ -18,7 +18,7 @@ func _ready():
 		
 		# CONNECT EVERYTHING TOGETHER
 		for c in connections:
-			associated_graph_edit.connect_node(c["from"].get_name(), 0, c["to"].get_name(), 0)
+			associated_graph_edit.connect_node(c["from"].associated_graph_node.get_name(), 0, c["to"].associated_graph_node.get_name(), 0)
 		
 		# CALL _ready() AGAIN FOR WHEN THE SCENE CHANGES
 		request_ready()

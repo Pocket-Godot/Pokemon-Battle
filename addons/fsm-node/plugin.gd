@@ -164,7 +164,7 @@ func _make_new_state():
 	var nd_input = popup_new_state.find_node("Name")
 	var new_name = nd_input.get_text()
 	if new_name:
-		inst_state.set_name(new_name)
+		inst_state.set_comp_name(new_name)
 		new_connection["new"] = new_name
 		
 		# CLEAR INPUT
@@ -187,7 +187,7 @@ func _make_new_transition():
 	var nd_input = popup_new_transition.find_node("Name")
 	var new_name = nd_input.get_text()
 	if new_name:
-		inst_state.set_name(new_name)
+		inst_state.set_comp_name(new_name)
 		new_connection["new"] = new_name
 		
 		# CLEAR INPUT
@@ -269,7 +269,7 @@ func _on_node_in_tree_renamed(node):
 		node.associated_graph_edit.title.set_text(node.get_name())
 		
 	elif node is FSM_Component:
-		node.associated_graph_node.set_name(node.get_name())
+		node.associated_graph_node.set_comp_name(node.get_name())
 
 func add_graph_node(key, fsm_root, base):
 	var gn = GraphNodes[key].instance()
@@ -278,7 +278,7 @@ func add_graph_node(key, fsm_root, base):
 	gn.set_associated_component(base)
 	
 	gn.set_offset(base.graph_offset)
-	gn.set_name(base.get_name())
+	gn.set_comp_name(base.get_name())
 	
 # INTERFACE INTERACTIONS
 func _cancel_node_connection():
