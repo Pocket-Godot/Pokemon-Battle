@@ -1,6 +1,6 @@
 extends Node
 
-onready var fsm_usedmove = $FSM/UsedMove
+onready var fsm_dialog_turn = $FSM/DialogTurn
 
 ## The timeline to load when starting the scene
 export(String, "TimelineDropdown") var timeline: String
@@ -70,7 +70,7 @@ func _on_move_btn_pressed(i:int):
 		"targets": [$Foes/Foe]
 	}
 	
-	fsm_usedmove.subturns.append(player_turn)
+	fsm_dialog_turn.subturns.append(player_turn)
 	
 	emit_signal("move_selected")
 	
@@ -88,7 +88,7 @@ func _on_switch_popmenu_pressed(item_i, unit_i):
 						"reserve_index": unit_i,
 					}
 			
-					fsm_usedmove.subturns.append(player_turn)
+					fsm_dialog_turn.subturns.append(player_turn)
 			
 					emit_signal("move_selected")
 		

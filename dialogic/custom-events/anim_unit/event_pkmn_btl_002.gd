@@ -1,10 +1,10 @@
 extends Node
 
-var state_tousedmove
+var state_dialog_turn
 var associated_dialognode
 
 func _ready():
-	state_tousedmove = get_node("/root/Battle/FSM/UsedMove")
+	state_dialog_turn = get_node("/root/Battle/FSM/DialogTurn")
 
 func handle_event(event_data, dialog_node):
 	""" 
@@ -22,13 +22,13 @@ func handle_event(event_data, dialog_node):
 		target_array = event_data["target_array"]
 	
 	associated_dialognode = dialog_node
-	state_tousedmove.connect("all_anims_finished", self, "_all_anims_finished")
+	state_dialog_turn.connect("all_anims_finished", self, "_all_anims_finished")
 	
-	state_tousedmove.play_animations(anim_name, target_array)
+	state_dialog_turn.play_animations(anim_name, target_array)
 	
 func _all_anims_finished():
 	# once you want to continue with the next event
-	state_tousedmove.disconnect("all_anims_finished", self, "_all_anims_finished")
+	state_dialog_turn.disconnect("all_anims_finished", self, "_all_anims_finished")
 	
 	associated_dialognode._load_next_event()
 	associated_dialognode.set_state(associated_dialognode.state.READY)

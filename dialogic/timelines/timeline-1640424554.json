@@ -95,7 +95,7 @@
 
 				],
 				"method_name": "upon_no_more_reserves",
-				"target_node_path": "Node/FSM/UsedMove"
+				"target_node_path": "Node/FSM/DialogTurn"
 			},
 			"event_id": "dialogic_042"
 		},
@@ -108,7 +108,7 @@
 
 				],
 				"method_name": "end_of_subturn",
-				"target_node_path": "Battle/FSM/UsedMove"
+				"target_node_path": "Battle/FSM/DialogTurn"
 			},
 			"event_id": "dialogic_042"
 		}

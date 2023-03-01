@@ -73,8 +73,6 @@ func _activate():
 		
 		subturns.append(enemy_turn)
 	
-	subturns.append({"timeline": "switch-out-any-koes"})
-	
 	# DIALOGIC
 	node_dialog.connect("text_complete", self, "_on_text_complete")
 	
