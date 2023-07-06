@@ -1,4 +1,4 @@
-tool
+@tool
 extends Control
 
 ####################################################################################################
@@ -6,9 +6,9 @@ extends Control
 ####################################################################################################
 # references
 var editor_reference
-onready var master_tree = get_node('../MasterTreeContainer/MasterTree')
+@onready var master_tree = get_node('../MasterTreeContainer/MasterTree')
 var portrait_entry = load("res://addons/dialogic/Editor/CharacterEditor/PortraitEntry.tscn")
-onready var nodes = {
+@onready var nodes = {
 	'editor': $Split/EditorScroll/Editor,
 	'name': $Split/EditorScroll/Editor/NameAndColor/NameLineEdit,
 	'color': $Split/EditorScroll/Editor/NameAndColor/ColorPickerButton,
@@ -52,25 +52,25 @@ func _ready():
 	nodes['import_from_folder_button'].text = "  "+editor_reference.dialogicTranslator.translate("Import folder")
 	
 	# connecting signals
-	nodes['name'].connect('text_changed', self, '_on_name_changed')
-	nodes['name'].connect('focus_exited', self, '_update_name_on_tree')
-	nodes['color'].connect('color_changed', self, '_on_color_changed')
-	nodes['display_name_checkbox'].connect('toggled', self, '_on_display_name_toggled')
-	nodes['nickname_checkbox'].connect('toggled', self, '_on_nickname_toggled')
-	nodes['theme'].connect("about_to_show", self, "build_ThemePickerMenu")
+	nodes['name'].connect('text_changed', Callable(self, '_on_name_changed'))
+	nodes['name'].connect('focus_exited', Callable(self, '_update_name_on_tree'))
+	nodes['color'].connect('color_changed', Callable(self, '_on_color_changed'))
+	nodes['display_name_checkbox'].connect('toggled', Callable(self, '_on_display_name_toggled'))
+	nodes['nickname_checkbox'].connect('toggled', Callable(self, '_on_nickname_toggled'))
+	nodes['theme'].connect("about_to_popup", Callable(self, "build_ThemePickerMenu"))
 	
-	nodes['portrait_search'].connect('text_changed', self, '_on_PortraitSearch_text_changed')
+	nodes['portrait_search'].connect('text_changed', Callable(self, '_on_PortraitSearch_text_changed'))
 	nodes['portrait_search'].right_icon = get_icon("Search", "EditorIcons")
-	nodes['import_from_folder_button'].connect('pressed', self, '_on_Import_Portrait_Folder_Button_pressed')
-	nodes['new_portrait_button'].connect('pressed', self, '_on_New_Portrait_Button_pressed')
+	nodes['import_from_folder_button'].connect('pressed', Callable(self, '_on_Import_Portrait_Folder_Button_pressed'))
+	nodes['new_portrait_button'].connect('pressed', Callable(self, '_on_New_Portrait_Button_pressed'))
 	
 	# updating styles
-	var style = $Split/EditorScroll.get('custom_styles/bg')
+	var style = $Split/EditorScroll.get('theme_override_styles/bg')
 	style.set('bg_color', get_color("base_color", "Editor"))
 	nodes['new_portrait_button'].icon = get_icon("Add", "EditorIcons")
 	nodes['import_from_folder_button'].icon = get_icon("Folder", "EditorIcons")
-	$Split/EditorScroll/Editor/Portraits/Title.set('custom_fonts/font', get_font("doc_title", "EditorFonts"))
-	$Split/EditorScroll/Editor/PortraitPanel.set('custom_styles/panel', get_stylebox("Background", "EditorStyles"))
+	$Split/EditorScroll/Editor/Portraits/Title.set('theme_override_fonts/font', get_font("doc_title", "EditorFonts"))
+	$Split/EditorScroll/Editor/PortraitPanel.set('theme_override_styles/panel', get_stylebox("Background", "EditorStyles"))
 	
 	# loading default setup
 	_on_PreviewMode_item_selected(DialogicResources.get_settings_value('editor', 'character_preview_mode', 1))
@@ -83,9 +83,9 @@ func clear_character_editor():
 	nodes['file'].text = ''
 	nodes['name'].text = ''
 	nodes['color'].color = Color('#ffffff')
-	nodes['display_name_checkbox'].pressed = false
+	nodes['display_name_checkbox'].button_pressed = false
 	nodes['display_name'].text = ''
-	nodes['nickname_checkbox'].pressed = false
+	nodes['nickname_checkbox'].button_pressed = false
 	nodes['nickname'].text = ''
 	nodes['description'].text = ''
 	nodes['theme'].text = 'No custom theme'
@@ -94,7 +94,7 @@ func clear_character_editor():
 	nodes['portrait_search'].text = ''
 	nodes['portraits'] = []
 	nodes['scale'].value = 100
-	nodes['mirror_portraits_checkbox'].pressed = false
+	nodes['mirror_portraits_checkbox'].button_pressed = false
 	nodes['offset_x'].value = 0
 	nodes['offset_y'].value = 0
 
@@ -103,11 +103,11 @@ func clear_character_editor():
 		p.queue_free()
 	nodes['portrait_preview_full'].texture = null
 	nodes['portrait_preview_real'].texture = null
-	nodes['portrait_preview_real'].rect_scale = Vector2(1, 1)
+	nodes['portrait_preview_real'].scale = Vector2(1, 1)
 
 # creates new character data
 func create_character():
-	var character_file = 'character-' + str(OS.get_unix_time()) + '.json'
+	var character_file = 'character-' + str(Time.get_unix_time_from_system()) + '.json'
 	var character = {
 		'color': '#ffffff',
 		'id': character_file,
@@ -167,9 +167,9 @@ func load_character(filename: String):
 	nodes['file'].text = data['id']
 	nodes['name'].text = data.get('name', '')
 	nodes['color'].color = Color(data.get('color','#ffffffff'))
-	nodes['display_name_checkbox'].pressed = data.get('display_name_bool', false)
+	nodes['display_name_checkbox'].button_pressed = data.get('display_name_bool', false)
 	nodes['display_name'].text = data.get('display_name', '')
-	nodes['nickname_checkbox'].pressed = data.get('nickname_bool', false)
+	nodes['nickname_checkbox'].button_pressed = data.get('nickname_bool', false)
 	nodes['nickname'].text = data.get('nickname', '')
 	nodes['description'].text = data.get('description', '')
 	refresh_themes_and_select(data.get('theme', ''))
@@ -178,10 +178,10 @@ func load_character(filename: String):
 	#nodes['nickname'].visible
 	nodes['offset_x'].value = data.get('offset_x', 0)
 	nodes['offset_y'].value = data.get('offset_y', 0)
-	nodes['mirror_portraits_checkbox'].pressed = data.get('mirror_portraits', false)
+	nodes['mirror_portraits_checkbox'].button_pressed = data.get('mirror_portraits', false)
 	nodes['portrait_preview_full'].flip_h = data.get('mirror_portraits', false)
 	nodes['portrait_preview_real'].flip_h = data.get('mirror_portraits', false)
-	nodes['portrait_preview_real'].rect_scale = Vector2(
+	nodes['portrait_preview_real'].scale = Vector2(
 					float(data.get('scale', 100))/100, float(data.get('scale', 100))/100)
 	
 	# Portraits
@@ -206,7 +206,7 @@ func load_character(filename: String):
 
 func _on_PortraitSearch_text_changed(text):
 	for portrait_item in nodes['portrait_list'].get_children():
-		if text.empty() or text.to_lower() in portrait_item.get_node("NameEdit").text.to_lower() or text.to_lower() in portrait_item.get_node("PathEdit").text.to_lower():
+		if text.is_empty() or text.to_lower() in portrait_item.get_node("NameEdit").text.to_lower() or text.to_lower() in portrait_item.get_node("PathEdit").text.to_lower():
 			portrait_item.show()
 		else:
 			portrait_item.hide()
@@ -257,8 +257,8 @@ func build_PickerMenuFolder(menu:PopupMenu, folder_structure:Dictionary, current
 		menu.set_item_metadata(index, {'file':file})
 		index += 1
 	
-	if not menu.is_connected("index_pressed", self, "_on_theme_selected"):
-		menu.connect("index_pressed", self, '_on_theme_selected', [menu])
+	if not menu.is_connected("index_pressed", Callable(self, "_on_theme_selected")):
+		menu.connect("index_pressed", Callable(self, '_on_theme_selected').bind(menu))
 	
 	return current_folder_name
 
@@ -293,7 +293,7 @@ func _update_name_on_tree():
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		if nodes['name'].has_focus():
-			if event.scancode == KEY_ENTER:
+			if event.keycode == KEY_ENTER:
 				nodes['name'].release_focus()
 
 
@@ -313,7 +313,7 @@ func create_portrait_entry(p_name = '', path = '', grab_focus = false):
 		nodes['portrait_list'].get_child(0)._on_ButtonSelect_pressed()
 		return
 	
-	var p = portrait_entry.instance()
+	var p = portrait_entry.instantiate()
 	p.editor_reference = editor_reference
 	p.image_node = nodes['portrait_preview_full']
 	p.image_node2 = nodes['portrait_preview_real']
@@ -331,14 +331,14 @@ func create_portrait_entry(p_name = '', path = '', grab_focus = false):
 
 
 func _on_Import_Portrait_Folder_Button_pressed():
-	editor_reference.godot_dialog("*", EditorFileDialog.MODE_OPEN_DIR)
-	editor_reference.godot_dialog_connect(self, "_on_dir_selected", "dir_selected")
+	editor_reference.godot_dialog("*", EditorFileDialog.FILE_MODE_OPEN_DIR)
+	editor_reference.godot_dialog_connect(self, Callable("_on_dir_selected", "dir_selected"))
 
 
 func _on_dir_selected(path, target):
-	var dir = Directory.new()
+	var dir = DirAccess.new()
 	if dir.open(path) == OK:
-		dir.list_dir_begin()
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		var file_name = dir.get_next()
 		while file_name != "":
 			if not dir.current_is_dir():
@@ -359,8 +359,8 @@ func _on_MirrorPortraitsCheckBox_toggled(button_pressed):
 
 func _on_Scale_value_changed(value):
 	#nodes['portrait_preview_real'].rect_position = ($Split/Preview/Background/Positioner.rect_position-nodes['portrait_preview_real'].rect_size*Vector2(0.5,1))
-	nodes['portrait_preview_real'].rect_size = Vector2()
-	nodes['portrait_preview_real'].rect_scale = Vector2(
+	nodes['portrait_preview_real'].size = Vector2()
+	nodes['portrait_preview_real'].scale = Vector2(
 					float(value)/100, float(value)/100)
 
 func _on_PreviewMode_item_selected(index):

@@ -1,15 +1,15 @@
-tool
+@tool
 extends Control
 
-export (bool) var enable_editing = false
+@export (bool) var enable_editing = false
 # needs to be corrected, if you use this on a diffrent plugin!!!
-export (String) var documentation_path: String = "res://addons/dialogic/Documentation"
+@export (String) var documentation_path: String = "res://addons/dialogic/Documentation"
 var MarkdownParser = load("res://addons/dialogic/Documentation/Nodes/DocsMarkdownParser.gd").new()
 
 var current_path: String = ""
 var current_headings = []
 
-onready var Content = $Content
+@onready var Content = $Content
 
 signal open_non_html_link(link, section)
 
@@ -25,23 +25,23 @@ signal open_non_html_link(link, section)
 ## The section can either be passed as a second argument or in the PAGE_PATH with #
 ## E.g.: "Tuts/welcome#how-to-use-the-plugin" == "Tuts/welcome", "#how-to-use-the-plugin"
 func load_page(page_path: String, section : String=''):
-	Content.set('custom_styles/normal', StyleBoxEmpty.new())
-	Content.get('custom_styles/normal').content_margin_left = 15
-	Content.get('custom_styles/normal').content_margin_top = 15
-	Content.get('custom_styles/normal').content_margin_right = 15
-	Content.get('custom_styles/normal').content_margin_bottom = 15
+	Content.set('theme_override_styles/normal', StyleBoxEmpty.new())
+	Content.get('theme_override_styles/normal').content_margin_left = 15
+	Content.get('theme_override_styles/normal').content_margin_top = 15
+	Content.get('theme_override_styles/normal').content_margin_right = 15
+	Content.get('theme_override_styles/normal').content_margin_bottom = 15
 	
 	var base_size = 16
-	Content.set('custom_fonts/normal_font/size', int(base_size * get_constant("scale", "Editor")))
-	Content.set('custom_fonts/bold_font/size', int(base_size * get_constant("scale", "Editor")))
+	Content.set('theme_override_fonts/normal_font/size', int(base_size * get_constant("scale", "Editor")))
+	Content.set('theme_override_fonts/bold_font/size', int(base_size * get_constant("scale", "Editor")))
 	#Content.set('custom_fonts/italics_font/size', int(base_size * get_constant("scale", "Editor")))
-	Content.set('custom_fonts/mono_font/size', int(base_size * get_constant("scale", "Editor")))
-	Content.set('custom_fonts/bold_italics_font/size', int(base_size * get_constant("scale", "Editor")))
+	Content.set('theme_override_fonts/mono_font/size', int(base_size * get_constant("scale", "Editor")))
+	Content.set('theme_override_fonts/bold_italics_font/size', int(base_size * get_constant("scale", "Editor")))
 	
 	
 	# Fonts
-	Content.set('custom_fonts/mono_font', get_font("doc_source", "EditorFonts"))
-	Content.set('custom_fonts/bold_font', Content.get_font("doc_bold", "EditorFonts"))
+	Content.set('theme_override_fonts/mono_font', get_font("doc_source", "EditorFonts"))
+	Content.set('theme_override_fonts/bold_font', Content.get_font("doc_bold", "EditorFonts"))
 	
 	MarkdownParser.set_accent_colors(get_color("accent_color", "Editor"),get_color("disabled_font_color", "Editor"))
 	# return if no path is given
@@ -70,7 +70,7 @@ func load_page(page_path: String, section : String=''):
 	current_path = page_path
 	
 	# parsing the file
-	Content.bbcode_text = MarkdownParser.parse(f.get_as_text(), current_path, documentation_path)
+	Content.text = MarkdownParser.parse(f.get_as_text(), current_path, documentation_path)
 	f.close()
 	
 	# saving the headings for going to sections
@@ -82,7 +82,7 @@ func load_page(page_path: String, section : String=''):
 		Content.scroll_to_line(0)
 	
 	# Scroll to top of the document. This probably broke the previews "scroll to the given section" part of the code
-	yield(get_tree(), "idle_frame")
+	await get_tree().idle_frame
 	_on_Up_pressed()
 
 
@@ -94,8 +94,8 @@ func scroll_to_section(title):
 	for heading in current_headings:
 		if (heading.to_lower().strip_edges().replace(' ', '-') == title.replace('#', '')) or \
 			(heading.to_lower().strip_edges() == title.to_lower().strip_edges()):
-			var x = Content.bbcode_text.find(heading.replace('#', '').strip_edges()+"[/font]")
-			x = Content.bbcode_text.count("\n", 0, x)
+			var x = Content.text.find(heading.replace('#', '').strip_edges()+"[/font]")
+			x = Content.text.count("\n", 0, x)
 			Content.scroll_to_line(x)
 			
 			$ContentMenu/Panel.hide()
@@ -124,16 +124,16 @@ func create_content_menu(headings):
 	headings.pop_front()
 	for heading in headings:
 		var button = Button.new()
-		button.set("custom_styles/normal", get_stylebox("sub_inspector_bg0", "Editor"))
+		button.set("theme_override_styles/normal", get_stylebox("sub_inspector_bg0", "Editor"))
 		button.text = heading
 		button.align = Button.ALIGN_LEFT
-		button.connect("pressed", self, "content_button_pressed", [heading])
+		button.connect("pressed", Callable(self, "content_button_pressed").bind(heading))
 		$ContentMenu/Panel/VBox.add_child(button)
 
 
 func content_button_pressed(heading):
 	scroll_to_section(heading)
-	$ContentMenu/ToggleContents.pressed = false
+	$ContentMenu/ToggleContents.button_pressed = false
 
 
 ## When one of the links is clicked
@@ -197,10 +197,10 @@ func toggle_editing():
 
 func _on_Content_resized():
 	if not Content: return 
-	if Content.rect_size.x < 500:
-		Content.get('custom_styles/normal').content_margin_left = 15
-		Content.get('custom_styles/normal').content_margin_right = 15
+	if Content.size.x < 500:
+		Content.get('theme_override_styles/normal').content_margin_left = 15
+		Content.get('theme_override_styles/normal').content_margin_right = 15
 	else:
-		Content.get('custom_styles/normal').content_margin_left = (Content.rect_size.x-500)/4
-		Content.get('custom_styles/normal').content_margin_right = (Content.rect_size.x-500)/3
+		Content.get('theme_override_styles/normal').content_margin_left = (Content.size.x-500)/4
+		Content.get('theme_override_styles/normal').content_margin_right = (Content.size.x-500)/3
 	Content.update()

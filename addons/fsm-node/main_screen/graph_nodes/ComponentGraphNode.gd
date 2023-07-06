@@ -1,4 +1,4 @@
-tool
+@tool
 extends GraphNode
 
 var associated_component:Node

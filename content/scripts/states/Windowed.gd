@@ -1,6 +1,6 @@
 extends State
 
-export (NodePath) var np_window
+@export var np_window: NodePath
 var window
 
 func _activate():
@@ -10,10 +10,10 @@ func _deactivate():
 	window.hide()
 	
 func _ready():
-	._ready()
+	super._ready()
 	
-	if !Engine.editor_hint:
+	if !Engine.is_editor_hint():
 		window = get_node(np_window)
 	
-		connect("activate", self, "_activate")
-		connect("deactivate", self, "_deactivate")
+		connect("activate", Callable(self, "_activate"))
+		connect("deactivate", Callable(self, "_deactivate"))

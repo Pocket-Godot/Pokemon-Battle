@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/dialogic/Images/Plugin/placeholder.png" type="Texture" id=1]
+[ext_resource path="res://addons/dialogic/Images/Plugin/placeholder.png" type="Texture2D" id=1]
 [ext_resource path="res://addons/dialogic/Nodes/DialogProxy.gd" type="Script" id=2]
 
 [node name="Dialog" type="Control"]
@@ -12,6 +12,6 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+offset_right = 40.0
+offset_bottom = 40.0
 texture = ExtResource( 1 )

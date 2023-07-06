@@ -1,4 +1,4 @@
-tool
+@tool
 extends GraphEdit
 
 var associated_fsm
@@ -25,7 +25,7 @@ func _on_connection_request(str_from, from_port, str_to, to_port):
 				nd_from.transitions += [target_np]
 						
 				# UPDATE PROPERTY LIST
-				nd_from.property_list_changed_notify()
+				nd_from.notify_property_list_changed()
 		else:
 			# TRANSITION TO STATE
 			
@@ -43,7 +43,7 @@ func _on_connection_request(str_from, from_port, str_to, to_port):
 				nd_from.target_state = nd_from.get_path_to(gn_to.associated_component)
 				
 				# UPDATE PROPERTY LIST
-				nd_from.property_list_changed_notify()
+				nd_from.notify_property_list_changed()
 
 func _on_disconnection_request(str_from, from_port, str_to, to_port):
 	disconnect_node(str_from, from_port, str_to, to_port)
@@ -63,7 +63,7 @@ func _on_disconnection_request(str_from, from_port, str_to, to_port):
 		nd_from.target_state = null
 		
 	# UPDATE PROPERTY LIST
-	nd_from.property_list_changed_notify()
+	nd_from.notify_property_list_changed()
 	
 func set_associated_fsm(node):
 	associated_fsm = node

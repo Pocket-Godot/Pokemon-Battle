@@ -4,11 +4,11 @@
 [ext_resource path="res://addons/fsm-node/main_screen/graph_nodes/ComponentGraphNode.gd" type="Script" id=2]
 
 [node name="State" type="GraphNode"]
-margin_right = 57.0
-margin_bottom = 38.0
+offset_right = 57.0
+offset_bottom = 38.0
 mouse_filter = 1
 theme = ExtResource( 1 )
-custom_constants/port_offset = -12
+theme_override_constants/port_offset = -12
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color( 0.913725, 0.403922, 0.713726, 1 )
@@ -21,10 +21,10 @@ __meta__ = {
 }
 
 [node name="Name" type="Label" parent="."]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 76.0
-margin_bottom = 42.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 76.0
+offset_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "State"

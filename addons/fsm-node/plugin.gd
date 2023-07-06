@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorPlugin
 
 var editor_selection
@@ -30,12 +30,12 @@ var select_transition:bool = true
 
 func _enter_tree():
 	editor_selection = get_editor_interface().get_selection()
-	editor_selection.connect("selection_changed", self, "_on_selection_changed")
+	editor_selection.connect("selection_changed", Callable(self, "_on_selection_changed"))
 	
 	# SET UP MAIN SCREEN
-	main_panel_instance = MainPanel.instance()
-	get_editor_interface().get_editor_viewport().add_child(main_panel_instance)
-	make_visible(false)
+	main_panel_instance = MainPanel.instantiate()
+	get_editor_interface().get_editor_main_screen().add_child(main_panel_instance)
+	_make_visible(false)
 	
 	# SET TOOLBAR
 	#	GET BUTTONS
@@ -67,22 +67,22 @@ func _enter_tree():
 	
 	#	CONNECT SIGNALS
 	for k in toolbar_btns.keys():
-		toolbar_btns[k].connect("pressed", self, toolbar_btns_pressed_methods[k])
+		toolbar_btns[k].connect("pressed", Callable(self, toolbar_btns_pressed_methods[k]))
 	
 	# ADD POPUP DIALOGS
 	behind_popup = get_script_create_dialog().get_parent()
-	popup_new_state = PopupNewState.instance()
+	popup_new_state = PopupNewState.instantiate()
 	behind_popup.add_child(popup_new_state)
-	popup_new_state.connect("confirmed", self, "_make_new_state")
-	popup_new_transition = PopupNewTransition.instance()
+	popup_new_state.connect("confirmed", Callable(self, "_make_new_state"))
+	popup_new_transition = PopupNewTransition.instantiate()
 	behind_popup.add_child(popup_new_transition)
-	popup_new_transition.connect("confirmed", self, "_make_new_transition")
+	popup_new_transition.connect("confirmed", Callable(self, "_make_new_transition"))
 	
 	# GRAPHWORKS
 	graph_fsm_edit_root = main_panel_instance.get_node("ScrollContainer/VBoxContainer")
-	get_tree().connect("node_added", self, "_on_node_added_to_tree")
-	get_tree().connect("node_removed", self, "_on_node_removed_from_tree")
-	get_tree().connect("node_renamed", self, "_on_node_in_tree_renamed")
+	get_tree().connect("node_added", Callable(self, "_on_node_added_to_tree"))
+	get_tree().connect("node_removed", Callable(self, "_on_node_removed_from_tree"))
+	get_tree().connect("node_renamed", Callable(self, "_on_node_in_tree_renamed"))
 
 func _exit_tree():
 	
@@ -92,7 +92,7 @@ func _exit_tree():
 	
 	# DISCONNECT SIGNALS
 	for k in toolbar_btns.keys():
-		toolbar_btns[k].disconnect("pressed", self, toolbar_btns_pressed_methods[k])
+		toolbar_btns[k].disconnect("pressed", Callable(self, toolbar_btns_pressed_methods[k]))
 	
 	toolbar_btns = {}
 	
@@ -100,18 +100,18 @@ func _exit_tree():
 	if main_panel_instance:
 		main_panel_instance.queue_free()
 	
-	editor_selection.disconnect("selection_changed", self, "_on_selection_changed")
+	editor_selection.disconnect("selection_changed", Callable(self, "_on_selection_changed"))
 
-func get_plugin_icon():
+func _get_plugin_icon():
 	return preload("main_screen/icon.svg")
 
-func get_plugin_name():
+func _get_plugin_name():
 	return "FSM"
 
-func has_main_screen():
+func _has_main_screen():
 	return true
 	
-func make_visible(visible):
+func _make_visible(visible):
 	if main_panel_instance:
 		main_panel_instance.visible = visible
 
@@ -161,7 +161,7 @@ func _make_new_state():
 	var inst_state = State.new()
 	
 	#	NAME OF NEW EVENT
-	var nd_input = popup_new_state.find_node("Name")
+	var nd_input = popup_new_state.find_child("Name")
 	var new_name = nd_input.get_text()
 	if new_name:
 		inst_state.set_comp_name(new_name)
@@ -184,7 +184,7 @@ func _make_new_transition():
 	var inst_state = Transition.new()
 	
 	#	NAME OF NEW EVENT
-	var nd_input = popup_new_transition.find_node("Name")
+	var nd_input = popup_new_transition.find_child("Name")
 	var new_name = nd_input.get_text()
 	if new_name:
 		inst_state.set_comp_name(new_name)
@@ -211,7 +211,7 @@ func _on_node_added_to_tree(node):
 	
 	if node is FSM:
 		# ADD NEW FSM GRAPH
-		var gfe_instance = GraphFsmEdit.instance()
+		var gfe_instance = GraphFsmEdit.instantiate()
 		graph_fsm_edit_root.add_child(gfe_instance)
 		node.associated_graph_edit = gfe_instance
 		gfe_instance.set_associated_fsm(node)
@@ -224,9 +224,9 @@ func _on_node_added_to_tree(node):
 		gfe_instance.title = fsm_title
 		
 		# CONNECT SIGNALS
-		gfe_instance.connect("gui_input", self, "_on_fsm_input", [gfe_instance])
-		gfe_instance.connect("connection_from_empty", self, "_on_connect_from_empty", [gfe_instance])
-		gfe_instance.connect("connection_to_empty", self, "_on_connect_to_empty", [gfe_instance])
+		gfe_instance.connect("gui_input", Callable(self, "_on_fsm_input").bind(gfe_instance))
+		gfe_instance.connect("connection_from_empty", Callable(self, "_on_connect_from_empty").bind(gfe_instance))
+		gfe_instance.connect("connection_to_empty", Callable(self, "_on_connect_to_empty").bind(gfe_instance))
 	
 	elif node is FSM_Component:
 		var parent = node.get_parent()
@@ -272,7 +272,7 @@ func _on_node_in_tree_renamed(node):
 		node.associated_graph_node.set_comp_name(node.get_name())
 
 func add_graph_node(key, fsm_root, base):
-	var gn = GraphNodes[key].instance()
+	var gn = GraphNodes[key].instantiate()
 	fsm_root.add_child(gn)
 	base.associated_graph_node = gn
 	gn.set_associated_component(base)
@@ -293,25 +293,25 @@ func _connect_old_to_new():
 	clear_new_connection()
 
 func _on_connect_from_empty(from, _fr_sl, release_pos, fg):
-	empty_connect(from, release_pos, fg, true)
+	empty_connect(from, Callable(release_pos, fg).bind(true))
 	
 func _on_connect_to_empty(from, _fr_sl, release_pos, fg):
-	empty_connect(from, release_pos, fg, false)
+	empty_connect(from, Callable(release_pos, fg).bind(false))
 	
 func _on_fsm_input(event, fg):
 	if event is InputEventMouseButton:
-		if event.is_pressed() and event.button_index == BUTTON_RIGHT:
+		if event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT:
 			new_offset = event.get_position()
 			parent_fsm = fg.associated_fsm
 			popup_new_state.popup_centered()
 
 func clear_new_connection():
-	disconnect("new_comp", self, new_connection["method"])
-	new_connection["popup"].get_cancel().disconnect("pressed", self, "_cancel_node_connection")
+	disconnect("new_comp", Callable(self, new_connection["method"]))
+	new_connection["popup"].get_cancel_button().disconnect("pressed", Callable(self, "_cancel_node_connection"))
 	
 	new_connection.clear()
 
-func empty_connect(port, release_pos, fg, is_from):
+func empty_connect(port, Callable(release_pos, fg).bind(is_from)):
 	# GET NEW OFFSET
 	new_offset = release_pos
 	parent_fsm = fg.associated_fsm
@@ -326,5 +326,5 @@ func empty_connect(port, release_pos, fg, is_from):
 	new_connection["old"] = port
 	
 	new_connection["popup"].popup_centered()
-	connect("new_comp", self, new_connection["method"])
-	new_connection["popup"].get_cancel().connect("pressed", self, "_cancel_node_connection")
+	connect("new_comp", Callable(self, new_connection["method"]))
+	new_connection["popup"].get_cancel_button().connect("pressed", Callable(self, "_cancel_node_connection"))

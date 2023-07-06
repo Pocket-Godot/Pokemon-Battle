@@ -1,3 +1,4 @@
+@tool
 #	Random Audio Stream PLayer Godot Engine Add-on
 #	Copyright (c) Tim Krief.
 #
@@ -19,16 +20,15 @@
 #	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #	SOFTWARE.
 
-tool
 extends AudioStreamPlayer
 
-export(Array, AudioStream) var samples = []
-export(String, DIR) var select_samples_from_folder setget load_samples_from_folder
-export(int, "Pure", "No consecutive repetition", "Use all samples before repeat") var random_strategy = 0
-onready var base_volume = volume_db
-export(float, 0, 80) var random_volume_range = 0
-onready var base_pitch = pitch_scale
-export(float, 0, 4) var random_pitch_range = 0
+@export var samples = [] # (Array, AudioStream)
+@export var select_samples_from_folder : set = load_samples_from_folder
+@export var random_strategy = 0 # (int, "Pure", "No consecutive repetition", "Use all samples before repeat")
+@onready var base_volume = volume_db
+@export var random_volume_range = 0 # (float, 0, 80)
+@onready var base_pitch = pitch_scale
+@export var random_pitch_range = 0 # (float, 0, 4)
 
 var playing_sample_nb : int = -1
 var last_played_sample_nb : int = -1 # only used if random_strategy = 1
@@ -59,26 +59,26 @@ func play(from_position=0.0, playing_sample_nb=-1):
 					_:
 						playing_sample_nb = randi() % number_of_samples
 			if random_volume_range != 0:
-				.set_volume_db(base_volume + (randf() - .5) * random_volume_range)
+				super.set_volume_db(base_volume + (randf() - .5) * random_volume_range)
 			if random_pitch_range != 0:
-				.set_pitch_scale(max(0.0001, base_pitch + (randf() - .5) * random_pitch_range))
+				super.set_pitch_scale(max(0.0001, base_pitch + (randf() - .5) * random_pitch_range))
 		set_stream(samples[playing_sample_nb])
-		.play(from_position)
+		super.play(from_position)
 
 func set_volume_db(new_volume_db):
-	.set_volume_db(new_volume_db)
+	super.set_volume_db(new_volume_db)
 	base_volume = new_volume_db
 
 func set_pitch_scale(new_pitch):
-	.set_pitch_scale(max(0.0001, new_pitch))
+	super.set_pitch_scale(max(0.0001, new_pitch))
 	base_pitch = new_pitch
 
 func load_samples_from_folder(path):
 	if path != "":
 		samples.clear()
-		var dir = Directory.new()
+		var dir = DirAccess.new()
 		if dir.open(path) == OK:
-			dir.list_dir_begin(true)
+			dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 			var file_name = dir.get_next()
 			while file_name != "":
 				if not dir.current_is_dir() and file_name.ends_with(".import"):

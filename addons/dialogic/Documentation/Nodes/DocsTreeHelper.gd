@@ -1,8 +1,8 @@
-tool
+@tool
 extends Control
 
 # Don't change this if possible
-export (String) var documentation_path : String = "res://addons/dialogic/Documentation"
+@export (String) var documentation_path : String = "res://addons/dialogic/Documentation"
 
 # This enables/disables the use of folder files
 # If enabled, the docs will expect a file named 
@@ -55,16 +55,16 @@ func build_documentation_tree(tree : Tree, root_item:TreeItem = null, def_folder
 
 func get_dir_contents(rootPath: String) -> Dictionary:
 	var directory_structure = {}
-	var dir := Directory.new()
+	var dir := DirAccess.new()
 
 	if dir.open(rootPath) == OK:
-		dir.list_dir_begin(true, false)
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		directory_structure = _add_dir_contents(dir)
 	else:
 		push_error("Docs: An error occurred when trying to access the path.")
 	return directory_structure
 
-func _add_dir_contents(dir: Directory) -> Dictionary:
+func _add_dir_contents(dir: DirAccess) -> Dictionary:
 	var file_name = dir.get_next()
 
 	var structure = {}
@@ -72,9 +72,9 @@ func _add_dir_contents(dir: Directory) -> Dictionary:
 		var path = dir.get_current_dir() + "/" + file_name
 		if dir.current_is_dir():
 			#print("Found directory: %s" % path)
-			var subDir = Directory.new()
+			var subDir = DirAccess.new()
 			subDir.open(path)
-			subDir.list_dir_begin(true, false)
+			subDir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 			var dir_content = _add_dir_contents(subDir)
 			if dir_content.has('_files_'):
 				structure[path] = dir_content
@@ -183,7 +183,7 @@ func get_title(path, default_name):
 	var f = File.new()
 	f.open(path, File.READ)
 	var arr = f.get_as_text().split('\n', false, 1)
-	if not arr.empty():
+	if not arr.is_empty():
 		return arr[0].trim_prefix('#').strip_edges()
 	else:
 		return default_name

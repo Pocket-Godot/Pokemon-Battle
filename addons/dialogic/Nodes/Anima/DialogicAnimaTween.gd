@@ -16,12 +16,12 @@ var _fake_property: Dictionary = {}
 var _callbacks := {}
 
 func _ready():
-	connect("tween_started", self, '_on_tween_started')
-	connect("tween_step", self, '_on_tween_step_with_easing')
-	connect("tween_step", self, '_on_tween_step_with_easing_callback')
-	connect("tween_step", self, '_on_tween_step_with_easing_funcref')
-	connect("tween_step", self, '_on_tween_step_without_easing')
-	connect("tween_completed", self, '_on_tween_completed')
+	connect("tween_started", Callable(self, '_on_tween_started'))
+	connect("tween_step", Callable(self, '_on_tween_step_with_easing'))
+	connect("tween_step", Callable(self, '_on_tween_step_with_easing_callback'))
+	connect("tween_step", Callable(self, '_on_tween_step_with_easing_funcref'))
+	connect("tween_step", Callable(self, '_on_tween_step_without_easing'))
+	connect("tween_completed", Callable(self, '_on_tween_completed'))
 	
 
 func play(node, animation_name, duration):
@@ -71,8 +71,8 @@ func play(node, animation_name, duration):
 	if not started:
 		printerr('something went wrong while trying to start the tween')
 	
-	if is_connected("tween_all_completed", self, 'finished_once'): disconnect("tween_all_completed", self, 'finished_once')
-	connect('tween_all_completed', self, 'finished_once', [node, animation_name, duration])
+	if is_connected("tween_all_completed", Callable(self, 'finished_once')): disconnect("tween_all_completed", Callable(self, 'finished_once'))
+	connect('tween_all_completed', Callable(self, 'finished_once').bind(node, animation_name, duration))
 
 func finished_once(node, animation, duration):
 	loop -= 1
@@ -242,14 +242,14 @@ func _get_animation_data_index(key: NodePath) -> int:
 	return int(s.replace('_fake_property:p', '')) - 1
 
 func _cubic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float) -> float:
-	var q0 = p0.linear_interpolate(p1, t)
-	var q1 = p1.linear_interpolate(p2, t)
-	var q2 = p2.linear_interpolate(p3, t)
+	var q0 = p0.lerp(p1, t)
+	var q1 = p1.lerp(p2, t)
+	var q2 = p2.lerp(p3, t)
 
-	var r0 = q0.linear_interpolate(q1, t)
-	var r1 = q1.linear_interpolate(q2, t)
+	var r0 = q0.lerp(q1, t)
+	var r1 = q1.lerp(q2, t)
 
-	var s = r0.linear_interpolate(r1, t)
+	var s = r0.lerp(r1, t)
 
 	return s.y
 
@@ -295,7 +295,7 @@ func _do_calculate_from_to(node: Node, animation_data: Dictionary) -> void:
 		animation_data.__to = to
 
 	if animation_data.has('pivot'):
-		if node is Spatial:
+		if node is Node3D:
 			printerr('3D Pivot not supported yet')
 		else:
 			DialogicAnimaPropertiesHelper.set_2D_pivot(animation_data.node, animation_data.pivot)
@@ -312,13 +312,13 @@ func _maybe_calculate_relative_value(relative, value, current_node_value):
 	return value + current_node_value
 
 func _maybe_convert_from_deg_to_rad(node: Node, animation_data: Dictionary, value):
-	if not node is Spatial or animation_data.property.find('rotation') < 0:
+	if not node is Node3D or animation_data.property.find('rotation') < 0:
 		return value
 
 	if value is Vector3:
-		return Vector3(deg2rad(value.x), deg2rad(value.y), deg2rad(value.z))
+		return Vector3(deg_to_rad(value.x), deg_to_rad(value.y), deg_to_rad(value.z))
 
-	return deg2rad(value)
+	return deg_to_rad(value)
 
 func _on_animation_with_key(index: int, elapsed: float) -> void:
 	var animation_data = _animation_data[index]

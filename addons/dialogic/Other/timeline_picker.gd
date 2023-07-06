@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorProperty
 
 # The main controls for editing the property.
@@ -25,13 +25,13 @@ func _ready():
 
 func _init():
 	# setup controls
-	timelines_dropdown.rect_min_size.x = 80
+	timelines_dropdown.custom_minimum_size.x = 80
 	timelines_dropdown.set_h_size_flags(SIZE_EXPAND_FILL)
 	timelines_dropdown.clip_text = true
 	container.add_child(timelines_dropdown)
 	container.add_child(edit_button)
 	edit_button.flat = true
-	edit_button.hint_tooltip = "Edit Timeline"
+	edit_button.tooltip_text = "Edit Timeline"
 	edit_button.disabled = true
 	
 	# Add the container as a direct child
@@ -41,9 +41,9 @@ func _init():
 	add_focusable(timelines_dropdown)
 	
 	# Setup the initial state and connect to the signal to track changes.
-	timelines_dropdown.connect("about_to_show", self, "_about_to_show_menu")
-	timelines_dropdown.get_popup().connect("index_pressed", self, '_on_timeline_selected')
-	edit_button.connect("pressed", self, "_on_editTimelineButton_pressed")
+	timelines_dropdown.connect("about_to_popup", Callable(self, "_about_to_show_menu"))
+	timelines_dropdown.get_popup().connect("index_pressed", Callable(self, '_on_timeline_selected'))
+	edit_button.connect("pressed", Callable(self, "_on_editTimelineButton_pressed"))
 
 
 func _about_to_show_menu():
@@ -65,7 +65,7 @@ func _on_timeline_selected(index):
 	var metadata = timelines_dropdown.get_popup().get_item_metadata(index)
 	current_value = metadata['file']
 	timelines_dropdown.text = text
-	timelines_dropdown.hint_tooltip = text
+	timelines_dropdown.tooltip_text = text
 	_update_edit_button(current_value)
 	emit_changed(get_edited_property(), current_value)
 	
@@ -90,12 +90,12 @@ func update_property():
 	timelines_dropdown.text = ''
 	
 	if (current_value == ''):
-		timelines_dropdown.hint_tooltip = 'Click to select a timeline'
+		timelines_dropdown.tooltip_text = 'Click to select a timeline'
 		
 	for c in DialogicUtil.get_timeline_list():
 		if c['file'] == current_value:
 			timelines_dropdown.text = c['name']
-			timelines_dropdown.hint_tooltip = c['name']
+			timelines_dropdown.tooltip_text = c['name']
 			
 	updating = false
 	

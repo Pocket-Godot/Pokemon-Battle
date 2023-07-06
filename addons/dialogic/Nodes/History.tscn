@@ -35,20 +35,20 @@ __meta__ = {
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="HistoryPopup/ScrollHistoryContainer"]
-margin_right = 1024.0
-margin_bottom = 10.0
+offset_right = 1024.0
+offset_bottom = 10.0
 size_flags_horizontal = 3
-custom_constants/margin_right = 5
-custom_constants/margin_top = 5
-custom_constants/margin_left = 5
-custom_constants/margin_bottom = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_bottom = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HistoryTimeline" type="VBoxContainer" parent="HistoryPopup/ScrollHistoryContainer/MarginContainer"]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 1019.0
-margin_bottom = 5.0
-custom_constants/separation = 16
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 1019.0
+offset_bottom = 5.0
+theme_override_constants/separation = 16

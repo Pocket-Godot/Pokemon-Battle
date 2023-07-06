@@ -1,9 +1,9 @@
 extends MarginContainer
 
-onready var label_name = $MarginContainer/HBoxContainer/Name
-onready var label_type = $MarginContainer/HBoxContainer/Type
-onready var label_category = $MarginContainer/HBoxContainer/Category
-onready var label_pp = $MarginContainer/HBoxContainer/PP
+@onready var label_name = $MarginContainer/HBoxContainer/Name
+@onready var label_type = $MarginContainer/HBoxContainer/Type
+@onready var label_category = $MarginContainer/HBoxContainer/Category
+@onready var label_pp = $MarginContainer/HBoxContainer/PP
 
 func update_movedata(move):
 	var move_name = move.get_name()

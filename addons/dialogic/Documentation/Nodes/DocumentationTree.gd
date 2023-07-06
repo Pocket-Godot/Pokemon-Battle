@@ -1,4 +1,4 @@
-tool
+@tool
 extends Tree
 
 var documentation_tree 
@@ -19,7 +19,7 @@ func select_item(path):
 ################################################################################
 
 func _ready():
-	connect('item_selected', self, '_on_item_selected')
+	connect('item_selected', Callable(self, '_on_item_selected'))
 	#documentation_tree = DocsHelper.build_documentation_tree(self)
 	# have to do this here, because the DocsHelpe has no access to the theme...
 	documentation_tree.set_icon(0, get_icon("Folder", "EditorIcons"))

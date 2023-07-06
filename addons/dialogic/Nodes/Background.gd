@@ -30,7 +30,7 @@ func fade_in(time = 1):
 
 func fade_out(time = 1):
 	if tween:
-		tween.connect('tween_all_completed', self, '_on_tween_over')
+		tween.connect('tween_all_completed', Callable(self, '_on_tween_over'))
 		tween.interpolate_property(self, "modulate",
 			Color(1,1,1,1), Color(1,1,1,0), time,
 			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
@@ -40,7 +40,7 @@ func fade_out(time = 1):
 
 func remove_with_delay(time =1):
 	var timer = Timer.new()
-	timer.connect("timeout", self, "queue_free")
+	timer.connect("timeout", Callable(self, "queue_free"))
 	add_child(timer)
 	timer.start(time+0.1)
 

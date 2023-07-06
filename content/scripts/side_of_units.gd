@@ -1,6 +1,6 @@
 extends Node2D
 
-export(Array, Resource) var species
+@export var species: Array[Resource]
 var units = []
 
 func _ready():

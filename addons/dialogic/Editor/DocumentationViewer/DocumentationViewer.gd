@@ -1,7 +1,7 @@
-tool
+@tool
 extends Control
 
-onready var master_tree = get_node('../MasterTreeContainer/MasterTree')
+@onready var master_tree = get_node('../MasterTreeContainer/MasterTree')
 var current_page : String = ""
 
 var previous_pages = []
@@ -9,22 +9,22 @@ var next_pages = []
 
 signal open_link(link)
 
-onready var nodes = {
+@onready var nodes = {
 	'DocsViewer': $DocsViewer,
 	'Next': null,
 	'Previous':null,
 }
 
 func _ready():
-	set("custom_styles/panel", get_stylebox("Background", "EditorStyles"))
+	set("theme_override_styles/panel", get_stylebox("Background", "EditorStyles"))
 	
 	var _scale = get_constant("inspector_margin", "Editor")
 	_scale = _scale * 0.125
 	nodes['DocsViewer'].MarkdownParser.editor_scale = _scale
 	nodes['Next'] = find_parent("EditorView").get_node("ToolBar/DocumentationNavigation/Next")
-	nodes['Next'].connect('pressed',self, 'open_next_page')
+	nodes['Next'].connect('pressed', Callable(self, 'open_next_page'))
 	nodes['Previous'] = find_parent("EditorView").get_node("ToolBar/DocumentationNavigation/Previous")
-	nodes['Previous'].connect('pressed',self, 'open_previous_page')
+	nodes['Previous'].connect('pressed', Callable(self, 'open_previous_page'))
 	
 
 

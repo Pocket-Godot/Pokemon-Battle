@@ -18,12 +18,12 @@ func handle_event(event_data, dialog_node):
 	#pass # fill with event action
 	associated_dialognode = dialog_node
 	
-	state_dialog_turn.connect("all_anims_finished", self, "_all_anims_finished")
+	state_dialog_turn.connect("all_anims_finished", Callable(self, "_all_anims_finished"))
 	state_dialog_turn.play_battle_animation()
 	
 func _all_anims_finished():
 	# once you want to continue with the next event
-	state_dialog_turn.disconnect("all_anims_finished", self, "_all_anims_finished")
+	state_dialog_turn.disconnect("all_anims_finished", Callable(self, "_all_anims_finished"))
 	
 	associated_dialognode._load_next_event()
 	associated_dialognode.set_state(associated_dialognode.state.READY)

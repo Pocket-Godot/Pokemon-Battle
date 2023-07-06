@@ -1,11 +1,11 @@
-tool
+@tool
 extends GridContainer
 
 var data_type
 var property_hint
 var hint_string
 
-export(String, DIR) var dir_subprop
+@export var dir_subprop # (String, DIR)
 var pkscn_subprop
 
 var current_value
@@ -20,18 +20,18 @@ func list_items(val):
 	if val:
 		if data_type == TYPE_DICTIONARY:
 			for k in val.keys():
-				var item = pkscn_subprop.instance()
+				var item = pkscn_subprop.instantiate()
 				add_child(item)
 				item.set_item(k, val[k], self)
 		else:
 			for i in val.size():
-				var item = pkscn_subprop.instance()
+				var item = pkscn_subprop.instantiate()
 				add_child(item)
 				item.set_item(i, val[i], self)
 	
 	add_child(add_item)
 	add_item.set_h_size_flags(SIZE_EXPAND_FILL)
-	add_item.connect("pressed", self, "_on_additem_pressed")
+	add_item.connect("pressed", Callable(self, "_on_additem_pressed"))
 
 func set_datatype(type, hint, h_string):
 	data_type = type
@@ -78,7 +78,7 @@ func set_datatype(type, hint, h_string):
 # SIGNALS FROM INPUT
 
 func _on_additem_pressed():
-	var item = pkscn_subprop.instance()
+	var item = pkscn_subprop.instantiate()
 	add_child(item)
 	var index = item.get_position_in_parent() - 1
 	move_child(item, index)

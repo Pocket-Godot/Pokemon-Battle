@@ -19,13 +19,13 @@ func handle_event(event_data, dialog_node):
 	var anim_name = event_data["target_anim"]
 	
 	associated_dialognode = dialog_node
-	state_tousedmove.connect("all_anims_finished", self, "_all_anims_finished")
+	state_tousedmove.connect("all_anims_finished", Callable(self, "_all_anims_finished"))
 	
 	state_tousedmove.play_animations(anim_name)
 	
 func _all_anims_finished():
 	# once you want to continue with the next event
-	state_tousedmove.disconnect("all_anims_finished", self, "_all_anims_finished")
+	state_tousedmove.disconnect("all_anims_finished", Callable(self, "_all_anims_finished"))
 	
 	associated_dialognode._load_next_event()
 	associated_dialognode.set_state(associated_dialognode.state.READY)

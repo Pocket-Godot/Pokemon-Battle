@@ -1,8 +1,8 @@
-tool
+@tool
 extends Control
 
-onready var DocTree = $HSplit/VBoxContainer/DocumentationTree
-onready var DocPageViewer = $HSplit/DocsPageViewer
+@onready var DocTree = $HSplit/VBoxContainer/DocumentationTree
+@onready var DocPageViewer = $HSplit/DocsPageViewer
 
 
 func _on_DocsPageViewer_open_non_html_link(link, section):

@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/typing4.wav-c0772ca318969a007c12c2d606458087.sample"
+type="AudioStreamWAV"
+uid="uid://dbsuma0selq11"
+path="res://.godot/imported/typing4.wav-c0772ca318969a007c12c2d606458087.sample"
 
 [deps]
 
 source_file="res://addons/dialogic/Example Assets/Sound Effects/Keyboard Noises/typing4.wav"
-dest_files=[ "res://.import/typing4.wav-c0772ca318969a007c12c2d606458087.sample" ]
+dest_files=["res://.godot/imported/typing4.wav-c0772ca318969a007c12c2d606458087.sample"]
 
 [params]
 

@@ -1,4 +1,4 @@
-tool
+@tool
 extends ScrollContainer
 
 # COMPARING PROPERT INSPECTOR
@@ -22,7 +22,7 @@ const PROPERTIES_SECTION = "Properties"
 var associated_treeitem
 var associated_resource
 var associated_script
-var has_unsaved_changes:bool setget set_unsaved_changes
+var has_unsaved_changes:bool: set = set_unsaved_changes
 
 func _gui_input(event):
 	if event is InputEventMouseMotion:
@@ -45,7 +45,7 @@ func augment_config(property_name, target_folder):
 	config.save(config_path)
 	# .cfg FILES ARE NOT RECORDED IN FILESYSTEM
 
-func can_drop_data(_p, data):
+func _can_drop_data(_p, data):
 	set_dragdata_onto_props($VBoxContainer, data)
 	current_dragdata = data
 	return false
@@ -74,7 +74,7 @@ func list_properties(c, cf:String, fn):
 			var pe_type = get_pe_by_type(pl)
 			# PROPERTY EDITOR
 			var pe = load(base_dir + pe_type + extension)
-			var pe_inst = pe.instance()
+			var pe_inst = pe.instantiate()
 			pe_inst.set_property(pl)
 			pe_inst.file_name = pe_type
 			
@@ -110,7 +110,7 @@ func list_properties(c, cf:String, fn):
 			match pe_type:
 				"Bool":
 					var check_box = pe_inst.get_node("CheckBox")
-					check_box.connect("toggled", self, "_on_value_changed", [pe_inst.tree_index])
+					check_box.connect("toggled", Callable(self, "_on_value_changed").bind(pe_inst.tree_index))
 					
 					if value:
 						check_box.set_pressed(value)
@@ -119,28 +119,28 @@ func list_properties(c, cf:String, fn):
 					
 					option_btn.add_options(pl["hint_string"], pl["type"], value)
 					
-					option_btn.connect("item_selected", self, "_on_enum_selected", [option_btn])
+					option_btn.connect("item_selected", Callable(self, "_on_enum_selected").bind(option_btn))
 				"Float", "Int":
 					var spinbox = pe_inst.get_node("SpinBox")
-					spinbox.connect("value_changed", self, "_on_value_changed", [pe_inst.tree_index])
+					spinbox.connect("value_changed", Callable(self, "_on_value_changed").bind(pe_inst.tree_index))
 					
 					if value:
 						spinbox.set_value(float(value))
 				"String":
 					var line_edit = pe_inst.get_node("LineEdit")
-					line_edit.connect("text_changed", self, "_on_value_changed", [pe_inst.tree_index])
+					line_edit.connect("text_changed", Callable(self, "_on_value_changed").bind(pe_inst.tree_index))
 					
 					if value:
 						line_edit.set_text(value)
 				"Color", "ColorAlpha":
 					var clr_picker = pe_inst.get_node("ColorPickerButton")
-					clr_picker.connect("color_changed", self, "_on_value_changed", [pe_inst.tree_index])
+					clr_picker.connect("color_changed", Callable(self, "_on_value_changed").bind(pe_inst.tree_index))
 					
 					if value:
 						clr_picker.set_pick_color(value)
 				"StringMultiline":
 					var text_edit = pe_inst.get_node("HBoxContainer/TextEdit")
-					text_edit.connect("text_changed", self, "_on_textedit_changed", [pe_inst.tree_index])
+					text_edit.connect("text_changed", Callable(self, "_on_textedit_changed").bind(pe_inst.tree_index))
 					
 					if value:
 						text_edit.set_text(value)
@@ -156,7 +156,7 @@ func list_properties(c, cf:String, fn):
 					
 					option_btn.class_hint = pl["class_name"]
 					
-					option_btn.connect("resource_is_set", self, "_on_property_resource_set")
+					option_btn.connect("resource_is_set", Callable(self, "_on_property_resource_set"))
 				"List":
 					pe_inst.prev_val = pe_inst.prev_val.duplicate(true)
 					
@@ -165,14 +165,14 @@ func list_properties(c, cf:String, fn):
 					grid_container.set_datatype(pl["type"], pl["hint"], pl["hint_string"])
 					grid_container.list_items(value)
 					
-					grid_container.connect("list_changed", self, "_on_value_changed", [pe_inst.tree_index])
+					grid_container.connect("list_changed", Callable(self, "_on_value_changed").bind(pe_inst.tree_index))
 
 func get_pe_by_type(property):
 	match property["type"]:
 		TYPE_BOOL:
 			return "Bool"
 		
-		TYPE_REAL:
+		TYPE_FLOAT:
 			if property["hint"] == PROPERTY_HINT_ENUM:
 				return "Enum"
 			else:
@@ -193,7 +193,7 @@ func get_pe_by_type(property):
 			else:
 				return "ColorAlpha"
 		
-		TYPE_DICTIONARY, TYPE_ARRAY, TYPE_INT_ARRAY, TYPE_REAL_ARRAY, TYPE_STRING_ARRAY, TYPE_COLOR_ARRAY:
+		TYPE_DICTIONARY, TYPE_ARRAY, TYPE_PACKED_INT32_ARRAY, TYPE_PACKED_FLOAT32_ARRAY, TYPE_PACKED_STRING_ARRAY, TYPE_PACKED_COLOR_ARRAY:
 			return "List"
 		
 		_:

@@ -31,7 +31,7 @@ class_name Dialogic
 ## @param dialog_scene_path		If you made a custom Dialog scene or moved it from its default path, you can specify its new path here.
 ## @param use_canvas_instead	Create the Dialog inside a canvas layer to make it show up regardless of the camera 2D/3D situation.
 ## @returns						A Dialog node to be added into the scene tree.
-static func start(timeline: String = '', default_timeline: String ='', dialog_scene_path: String="res://addons/dialogic/Nodes/DialogNode.tscn", use_canvas_instead=true):
+static func start(Callable(timeline: String = '', default_timeline: String ='').bind(dialog_scene_path: String="res://addons/dialogic/Nodes/DialogNode.tscn"), use_canvas_instead=true):
 	var dialog_scene = load(dialog_scene_path)
 	var dialog_node = null
 	var canvas_dialog_node = null
@@ -43,22 +43,22 @@ static func start(timeline: String = '', default_timeline: String ='', dialog_sc
 		canvas_dialog_node.set_dialog_node_scene(dialog_scene)
 		dialog_node = canvas_dialog_node.dialog_node
 	else:
-		dialog_node = dialog_scene.instance()
+		dialog_node = dialog_scene.instantiate()
 	
 	returned_dialog_node = dialog_node if not canvas_dialog_node else canvas_dialog_node
 	
 	## 1. Case: A slot has been loaded OR data has been imported
 	if timeline == '':
 		if (Engine.get_main_loop().has_meta('last_dialog_state') 
-			and not Engine.get_main_loop().get_meta('last_dialog_state').empty()
-			and not Engine.get_main_loop().get_meta('last_dialog_state').get('timeline', '').empty()):
+			and not Engine.get_main_loop().get_meta('last_dialog_state').is_empty()
+			and not Engine.get_main_loop().get_meta('last_dialog_state').get('timeline', '').is_empty()):
 		
 			dialog_node.resume_state_from_info(Engine.get_main_loop().get_meta('last_dialog_state'))
 			return returned_dialog_node
 		
 		## The loaded data isn't complete
 		elif (Engine.get_main_loop().has_meta('current_timeline')
-			and not Engine.get_main_loop().get_meta('current_timeline').empty()):
+			and not Engine.get_main_loop().get_meta('current_timeline').is_empty()):
 				timeline = Engine.get_main_loop().get_meta('current_timeline')
 		
 		## Else load the default timeline

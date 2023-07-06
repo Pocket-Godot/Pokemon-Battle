@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 class_name DialogicCustomEvents
 
@@ -17,9 +17,9 @@ var handlers : = {}
 ## then get the value (which is the handler node) to call its hadler function
 func update() -> void:
 	var path : String = DialogicResources.get_working_directories()["CUSTOM_EVENTS_DIR"]
-	var dir = Directory.new()
+	var dir = DirAccess.new()
 	if dir.open(path) == OK:
-		dir.list_dir_begin()
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		var file_name = dir.get_next()
 		# goes through all the folders in the custom events folder
 		while file_name != "":
@@ -28,7 +28,7 @@ func update() -> void:
 				
 				# look through that folder
 				#print("Found custom event folder: " + file_name)
-				var event = load(path.plus_file(file_name).plus_file('EventBlock.tscn')).instance()
+				var event = load(path.plus_file(file_name).plus_file('EventBlock.tscn')).instantiate()
 				
 				if event:
 					var handler_script_path = path.plus_file(file_name).plus_file('event_'+event.event_data['event_id']+'.gd')

@@ -1,9 +1,9 @@
-tool
+@tool
 extends Button
 
-export (String) var EventName = ''
+@export (String) var EventName = ''
 
-func get_drag_data(position):
+func _get_drag_data(position):
 	var preview_label = Label.new()
 	
 	if (self.text != ''):

@@ -5,9 +5,9 @@
 [node name="HBoxContainer" instance=ExtResource( 1 )]
 
 [node name="Name" parent="." index="0"]
-margin_right = 996.0
+offset_right = 996.0
 
 [node name="CheckBox" type="CheckBox" parent="." index="1"]
-margin_left = 1000.0
-margin_right = 1024.0
-margin_bottom = 600.0
+offset_left = 1000.0
+offset_right = 1024.0
+offset_bottom = 600.0

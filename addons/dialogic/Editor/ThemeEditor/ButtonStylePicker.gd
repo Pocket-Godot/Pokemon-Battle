@@ -1,4 +1,4 @@
-tool
+@tool
 extends GridContainer
 
 signal style_modified(section)
@@ -8,16 +8,16 @@ var real_file_path = 'res://addons/dialogic/Example Assets/backgrounds/backgroun
 
 
 func load_style(data):
-	$TextColor/CheckBox.pressed = data[0]
+	$TextColor/CheckBox.button_pressed = data[0]
 	$TextColor/ColorPickerButton.color = data[1]
 	
-	$FlatBackground/CheckBox.pressed = data[2]
+	$FlatBackground/CheckBox.button_pressed = data[2]
 	$FlatBackground/ColorPickerButton.color = data[3]
 	
-	$BackgroundTexture/CheckBox.pressed = data[4]
+	$BackgroundTexture/CheckBox.button_pressed = data[4]
 	set_path(data[5])
 	
-	$TextureModulation/CheckBox.pressed = data[6]
+	$TextureModulation/CheckBox.button_pressed = data[6]
 	$TextureModulation/ColorPickerButton.color = data[7]
 	
 	check_visible_buttons()
@@ -77,5 +77,5 @@ func _on_button_texture_selected(path, target) -> void:
 
 
 func _on_TextColor_ColorPickerButton_color_changed(color):
-	$TextColor/CheckBox.pressed = true
+	$TextColor/CheckBox.button_pressed = true
 	emit_signal("style_modified", name.to_lower())

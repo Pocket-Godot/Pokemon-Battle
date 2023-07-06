@@ -1,4 +1,4 @@
-tool
+@tool
 extends HSplitContainer
 
 var editor_reference
@@ -7,10 +7,10 @@ var timeline_file: String = ''
 var current_timeline: Dictionary = {}
 var TimelineUndoRedo := UndoRedo.new()
 
-onready var master_tree = get_node('../MasterTreeContainer/MasterTree')
-onready var timeline = $TimelineArea/TimeLine
-onready var events_warning = $ScrollContainer/EventContainer/EventsWarning
-onready var custom_events_container = $ScrollContainer/EventContainer/CustomEventsContainer
+@onready var master_tree = get_node('../MasterTreeContainer/MasterTree')
+@onready var timeline = $TimelineArea/TimeLine
+@onready var events_warning = $ScrollContainer/EventContainer/EventsWarning
+@onready var custom_events_container = $ScrollContainer/EventContainer/CustomEventsContainer
 
 var hovered_item = null
 var selected_style : StyleBoxFlat = load("res://addons/dialogic/Editor/Events/styles/selected_styleboxflat.tres")
@@ -67,36 +67,36 @@ signal timeline_loaded
 
 func _ready():
 	editor_reference = find_parent('EditorView')
-	connect("batch_loaded", self, '_on_batch_loaded')
+	connect("batch_loaded", Callable(self, '_on_batch_loaded'))
 	var modifier = ''
 	var _scale = get_constant("inspector_margin", "Editor")
 	_scale = _scale * 0.125
-	$ScrollContainer.rect_min_size.x = 180
+	$ScrollContainer.custom_minimum_size.x = 180
 	if _scale == 1.25:
 		modifier = '-1.25'
-		$ScrollContainer.rect_min_size.x = 200
+		$ScrollContainer.custom_minimum_size.x = 200
 	if _scale == 1.5:
 		modifier = '-1.25'
-		$ScrollContainer.rect_min_size.x = 200
+		$ScrollContainer.custom_minimum_size.x = 200
 	if _scale == 1.75:
 		modifier = '-1.25'
-		$ScrollContainer.rect_min_size.x = 390
+		$ScrollContainer.custom_minimum_size.x = 390
 	if _scale == 2:
 		modifier = '-2'
-		$ScrollContainer.rect_min_size.x = 390
+		$ScrollContainer.custom_minimum_size.x = 390
 	
-	var style = $TimelineArea.get('custom_styles/bg')
+	var style = $TimelineArea.get('theme_override_styles/bg')
 	style.set('bg_color', get_color("dark_color_1", "Editor"))
 	
 	update_custom_events()
-	$TimelineArea.connect('resized', self, 'add_extra_scroll_area_to_timeline', [])
+	$TimelineArea.connect('resized', Callable(self, 'add_extra_scroll_area_to_timeline').bind())
 	
 	# We create the event buttons
 	event_data = _read_event_data()
 	var buttonScene = load("res://addons/dialogic/Editor/TimelineEditor/SmallEventButton.tscn")
 	for b in event_data:
 		if typeof(b['event_data']) == TYPE_DICTIONARY:
-			var button = buttonScene.instance()
+			var button = buttonScene.instantiate()
 			# Button properties
 			button.visible_name = '       ' + b['event_name']
 			button.event_id = b['event_data']['event_id']
@@ -106,11 +106,11 @@ func _ready():
 			button.sorting_index = b.get('sorting_index', 9999)
 			# Connecting the signal
 			if button.event_id == 'dialogic_010':
-				button.connect('pressed', self, "_on_ButtonQuestion_pressed", [])
+				button.connect('pressed', Callable(self, "_on_ButtonQuestion_pressed").bind())
 			elif button.event_id == 'dialogic_012': # Condition
-				button.connect('pressed', self, "_on_ButtonCondition_pressed", [])
+				button.connect('pressed', Callable(self, "_on_ButtonCondition_pressed").bind())
 			else:
-				button.connect('pressed', self, "_create_event_button_pressed", [button.event_id])
+				button.connect('pressed', Callable(self, "_create_event_button_pressed").bind(button.event_id))
 			# Adding it to its section
 			get_node("ScrollContainer/EventContainer/FlexContainer" + str(button.event_category + 1)).add_child(button)
 			while button.get_index() != 0 and button.sorting_index < get_node("ScrollContainer/EventContainer/FlexContainer" + str(button.event_category + 1)).get_child(button.get_index()-1).sorting_index:
@@ -120,7 +120,7 @@ func _ready():
 func _process(delta):
 	if moving_piece != null:
 		var current_position = get_global_mouse_position()
-		var node_position = moving_piece.rect_global_position.y
+		var node_position = moving_piece.global_position.y
 		var height = get_block_height(moving_piece)
 		var up_offset = get_block_height(get_block_above(moving_piece))
 		var down_offset = get_block_height(get_block_below(moving_piece))
@@ -176,7 +176,7 @@ func _input(event):
 	# because certain godot controls swallow events (like textedit)
 	# we protect this with is_visible_in_tree to not 
 	# invoke a shortcut by accident
-	if get_focus_owner() is TextEdit:
+	if get_viewport().gui_get_focus_owner() is TextEdit:
 		return
 	if (event is InputEventKey and event is InputEventWithModifiers and is_visible_in_tree()):
 		# CTRL Z # UNDO
@@ -184,36 +184,36 @@ func _input(event):
 			and event.alt == false
 			and event.shift == false
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_Z
+			and event.keycode == KEY_Z
 			and event.echo == false
 		):
 			TimelineUndoRedo.undo()
 			indent_events()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 	if (event is InputEventKey and event is InputEventWithModifiers and is_visible_in_tree()):
 		# CTRL +SHIFT+ Z # REDO
 		if (event.pressed
 			and event.alt == false
 			and event.shift == true
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_Z
+			and event.keycode == KEY_Z
 			and event.echo == false
 		) or (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_Y
+			and event.keycode == KEY_Y
 			and event.echo == false):
 			TimelineUndoRedo.redo()
 			indent_events()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 	if (event is InputEventKey and event is InputEventWithModifiers and is_visible_in_tree()):
 		# UP
 		if (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == false or event.command == false)
-			and event.scancode == KEY_UP
+			and event.keycode == KEY_UP
 			and event.echo == false
 		):
 			# select previous
@@ -223,7 +223,7 @@ func _input(event):
 				if (prev_node != selected_items[0]):
 					selected_items = []
 					select_item(prev_node)
-				get_tree().set_input_as_handled()
+				get_viewport().set_input_as_handled()
 
 			
 		# DOWN
@@ -231,7 +231,7 @@ func _input(event):
 			and event.alt == false
 			and event.shift == false
 			and (event.control == false or event.command == false)
-			and event.scancode == KEY_DOWN
+			and event.keycode == KEY_DOWN
 			and event.echo == false
 		):
 			# select next
@@ -241,14 +241,14 @@ func _input(event):
 				if (next_node != selected_items[0]):
 					selected_items = []
 					select_item(next_node)
-				get_tree().set_input_as_handled()
+				get_viewport().set_input_as_handled()
 			
 		# DELETE
 		if (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == false or event.command == false)
-			and event.scancode == KEY_DELETE
+			and event.keycode == KEY_DELETE
 			and event.echo == false
 		):
 			if (len(selected_items) != 0):
@@ -257,14 +257,14 @@ func _input(event):
 				TimelineUndoRedo.add_do_method(self, "delete_events_indexed", events_indexed)
 				TimelineUndoRedo.add_undo_method(self, "add_events_indexed", events_indexed)
 				TimelineUndoRedo.commit_action()
-				get_tree().set_input_as_handled()
+				get_viewport().set_input_as_handled()
 			
 		# CTRL T
 		if (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_T
+			and event.keycode == KEY_T
 			and event.echo == false
 		):
 			var at_index = -1
@@ -276,49 +276,49 @@ func _input(event):
 			TimelineUndoRedo.add_do_method(self, "create_event", "dialogic_001", {'no-data': true}, true, at_index, true)
 			TimelineUndoRedo.add_undo_method(self, "remove_events_at_index", at_index, 1)
 			TimelineUndoRedo.commit_action()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 			
 		# CTRL A
 		if (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_A
+			and event.keycode == KEY_A
 			and event.echo == false
 		):
 			if (len(selected_items) != 0):
 				select_all_items()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 		
 		# CTRL SHIFT A
 		if (event.pressed
 			and event.alt == false
 			and event.shift == true
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_A
+			and event.keycode == KEY_A
 			and event.echo == false
 		):
 			if (len(selected_items) != 0):
 				deselect_all_items()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 		
 		# CTRL C
 		if (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_C
+			and event.keycode == KEY_C
 			and event.echo == false
 		):
 			copy_selected_events()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 		
 		# CTRL V
 		if (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_V
+			and event.keycode == KEY_V
 			and event.echo == false
 		):
 			var events_list = paste_check()
@@ -331,14 +331,14 @@ func _input(event):
 			TimelineUndoRedo.add_do_method(self, "add_events_at_index", events_list, paste_position)
 			TimelineUndoRedo.add_undo_method(self, "remove_events_at_index", paste_position+1, len(events_list))
 			TimelineUndoRedo.commit_action()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 		
 		# CTRL X
 		if (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_X
+			and event.keycode == KEY_X
 			and event.echo == false
 		):
 			var events_indexed = get_events_indexed(selected_items)
@@ -346,14 +346,14 @@ func _input(event):
 			TimelineUndoRedo.add_do_method(self, "cut_events_indexed", events_indexed)
 			TimelineUndoRedo.add_undo_method(self, "add_events_indexed", events_indexed)
 			TimelineUndoRedo.commit_action()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 
 		# CTRL D
 		if (event.pressed
 			and event.alt == false
 			and event.shift == false
 			and (event.control == true or event.command == true)
-			and event.scancode == KEY_D
+			and event.keycode == KEY_D
 			and event.echo == false
 		):
 			
@@ -364,7 +364,7 @@ func _input(event):
 				TimelineUndoRedo.add_do_method(self, "add_events_at_index", events, at_index)
 				TimelineUndoRedo.add_undo_method(self, "remove_events_at_index", at_index, len(events))
 				TimelineUndoRedo.commit_action()
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 
 func _unhandled_key_input(event):
 	if (event is InputEventWithModifiers):
@@ -373,28 +373,28 @@ func _unhandled_key_input(event):
 			and event.alt == true 
 			and event.shift == false 
 			and (event.control == false or event.command == false)
-			and event.scancode == KEY_UP
+			and event.keycode == KEY_UP
 			and event.echo == false
 		):
 			# move selected up
 			if (len(selected_items) == 1):
 				move_block(selected_items[0], "up")
 				indent_events()
-				get_tree().set_input_as_handled()
+				get_viewport().set_input_as_handled()
 			
 		# ALT DOWN
 		if (event.pressed
 			and event.alt == true 
 			and event.shift == false 
 			and (event.control == false or event.command == false)
-			and event.scancode == KEY_DOWN
+			and event.keycode == KEY_DOWN
 			and event.echo == false
 		):
 			# move selected down
 			if (len(selected_items) == 1):
 				move_block(selected_items[0], "down")
 				indent_events()
-				get_tree().set_input_as_handled()
+				get_viewport().set_input_as_handled()
 
 ## *****************************************************************************
 ##					 	DELETING, COPY, PASTE
@@ -472,7 +472,7 @@ func copy_selected_events():
 	for item in selected_items:
 		event_copy_array.append(item.event_data)
 	
-	OS.clipboard = JSON.print(
+	OS.clipboard = JSON.stringify(
 		{
 			"events":event_copy_array,
 			"dialogic_version": editor_reference.version_string,
@@ -480,7 +480,9 @@ func copy_selected_events():
 		})
 
 func paste_check():
-	var clipboard_parse = JSON.parse(OS.clipboard).result
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(OS.clipboard).result
+	var clipboard_parse = test_json_conv.get_data()
 	
 	if typeof(clipboard_parse) == TYPE_DICTIONARY:
 		if clipboard_parse.has("dialogic_version"):
@@ -532,7 +534,7 @@ func select_item(item: Node, multi_possible:bool = true):
 	if item == null:
 		return
 
-	if Input.is_key_pressed(KEY_CONTROL) and multi_possible:
+	if Input.is_key_pressed(KEY_CTRL) and multi_possible:
 		# deselect the item if it is selected
 		if _is_item_selected(item):
 			selected_items.erase(item)
@@ -577,7 +579,7 @@ func visual_update_selection():
 
 ## Sorts the selection using 'custom_sort_selection'
 func sort_selection():
-	selected_items.sort_custom(self, 'custom_sort_selection')
+	selected_items.sort_custom(Callable(self, 'custom_sort_selection'))
 
 
 ## Compares two event blocks based on their position in the timeline
@@ -699,9 +701,9 @@ func update_custom_events() -> void:
 	
 	var path:String = "res://dialogic/custom-events"
 	
-	var dir = Directory.new()
+	var dir = DirAccess.new()
 	if dir.open(path) == OK:
-		dir.list_dir_begin()
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		var file_name = dir.get_next()
 		# goes through all the folders in the custom events folder
 		while file_name != "":
@@ -709,7 +711,7 @@ func update_custom_events() -> void:
 			if dir.current_is_dir() and not file_name in ['.', '..']:
 				# look through that folder
 				#print("Found custom event folder: " + file_name)
-				var event = load(path.plus_file(file_name).plus_file('EventBlock.tscn')).instance()
+				var event = load(path.plus_file(file_name).plus_file('EventBlock.tscn')).instantiate()
 				if event:
 					custom_events[event.event_data['event_id']] = {
 						'event_block_scene' :path.plus_file(file_name).plus_file('EventBlock.tscn'),
@@ -740,14 +742,14 @@ func update_custom_events() -> void:
 	
 	# adding new ones
 	for custom_event_id in custom_events.keys():
-		var button = load('res://addons/dialogic/Editor/TimelineEditor/SmallEventButton.tscn').instance()
+		var button = load('res://addons/dialogic/Editor/TimelineEditor/SmallEventButton.tscn').instantiate()
 		#button.set_script(preload("EventButton.gd"))
 		button.event_id = custom_event_id
 		button.visible_name = '       ' + custom_events[custom_event_id]['event_name']
 		if custom_events[custom_event_id]['event_icon']:
 			button.set_icon(custom_events[custom_event_id]['event_icon'])
 		#button.event_color = TODO
-		button.connect("pressed", self, "_create_event_button_pressed", [custom_event_id])
+		button.connect("pressed", Callable(self, "_create_event_button_pressed").bind(custom_event_id))
 		custom_events_container.add_child(button)
 
 ## *****************************************************************************
@@ -800,13 +802,13 @@ func create_event(event_id: String, data: Dictionary = {'no-data': true} , inden
 	
 	# check if it's a custom event
 	if event_id in custom_events.keys():
-		piece = load(custom_events[event_id]['event_block_scene']).instance()
+		piece = load(custom_events[event_id]['event_block_scene']).instantiate()
 	# check if it's a builtin event
 	elif event_id in id_to_scene_name.keys():
-		piece = load("res://addons/dialogic/Editor/Events/" + id_to_scene_name[event_id] + ".tscn").instance()
+		piece = load("res://addons/dialogic/Editor/Events/" + id_to_scene_name[event_id] + ".tscn").instantiate()
 	# else use dummy event
 	else:
-		piece = load("res://addons/dialogic/Editor/Events/DummyEvent.tscn").instance()
+		piece = load("res://addons/dialogic/Editor/Events/DummyEvent.tscn").instantiate()
 	
 	# load the piece with data
 	piece.editor_reference = editor_reference
@@ -816,15 +818,15 @@ func create_event(event_id: String, data: Dictionary = {'no-data': true} , inden
 	
 	if at_index == -1:
 		if len(selected_items) != 0:
-			timeline.add_child_below_node(selected_items[0], piece)
+			timeline.add_sibling(selected_items[0], piece)
 		else:
 			timeline.add_child(piece)
 	else:
 		timeline.add_child(piece)
 		timeline.move_child(piece, at_index)
 
-	piece.connect("option_action", self, '_on_event_options_action', [piece])
-	piece.connect("gui_input", self, '_on_event_block_gui_input', [piece])
+	piece.connect("option_action", Callable(self, '_on_event_options_action').bind(piece))
+	piece.connect("gui_input", Callable(self, '_on_event_block_gui_input').bind(piece))
 	
 	events_warning.visible = false
 	if auto_select:
@@ -882,7 +884,7 @@ func load_batch(data):
 
 func _on_batch_loaded():
 	if batches.size() > 0:
-		yield(get_tree().create_timer(0.01), "timeout")
+		await get_tree().create_timer(0.01).timeout
 		load_batch(batches)
 	else:
 		events_warning.visible = false
@@ -921,7 +923,7 @@ func get_block_below(block):
 
 func get_block_height(block):
 	if block != null:
-		return block.rect_size.y
+		return block.size.y
 	else:
 		return null
 
@@ -931,7 +933,7 @@ func get_index_under_cursor():
 	var top_pos = 0
 	for i in range(timeline.get_child_count()):
 		var c = timeline.get_child(i)
-		if c.rect_global_position.y < current_position.y:
+		if c.global_position.y < current_position.y:
 			top_pos = i
 	return top_pos
 
@@ -959,7 +961,7 @@ func move_block_to_index(block_index, index):
 
 
 func create_timeline():
-	timeline_file = 'timeline-' + str(OS.get_unix_time()) + '.json'
+	timeline_file = 'timeline-' + str(Time.get_unix_time_from_system()) + '.json'
 	var timeline = {
 		"events": [],
 		"metadata":{
@@ -1011,8 +1013,8 @@ func save_timeline() -> void:
 func scroll_to_piece(piece_index) -> void:
 	var height = 0
 	for i in range(0, piece_index):
-		height += $TimelineArea/TimeLine.get_child(i).rect_size.y
-	if height < $TimelineArea.scroll_vertical or height > $TimelineArea.scroll_vertical+$TimelineArea.rect_size.y-(200*DialogicUtil.get_editor_scale(self)):
+		height += $TimelineArea/TimeLine.get_child(i).size.y
+	if height < $TimelineArea.scroll_vertical or height > $TimelineArea.scroll_vertical+$TimelineArea.size.y-(200*DialogicUtil.get_editor_scale(self)):
 		$TimelineArea.scroll_vertical = height
 
 # Event Indenting
@@ -1093,10 +1095,10 @@ func get_current_events_anchors():
 
 func add_extra_scroll_area_to_timeline():
 	if timeline.get_children().size() > 4:
-		timeline.rect_min_size.y = 0
-		timeline.rect_size.y = 0
-		if timeline.rect_size.y + 200 > $TimelineArea.rect_size.y:
-			timeline.rect_min_size = Vector2(0, timeline.rect_size.y + 200)
+		timeline.custom_minimum_size.y = 0
+		timeline.size.y = 0
+		if timeline.size.y + 200 > $TimelineArea.size.y:
+			timeline.custom_minimum_size = Vector2(0, timeline.size.y + 200)
 
 
 # Functions for reading the event data and coloring the buttons

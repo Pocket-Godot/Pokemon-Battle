@@ -1,18 +1,18 @@
 extends Node
 
-onready var fsm_dialog_turn = $FSM/DialogTurn
+@onready var fsm_dialog_turn = $FSM/DialogTurn
 
 ## The timeline to load when starting the scene
-export(String, "TimelineDropdown") var timeline: String
+@export var timeline: String # (String, "TimelineDropdown")
 var dialogic_node
 signal dialogic_node_added
 
 var moves_list
 signal move_selected
 
-onready var ally_list = $Allies.species
+@onready var ally_list = $Allies.species
 
-onready var ally_battlebars = $UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies
+@onready var ally_battlebars = $UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies
 
 signal end_turn
 
@@ -27,7 +27,7 @@ func _ready():
 	moves_list = $UI_Layer/MarginContainer/Moves/List
 	for i in range(1, moves_list.get_child_count()):
 		var move_btn = moves_list.get_child(i).get_child(0)
-		move_btn.connect("pressed", self, "_on_move_btn_pressed", [i-1])
+		move_btn.connect("pressed", Callable(self, "_on_move_btn_pressed").bind(i-1))
 	
 	var moveset = $Allies/You.moveset
 	update_moves_list(moveset)
@@ -111,7 +111,7 @@ func connect_to_reserve(u, i):
 		battlebar = i
 	
 	var battlebar_tween = battlebar.get_hpbar_tween()
-	battlebar_tween.connect("tween_completed", unit_reserve, "_on_hp_tween_completed")
+	battlebar_tween.connect("tween_completed", Callable(unit_reserve, "_on_hp_tween_completed"))
 
 func disconnect_from_reserve(i:int, j):
 	var unit_reserve = $UI_Layer/ShadowBg/Switch/VBoxContainer.get_child(i)
@@ -125,7 +125,7 @@ func disconnect_from_reserve(i:int, j):
 	
 	var battlebar_tween = battlebar.get_hpbar_tween()
 	
-	battlebar_tween.disconnect("tween_completed", unit_reserve, "_on_hp_tween_completed")
+	battlebar_tween.disconnect("tween_completed", Callable(unit_reserve, "_on_hp_tween_completed"))
 
 func update_moves_list(moveset):
 	for i in range(1, moves_list.get_child_count()):

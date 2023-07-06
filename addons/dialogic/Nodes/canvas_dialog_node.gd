@@ -5,7 +5,7 @@ extends CanvasLayer
 
 # Copied
 # Event end/start
-signal event_start(type, event)
+signal event_start(Callable(type, event))
 signal event_end(type)
 # Timeline end/start
 signal timeline_start(timeline_name)
@@ -21,28 +21,28 @@ var dialog_node = null
 
 func set_dialog_node_scene(scene) -> void:
 	_dialog_node_scene = scene
-	dialog_node = _dialog_node_scene.instance()
+	dialog_node = _dialog_node_scene.instantiate()
 	var _err:int
 	if dialog_node:
-		_err = dialog_node.connect("event_start", self, "_on_event_start")
+		_err = dialog_node.connect("event_start", Callable(self, "_on_event_start"))
 		assert(_err == OK)
-		_err = dialog_node.connect("event_end", self, "_on_event_end")
+		_err = dialog_node.connect("event_end", Callable(self, "_on_event_end"))
 		assert(_err == OK)
-		_err = dialog_node.connect("timeline_start", self, "_on_timeline_start")
+		_err = dialog_node.connect("timeline_start", Callable(self, "_on_timeline_start"))
 		assert(_err == OK)
-		_err = dialog_node.connect("timeline_end", self, "_on_timeline_end")
+		_err = dialog_node.connect("timeline_end", Callable(self, "_on_timeline_end"))
 		assert(_err == OK)
-		_err = dialog_node.connect("text_complete", self, "_on_text_complete")
+		_err = dialog_node.connect("text_complete", Callable(self, "_on_text_complete"))
 		assert(_err == OK)
-		_err = dialog_node.connect("dialogic_signal", self, "_on_dialogic_signal")
+		_err = dialog_node.connect("dialogic_signal", Callable(self, "_on_dialogic_signal"))
 		assert(_err == OK)
-		_err = dialog_node.connect("letter_displayed", self, "_on_letter_displayed")
+		_err = dialog_node.connect("letter_displayed", Callable(self, "_on_letter_displayed"))
 		assert(_err == OK)
 
 func _enter_tree() -> void:  
 	if dialog_node:
 		add_child(dialog_node)
-		dialog_node.connect('tree_exited', self, 'dialog_finished')
+		dialog_node.connect('tree_exited', Callable(self, 'dialog_finished'))
 
 func dialog_finished():
 	queue_free()

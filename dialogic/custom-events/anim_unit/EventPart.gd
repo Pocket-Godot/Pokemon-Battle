@@ -1,11 +1,11 @@
-tool
+@tool
 extends "res://addons/dialogic/Editor/Events/Parts/EventPart.gd"
  # has an event_data variable that stores the current data!!!
 
  ## node references
  # e.g. 
-onready var txt_aniname = $VBoxContainer/HBoxContainer/InputField
-onready var txt_tarray = $VBoxContainer/HBoxContainer2/InputField
+@onready var txt_aniname = $VBoxContainer/HBoxContainer/InputField
+@onready var txt_tarray = $VBoxContainer/HBoxContainer2/InputField
 
 const KEY_ANIMNAME = "anim_name"
 const KEY_TARGETARRAY = "target_array"
@@ -13,13 +13,13 @@ const KEY_TARGETARRAY = "target_array"
  # used to connect the signals
 func _ready():
 	# e.g. 
-	txt_aniname.connect("text_changed", self, "_on_InputField_text_changed", [KEY_ANIMNAME])
-	txt_tarray.connect("text_changed", self, "_on_InputField_text_changed", [KEY_TARGETARRAY])
+	txt_aniname.connect("text_changed", Callable(self, "_on_InputField_text_changed").bind(KEY_ANIMNAME))
+	txt_tarray.connect("text_changed", Callable(self, "_on_InputField_text_changed").bind(KEY_TARGETARRAY))
 
  # called by the event block
 func load_data(data:Dictionary):
 	# First set the event_data
-	.load_data(data)
+	super.load_data(data)
 	
 	# Now update the ui nodes to display the data. 
 	# e.g. 

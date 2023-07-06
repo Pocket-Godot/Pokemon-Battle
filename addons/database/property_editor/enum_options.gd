@@ -1,4 +1,4 @@
-tool
+@tool
 extends OptionButton
 
 var option_values = []

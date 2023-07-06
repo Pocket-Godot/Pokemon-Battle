@@ -1,4 +1,4 @@
-tool
+@tool
 class_name DialogicResources
 
 ## This class is used by the DialogicEditor to access the resources files
@@ -21,9 +21,11 @@ static func load_json(path: String, default: Dictionary={}) -> Dictionary:
 		return default
 	var data_text: String = file.get_as_text()
 	file.close()
-	if data_text.empty():
+	if data_text.is_empty():
 		return default
-	var data_parse: JSONParseResult = JSON.parse(data_text)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(data_text)
+	var data_parse: JSON = test_json_conv.get_data()
 	if data_parse.error != OK:
 		return default
 	
@@ -39,7 +41,7 @@ static func set_json(path: String, data: Dictionary):
 	var file = File.new()
 	var err = file.open(path, File.WRITE)
 	if err == OK:
-		file.store_line(JSON.print(data, '\t', true))
+		file.store_line(JSON.stringify(data, '\t', true))
 		file.close()
 	return err
 
@@ -52,7 +54,7 @@ static func init_dialogic_files() -> void:
 	# exists when the plugin is loaded. If they don't, we create 
 	# them.
 	# WARNING: only call while in the editor
-	var directory = Directory.new()
+	var directory = DirAccess.new()
 	var paths = get_working_directories()
 	var files = get_config_files_paths()
 	# Create directories
@@ -110,10 +112,10 @@ static func get_filename_from_path(path: String, extension = false) -> String:
 static func listdir(path: String) -> Array:
 	# https://docs.godotengine.org/en/stable/classes/class_directory.html#description
 	var files: Array = []
-	var dir := Directory.new()
+	var dir := DirAccess.new()
 	var err = dir.open(path)
 	if err == OK:
-		dir.list_dir_begin()
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		var file_name = dir.get_next()
 		while file_name != "":
 			if not dir.current_is_dir() and not file_name.begins_with("."):
@@ -133,7 +135,7 @@ static func create_empty_file(path):
 
 
 static func remove_file(path: String):
-	var dir = Directory.new()
+	var dir = DirAccess.new()
 	var _err = dir.remove(path)
 	
 	if _err != OK:
@@ -151,7 +153,7 @@ static func copy_file(path_from, path_to):
 		push_error("[Dialogic] Could not copy to empty filename")
 		return ERR_FILE_BAD_PATH
 	
-	var dir = Directory.new()
+	var dir = DirAccess.new()
 	if (not dir.file_exists(path_from)):
 		push_error("[Dialogic] Could not copy file %s, File does not exists" % [ path_from ])
 		return ERR_FILE_NOT_FOUND
@@ -326,12 +328,12 @@ static func delete_default_definition(id: String):
 # -> this returns a list of the save_slot-names
 static func get_saves_folders() -> Array:
 	var save_folders = []
-	var directory := Directory.new()
+	var directory := DirAccess.new()
 	if directory.open(WORKING_DIR) != OK:
 		print("[D] Error: Failed to access working directory.")
 		return []
 	
-	directory.list_dir_begin()
+	directory.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	var file_name = directory.get_next()
 	while file_name != "":
 		if directory.current_is_dir() and not file_name.begins_with("."):
@@ -342,7 +344,7 @@ static func get_saves_folders() -> Array:
 
 # this adds a new save folder with the given name
 static func add_save_folder(save_name: String) -> void:
-	var directory := Directory.new()
+	var directory := DirAccess.new()
 	if directory.open(WORKING_DIR) != OK:
 		print("[D] Error: Failed to access working directory.")
 		return 
@@ -358,12 +360,12 @@ static func add_save_folder(save_name: String) -> void:
 
 # this removes the given  folder
 static func remove_save_folder(save_name: String) -> void:
-	var directory := Directory.new()
+	var directory := DirAccess.new()
 	if directory.open(WORKING_DIR+"/"+save_name) != OK:
 		print("[D] Error: Failed to access save folder '"+save_name+"'.")
 		return
 	
-	directory.list_dir_begin()
+	directory.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	var file_name = directory.get_next()
 	while file_name != "":
 		directory.remove(file_name)

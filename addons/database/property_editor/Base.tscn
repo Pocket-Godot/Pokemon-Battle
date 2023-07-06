@@ -12,7 +12,7 @@ __meta__ = {
 }
 
 [node name="Name" type="Label" parent="."]
-margin_top = 293.0
-margin_right = 1024.0
-margin_bottom = 307.0
+offset_top = 293.0
+offset_right = 1024.0
+offset_bottom = 307.0
 size_flags_horizontal = 3

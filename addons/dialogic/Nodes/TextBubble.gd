@@ -1,4 +1,4 @@
-tool
+@tool
 extends Control
 
 var text_speed := 0.02 # Higher = lower speed
@@ -11,10 +11,10 @@ var commands = []
 var regex = RegEx.new()
 var bbcoderemoverregex = RegEx.new()
 
-onready var text_container = $TextContainer
-onready var text_label = $TextContainer/RichTextLabel
-onready var name_label = $NameLabel
-onready var next_indicator = $NextIndicatorContainer/NextIndicator
+@onready var text_container = $TextContainer
+@onready var text_label = $TextContainer/RichTextLabel
+@onready var name_label = $NameLabel
+@onready var next_indicator = $NextIndicatorContainer/NextIndicator
 
 var _finished := false
 var _theme
@@ -28,36 +28,36 @@ signal signal_request(arg)
 ## *****************************************************************************
 
 
-func update_name(name: String, color: Color = Color.white, autocolor: bool=false) -> void:
+func update_name(name: String, color: Color = Color.WHITE, autocolor: bool=false) -> void:
 	var name_is_hidden = _theme.get_value('name', 'is_hidden', false)
 	if name_is_hidden:
 		name_label.visible = false
 		return
 	
-	if not name.empty():
+	if not name.is_empty():
 		# Hack to reset the size
-		name_label.rect_min_size = Vector2(0, 0)
-		name_label.rect_size = Vector2(-1, 40)
+		name_label.custom_minimum_size = Vector2(0, 0)
+		name_label.size = Vector2(-1, 40)
 		# Setting the color and text
 		name_label.text = name
 		# Alignment
 		call_deferred('align_name_label')
 		if autocolor:
-			name_label.set('custom_colors/font_color', color)
+			name_label.set('theme_override_colors/font_color', color)
 		
 		name_label.visible = true
 	else:
 		name_label.visible = false
 
 func clear():
-	text_label.bbcode_text = ""
+	text_label.text = ""
 	name_label.text = ""
 	$WritingTimer.stop()
 
 func update_text(text:String):
 	
 	var orig_text = text
-	text_label.bbcode_text = text
+	text_label.text = text
 	var text_bbcodefree = text_label.text
 	
 	#regex moved from func scope to class scope
@@ -95,7 +95,7 @@ func update_text(text:String):
 		
 		result = regex.search(text_bbcodefree)
 
-	text_label.bbcode_text = text
+	text_label.text = text
 	text_label.visible_characters = 0
 
 	## SIZING THE RICHTEXTLABEL
@@ -104,7 +104,7 @@ func update_text(text:String):
 	# for this reason the RichTextLabel ist first set to just go for the size it needs,
 	# even if this might be more than available.
 	text_label.size_flags_vertical = 0
-	text_label.rect_clip_content = 0
+	text_label.clip_contents = 0
 	text_label.fit_content_height = true
 	# a frame later, when the sizes have been updated, it will check if there 
 	# is enough space or the scrollbar should be activated.
@@ -118,9 +118,9 @@ func update_text(text:String):
 
 func update_sizing():
 	# this will enable/disable the scrollbar based on the size of the text
-	theme_text_max_height = text_container.rect_size.y
+	theme_text_max_height = text_container.size.y
 
-	if text_label.rect_size.y >= theme_text_max_height:
+	if text_label.size.y >= theme_text_max_height:
 		text_label.fit_content_height = false
 		text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	else:
@@ -146,7 +146,7 @@ func handle_command(command:Array):
 		$WritingTimer.stop()
 		var x = text_label.visible_characters
 		get_parent().get_node("DialogicTimer").start(float(command[2]))
-		yield(get_parent().get_node("DialogicTimer"), "timeout")
+		await get_parent().get_node("DialogicTimer").timeout
 		# only continue, if no skip was performed
 		if text_label.visible_characters == x: 
 			start_text_timer()
@@ -165,34 +165,34 @@ func reset():
 func load_theme(theme: ConfigFile):
 	# Text
 	var theme_font = DialogicUtil.path_fixer_load(theme.get_value('text', 'font', 'res://addons/dialogic/Example Assets/Fonts/DefaultFont.tres'))
-	text_label.set('custom_fonts/normal_font', theme_font)
-	text_label.set('custom_fonts/bold_font', DialogicUtil.path_fixer_load(theme.get_value('text', 'bold_font', 'res://addons/dialogic/Example Assets/Fonts/DefaultBoldFont.tres')))
-	text_label.set('custom_fonts/italics_font', DialogicUtil.path_fixer_load(theme.get_value('text', 'italic_font', 'res://addons/dialogic/Example Assets/Fonts/DefaultItalicFont.tres')))
-	name_label.set('custom_fonts/font', DialogicUtil.path_fixer_load(theme.get_value('name', 'font', 'res://addons/dialogic/Example Assets/Fonts/NameFont.tres')))
+	text_label.set('theme_override_fonts/normal_font', theme_font)
+	text_label.set('theme_override_fonts/bold_font', DialogicUtil.path_fixer_load(theme.get_value('text', 'bold_font', 'res://addons/dialogic/Example Assets/Fonts/DefaultBoldFont.tres')))
+	text_label.set('theme_override_fonts/italics_font', DialogicUtil.path_fixer_load(theme.get_value('text', 'italic_font', 'res://addons/dialogic/Example Assets/Fonts/DefaultItalicFont.tres')))
+	name_label.set('theme_override_fonts/font', DialogicUtil.path_fixer_load(theme.get_value('name', 'font', 'res://addons/dialogic/Example Assets/Fonts/NameFont.tres')))
 	
 	# setting the vertical alignment
 	var alignment = theme.get_value('text', 'alignment',0)
 	if alignment <= 2: # top
-		text_container.alignment = BoxContainer.ALIGN_BEGIN
+		text_container.alignment = BoxContainer.ALIGNMENT_BEGIN
 	elif alignment <= 5: # center
-		text_container.alignment = BoxContainer.ALIGN_CENTER
+		text_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	elif alignment <= 8: # bottom
-		text_container.alignment = BoxContainer.ALIGN_END
+		text_container.alignment = BoxContainer.ALIGNMENT_END
 	
 	var text_color = Color(theme.get_value('text', 'color', '#ffffffff'))
-	text_label.set('custom_colors/default_color', text_color)
-	name_label.set('custom_colors/font_color', text_color)
+	text_label.set('theme_override_colors/default_color', text_color)
+	name_label.set('theme_override_colors/font_color', text_color)
 
-	text_label.set('custom_colors/font_color_shadow', Color('#00ffffff'))
-	name_label.set('custom_colors/font_color_shadow', Color('#00ffffff'))
+	text_label.set('theme_override_colors/font_shadow_color', Color('#00ffffff'))
+	name_label.set('theme_override_colors/font_shadow_color', Color('#00ffffff'))
 
 	if theme.get_value('text', 'shadow', false):
 		var text_shadow_color = Color(theme.get_value('text', 'shadow_color', '#9e000000'))
-		text_label.set('custom_colors/font_color_shadow', text_shadow_color)
+		text_label.set('theme_override_colors/font_shadow_color', text_shadow_color)
 
 	var shadow_offset = theme.get_value('text', 'shadow_offset', Vector2(2,2))
-	text_label.set('custom_constants/shadow_offset_x', shadow_offset.x)
-	text_label.set('custom_constants/shadow_offset_y', shadow_offset.y)
+	text_label.set('theme_override_constants/shadow_offset_x', shadow_offset.x)
+	text_label.set('theme_override_constants/shadow_offset_y', shadow_offset.y)
 	
 
 	# Text speed
@@ -200,10 +200,10 @@ func load_theme(theme: ConfigFile):
 	theme_text_speed = text_speed
 
 	# Margin
-	text_container.set('margin_left', theme.get_value('text', 'text_margin_left', 20))
-	text_container.set('margin_right', theme.get_value('text', 'text_margin_right', -20))
-	text_container.set('margin_top', theme.get_value('text', 'text_margin_top', 10))
-	text_container.set('margin_bottom', theme.get_value('text', 'text_margin_bottom', -10))
+	text_container.set('offset_left', theme.get_value('text', 'text_margin_left', 20))
+	text_container.set('offset_right', theme.get_value('text', 'text_margin_right', -20))
+	text_container.set('offset_top', theme.get_value('text', 'text_margin_top', 10))
+	text_container.set('offset_bottom', theme.get_value('text', 'text_margin_bottom', -10))
 
 	# Backgrounds
 	$TextureRect.texture = DialogicUtil.path_fixer_load(theme.get_value('background','image', "res://addons/dialogic/Example Assets/backgrounds/background-2.png"))
@@ -223,20 +223,20 @@ func load_theme(theme: ConfigFile):
 	$TextureRect.patch_margin_bottom = theme.get_value('ninepatch', 'ninepatch_margin_bottom', 0)
 
 	# Next image
-	$NextIndicatorContainer.rect_position = Vector2(0,0)
+	$NextIndicatorContainer.position = Vector2(0,0)
 	next_indicator.texture = DialogicUtil.path_fixer_load(theme.get_value('next_indicator', 'image', 'res://addons/dialogic/Example Assets/next-indicator/next-indicator.png'))
 	# Reset for up and down animation
-	next_indicator.margin_top = 0 
-	next_indicator.margin_bottom = 0 
-	next_indicator.margin_left = 0 
-	next_indicator.margin_right = 0 
+	next_indicator.offset_top = 0 
+	next_indicator.offset_bottom = 0 
+	next_indicator.offset_left = 0 
+	next_indicator.offset_right = 0 
 	# Scale
 	var indicator_scale = theme.get_value('next_indicator', 'scale', 0.4)
-	next_indicator.rect_scale = Vector2(indicator_scale, indicator_scale)
+	next_indicator.scale = Vector2(indicator_scale, indicator_scale)
 	# Offset
 	var offset = theme.get_value('next_indicator', 'offset', Vector2(13, 10))
-	next_indicator.rect_position = theme.get_value('box', 'size', Vector2(910, 167)) - (next_indicator.texture.get_size() * indicator_scale)
-	next_indicator.rect_position -= offset
+	next_indicator.position = theme.get_value('box', 'size', Vector2(910, 167)) - (next_indicator.texture.get_size() * indicator_scale)
+	next_indicator.position -= offset
 	
 	# Character Name
 	$NameLabel/ColorRect.visible = theme.get_value('name', 'background_visible', false)
@@ -245,7 +245,7 @@ func load_theme(theme: ConfigFile):
 	$NameLabel/TextureRect.texture = DialogicUtil.path_fixer_load(theme.get_value('name','image', "res://addons/dialogic/Example Assets/backgrounds/background-2.png"))
 	
 	var name_padding = theme.get_value('name', 'name_padding', Vector2( 10, 0 ))
-	var name_style = name_label.get('custom_styles/normal')
+	var name_style = name_label.get('theme_override_styles/normal')
 	name_style.set('content_margin_left', name_padding.x)
 	name_style.set('content_margin_right', name_padding.x)
 	name_style.set('content_margin_bottom', name_padding.y)
@@ -253,10 +253,10 @@ func load_theme(theme: ConfigFile):
 	
 	var name_shadow_offset = theme.get_value('name', 'shadow_offset', Vector2(2,2))
 	if theme.get_value('name', 'shadow_visible', true):
-		name_label.set('custom_colors/font_color_shadow', Color(theme.get_value('name', 'shadow', '#9e000000')))
-		name_label.set('custom_constants/shadow_offset_x', name_shadow_offset.x)
-		name_label.set('custom_constants/shadow_offset_y', name_shadow_offset.y)
-	name_label.rect_position.y = theme.get_value('name', 'bottom_gap', 48) * -1 - (name_padding.y)
+		name_label.set('theme_override_colors/font_shadow_color', Color(theme.get_value('name', 'shadow', '#9e000000')))
+		name_label.set('theme_override_constants/shadow_offset_x', name_shadow_offset.x)
+		name_label.set('theme_override_constants/shadow_offset_y', name_shadow_offset.y)
+	name_label.position.y = theme.get_value('name', 'bottom_gap', 48) * -1 - (name_padding.y)
 	if theme.get_value('name', 'modulation', false) == true:
 		$NameLabel/TextureRect.modulate = Color(theme.get_value('name', 'modulation_color', '#ffffffff'))
 	else:
@@ -312,13 +312,13 @@ func align_name_label():
 	var name_padding = _theme.get_value('name', 'name_padding', Vector2( 10, 0 ))
 	var horizontal_offset = _theme.get_value('name', 'horizontal_offset', 0)
 	var name_label_position = _theme.get_value('name', 'position', 0)
-	var label_size = name_label.rect_size.x
+	var label_size = name_label.size.x
 	if name_label_position == 0:
-		name_label.rect_global_position.x = rect_global_position.x + horizontal_offset
+		name_label.global_position.x = global_position.x + horizontal_offset
 	elif name_label_position == 1: # Center
-		name_label.rect_global_position.x = rect_global_position.x + (rect_size.x / 2) - (label_size / 2) + horizontal_offset
+		name_label.global_position.x = global_position.x + (size.x / 2) - (label_size / 2) + horizontal_offset
 	elif name_label_position == 2: # Right
-		name_label.rect_global_position.x = rect_global_position.x + rect_size.x - label_size + horizontal_offset
+		name_label.global_position.x = global_position.x + size.x - label_size + horizontal_offset
 
 ## *****************************************************************************
 ##								OVERRIDES
@@ -327,7 +327,7 @@ func align_name_label():
 
 func _ready():
 	reset()
-	$WritingTimer.connect("timeout", self, "_on_writing_timer_timeout")
+	$WritingTimer.connect("timeout", Callable(self, "_on_writing_timer_timeout"))
 	text_label.meta_underlined = false
 	regex.compile("\\[\\s*(nw|(nw|speed|signal|play|pause)\\s*=\\s*(.+?)\\s*)\\](.*?)")
 	

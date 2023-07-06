@@ -1,0 +1,72 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/dialogic/Editor/Events/Parts/Character/EventPart_PositionPicker.gd" type="Script" id=1]
+[ext_resource path="res://addons/dialogic/Images/Event Icons/character.svg" type="Texture2D" id=2]
+[ext_resource path="res://addons/dialogic/Editor/Events/Parts/Text/GreyLabel.tscn" type="PackedScene" id=3]
+
+[node name="PositionPicker" type="VBoxContainer"]
+offset_right = 186.0
+offset_bottom = 30.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBox" type="HBoxContainer" parent="."]
+offset_right = 274.0
+offset_bottom = 30.0
+
+[node name="Label" parent="HBox" instance=ExtResource( 3 )]
+offset_top = 8.0
+offset_right = 68.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color( 0, 0, 0, 1 )
+text = "at position"
+
+[node name="PositionsContainer" type="HBoxContainer" parent="HBox"]
+offset_left = 72.0
+offset_right = 258.0
+offset_bottom = 30.0
+
+[node name="position-0" type="Button" parent="HBox/PositionsContainer"]
+self_modulate = Color( 0.596078, 0.596078, 0.596078, 0.396078 )
+offset_right = 34.0
+offset_bottom = 30.0
+icon = ExtResource( 2 )
+
+[node name="position-1" type="Button" parent="HBox/PositionsContainer"]
+self_modulate = Color( 0.596078, 0.596078, 0.596078, 0.396078 )
+offset_left = 38.0
+offset_right = 72.0
+offset_bottom = 30.0
+icon = ExtResource( 2 )
+
+[node name="position-2" type="Button" parent="HBox/PositionsContainer"]
+self_modulate = Color( 0.596078, 0.596078, 0.596078, 0.396078 )
+offset_left = 76.0
+offset_right = 110.0
+offset_bottom = 30.0
+icon = ExtResource( 2 )
+
+[node name="position-3" type="Button" parent="HBox/PositionsContainer"]
+self_modulate = Color( 0.596078, 0.596078, 0.596078, 0.396078 )
+offset_left = 114.0
+offset_right = 148.0
+offset_bottom = 30.0
+icon = ExtResource( 2 )
+
+[node name="position-4" type="Button" parent="HBox/PositionsContainer"]
+self_modulate = Color( 0.596078, 0.596078, 0.596078, 0.396078 )
+offset_left = 152.0
+offset_right = 186.0
+offset_bottom = 30.0
+icon = ExtResource( 2 )
+
+[node name="EnablePosition" type="Button" parent="HBox"]
+offset_left = 262.0
+offset_right = 274.0
+offset_bottom = 30.0
+toggle_mode = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

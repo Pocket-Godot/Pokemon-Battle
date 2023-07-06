@@ -1,14 +1,14 @@
-tool
+@tool
 extends MenuState
 
 class_name MenuStateBlkBg
 
-onready var shadow_bg = get_node("%ShadowBg")
+@onready var shadow_bg = get_node("%ShadowBg")
 
 func _activate():
 	shadow_bg.show()
-	._activate()
+	super._activate()
 
 func _deactivate():
-	._deactivate()
+	super._deactivate()
 	shadow_bg.hide()

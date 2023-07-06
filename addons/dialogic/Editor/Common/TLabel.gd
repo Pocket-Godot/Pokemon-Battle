@@ -1,6 +1,6 @@
-tool
+@tool
 extends Label
-export var text_key : String = ""
+@export var text_key : String = ""
 var editor_reference
 
 func set_text_from_key(value):

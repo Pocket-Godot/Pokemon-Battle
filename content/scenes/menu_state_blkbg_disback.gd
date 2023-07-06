@@ -1,17 +1,17 @@
-tool
+@tool
 extends MenuStateBlkBg
 
-export(NodePath) var np_backbtn
+@export var np_backbtn: NodePath
 var backbtn
 
 func _ready():
 	backbtn = get_node(np_backbtn)
-	._ready()
+	super._ready()
 
 func _activate():
 	backbtn.set_disabled(true)
-	._activate()
+	super._activate()
 
 func _deactivate():
-	._deactivate()
+	super._deactivate()
 	backbtn.set_disabled(false)

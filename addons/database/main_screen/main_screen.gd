@@ -1,12 +1,12 @@
-tool
+@tool
 extends MarginContainer
 
 var editor_plugin
 var editor_interface
 var filesystem_dock
 
-onready var data_container = $VBoxContainer/HSplitContainer/TabContainer
-onready var tree_list = $VBoxContainer/HSplitContainer/VBoxContainer/Tree
+@onready var data_container = $VBoxContainer/HSplitContainer/TabContainer
+@onready var tree_list = $VBoxContainer/HSplitContainer/VBoxContainer/Tree
 
 const DATA_DIR = "res://data"
 
@@ -17,17 +17,17 @@ const ResourceContainer = preload("Resource.tscn")
 var filename_to_rindx = {} # RINDX: RESOURCE (CHILD) INDEX
 enum {TICOL_FILENAME}
 
-onready var newcat_name = $NewCategory/VBoxContainer/LineEdit
-onready var newres_name = $NewResource/VBoxContainer/Name/HBoxContainer/LineEdit
-onready var res_cat_options = $NewResource/VBoxContainer/Category/OptionButton
+@onready var newcat_name = $NewCategory/VBoxContainer/LineEdit
+@onready var newres_name = $NewResource/VBoxContainer/Name/HBoxContainer/LineEdit
+@onready var res_cat_options = $NewResource/VBoxContainer/Category/OptionButton
 signal changing_filesystem
 
 var cat_config = {}
 
 var selected_resoptions
-onready var empty_options = $EmptyResourceOptions
-onready var empty_wcat = $EmptyWithCategory
-onready var resource_options = $ResourceOptions
+@onready var empty_options = $EmptyResourceOptions
+@onready var empty_wcat = $EmptyWithCategory
+@onready var resource_options = $ResourceOptions
 enum {OPT_NEW, OPT_NEWAS, OPT_LOAD, OPT_INSTALOAD, OPT_CAT, OPT_EDIT, OPT_CLEAR, OPT_SHOWINFOLDER, OPT_SHOWINCAT}
 
 func _newcat_pressed():
@@ -48,7 +48,7 @@ func _newres_pressed():
 	open_newres_popup(target_cat)
 
 func _newcat_confirmed():
-	var base_dir = Directory.new()
+	var base_dir = DirAccess.new()
 	var open_error = base_dir.open(DATA_DIR)
 	
 	var new_folder_name = newcat_name.get_text()
@@ -71,7 +71,7 @@ func _newcat_confirmed():
 	emit_signal("changing_filesystem")
 
 func _newres_confirmed():
-	var base_dir = Directory.new()
+	var base_dir = DirAccess.new()
 	var open_error = base_dir.open(DATA_DIR.plus_file(res_cat_options.get_item_text(res_cat_options.get_selected())))
 	
 	var newres_name_ext = newres_name.get_text() + ".tres"
@@ -178,11 +178,11 @@ func go_through_folder_for_update(dir, search, parent_ti=null):
 			res_cat_options.add_item(folder_name)
 			
 			# GO THROUGH SUBFOLDER
-			var sub_dir = Directory.new()
+			var sub_dir = DirAccess.new()
 			var open_error = sub_dir.open(sub_dir_path)
 			match open_error:
 				OK:
-					sub_dir.list_dir_begin(true, false)
+					sub_dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 					go_through_folder_for_update(sub_dir, search, category_folder)
 				_:
 					print(open_error)
@@ -202,7 +202,7 @@ func go_through_folder_for_update(dir, search, parent_ti=null):
 			
 				# IF HAVEN'T ALREADY, ADD NEW TAB
 				if not file_name in filename_to_rindx.keys():
-					var resource_inst = ResourceContainer.instance()
+					var resource_inst = ResourceContainer.instantiate()
 					resource_inst.set_editor_plugin(editor_plugin)
 					data_container.add_child(resource_inst)
 					resource_inst.list_properties(self, dir.get_current_dir(), file_name)
@@ -294,13 +294,13 @@ func update_tree(search:String = ""):
 	tree_list.clear()
 	res_cat_options.clear()
 	
-	var main_dir = Directory.new()
+	var main_dir = DirAccess.new()
 	var open_error = main_dir.open(DATA_DIR)
 	
 	match open_error:
 		OK:
 			# GO THROUGH DIRECTORY
-			main_dir.list_dir_begin(true, false)
+			main_dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 			go_through_folder_for_update(main_dir, search,  tree_list.create_item())
 			for c in data_container.get_children():
 				c.update_property_options()

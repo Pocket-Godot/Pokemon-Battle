@@ -1,10 +1,10 @@
 extends Resource
 
-export(Resource) var type
+@export var type: Resource
 
-export(int) var base_power
-export(int) var accuracy = 100
-export(int) var power_points = 10
+@export var base_power: int
+@export var accuracy: int = 100
+@export var power_points: int = 10
 
 func get_name()->String:
 	return resource_path.get_file().get_basename().capitalize()

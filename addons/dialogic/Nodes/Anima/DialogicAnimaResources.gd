@@ -49,11 +49,11 @@ static func _get_animations_list() -> Array:
 	return files
 
 static func _get_scripts_in_dir(path: String, files: Array = []) -> Array:
-	var dir = Directory.new()
+	var dir = DirAccess.new()
 	if dir.open(path) != OK:
 		return files
 
-	dir.list_dir_begin()
+	dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	var file_name = dir.get_next()
 
 	while file_name != "":
@@ -68,7 +68,7 @@ static func _get_scripts_in_dir(path: String, files: Array = []) -> Array:
 	return files
 
 static func from_camel_to_snack_case(string:String) -> String:
-	var result = PoolStringArray()
+	var result = PackedStringArray()
 	var is_first_char = true
 
 	for character in string:
@@ -79,5 +79,5 @@ static func from_camel_to_snack_case(string:String) -> String:
 
 		is_first_char = false
 
-	return result.join('').replace(' ', '_')
+	return ''.join(result).replace(' ', '_')
 

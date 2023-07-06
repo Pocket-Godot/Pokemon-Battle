@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://addons/dialogic/Example Assets/Fonts/DefaultFont.tres" type="DynamicFont" id=1]
-[ext_resource path="res://addons/dialogic/Example Assets/backgrounds/background-2.png" type="Texture" id=2]
-[ext_resource path="res://addons/dialogic/Example Assets/next-indicator/next-indicator.png" type="Texture" id=3]
+[ext_resource path="res://addons/dialogic/Example Assets/Fonts/DefaultFont.tres" type="FontFile" id=1]
+[ext_resource path="res://addons/dialogic/Example Assets/backgrounds/background-2.png" type="Texture2D" id=2]
+[ext_resource path="res://addons/dialogic/Example Assets/next-indicator/next-indicator.png" type="Texture2D" id=3]
 [ext_resource path="res://addons/dialogic/Nodes/TextBubble.gd" type="Script" id=4]
 
 [sub_resource type="StyleBoxEmpty" id=1]
@@ -20,8 +20,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array( 0, 0.5 ),
+"transitions": PackedFloat32Array( 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
@@ -31,14 +31,14 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=5]
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("..:rect_position")
+tracks/0/path = NodePath("..:position")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array( 0, 0.5 ),
+"transitions": PackedFloat32Array( 1, 1 ),
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( 0, -10 ) ]
 }
@@ -56,10 +56,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -455.0
-margin_top = 399.0
-margin_right = 455.0
-margin_bottom = 560.0
+offset_left = -455.0
+offset_top = 399.0
+offset_right = 455.0
+offset_bottom = 560.0
 script = ExtResource( 4 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -79,10 +79,10 @@ texture = ExtResource( 2 )
 [node name="TextContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 12.0
-margin_right = -10.0
-margin_bottom = -12.0
+offset_left = 10.0
+offset_top = 12.0
+offset_right = -10.0
+offset_bottom = -12.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
@@ -91,20 +91,20 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="TextContainer"]
-margin_top = 11.0
-margin_right = 890.0
-margin_bottom = 125.0
+offset_top = 11.0
+offset_right = 890.0
+offset_bottom = 125.0
 focus_mode = 2
-custom_colors/default_color = Color( 1, 1, 1, 1 )
-custom_colors/selection_color = Color( 0, 0, 0, 0 )
-custom_colors/font_color_shadow = Color( 1, 1, 1, 0 )
-custom_constants/shadow_offset_x = 2
-custom_constants/shadow_offset_y = 2
-custom_fonts/normal_font = ExtResource( 1 )
-custom_styles/focus = SubResource( 1 )
-custom_styles/normal = SubResource( 2 )
+theme_override_colors/default_color = Color( 1, 1, 1, 1 )
+theme_override_colors/selection_color = Color( 0, 0, 0, 0 )
+theme_override_colors/font_shadow_color = Color( 1, 1, 1, 0 )
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/normal_font = ExtResource( 1 )
+theme_override_styles/focus = SubResource( 1 )
+theme_override_styles/normal = SubResource( 2 )
 bbcode_enabled = true
-bbcode_text = "Placeholder text for testing an formatting. 
+text = "Placeholder text for testing an formatting. 
 Placeholder text for testing an formatting. 
 adsd"
 visible_characters = 0
@@ -120,16 +120,16 @@ __meta__ = {
 }
 
 [node name="NextIndicatorContainer" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+offset_right = 40.0
+offset_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="NextIndicator" type="TextureRect" parent="NextIndicatorContainer"]
-margin_top = -10.0
-margin_right = 51.0
-margin_bottom = 41.0
+offset_top = -10.0
+offset_right = 51.0
+offset_bottom = 41.0
 texture = ExtResource( 3 )
 stretch_mode = 4
 __meta__ = {
@@ -144,16 +144,16 @@ anims/Static = SubResource( 4 )
 
 [node name="NameLabel" type="Label" parent="."]
 visible = false
-margin_top = -48.0
-margin_right = 58.0
-margin_bottom = -8.0
+offset_top = -48.0
+offset_right = 58.0
+offset_bottom = -8.0
 size_flags_vertical = 1
-custom_colors/font_color = Color( 0.423529, 0.580392, 0.74902, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 0.619608 )
-custom_constants/shadow_offset_x = 2
-custom_constants/shadow_offset_y = 2
-custom_fonts/font = ExtResource( 1 )
-custom_styles/normal = SubResource( 6 )
+theme_override_colors/font_color = Color( 0.423529, 0.580392, 0.74902, 1 )
+theme_override_colors/font_shadow_color = Color( 0, 0, 0, 0.619608 )
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource( 1 )
+theme_override_styles/normal = SubResource( 6 )
 align = 1
 valign = 1
 __meta__ = {

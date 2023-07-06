@@ -1,4 +1,4 @@
-tool
+@tool
 extends VBoxContainer
 
 var listgrid
@@ -8,27 +8,27 @@ enum {DT_NULL, DT_BOOL, DT_INT, DT_FLOAT, DT_STRING, DT_COLOR}
 var datatypes = { TYPE_NIL: DT_NULL,
 	TYPE_BOOL: DT_BOOL,
 	TYPE_INT: DT_INT,
-	TYPE_REAL: DT_FLOAT,
+	TYPE_FLOAT: DT_FLOAT,
 	TYPE_STRING: DT_STRING,
 	TYPE_COLOR: DT_COLOR }
 var prev_datatype = DT_NULL
 
-onready var input_string = $LineEdit
-onready var input_bool = $CheckBox
-onready var input_number = $SpinBox
-onready var input_color = $ColorPickerButton
+@onready var input_string = $LineEdit
+@onready var input_bool = $CheckBox
+@onready var input_number = $SpinBox
+@onready var input_color = $ColorPickerButton
 
 signal value_changed
 
 func _listgrid_call_itemchange(lg):
 	listgrid = lg
-	connect("value_changed", listgrid, "_on_value_changed")
+	connect("value_changed", Callable(listgrid, "_on_value_changed"))
 
 func _listgrid_call_keychange(lg):
 	listgrid = lg
-	connect("value_changed", listgrid, "_on_key_changed")
-	connect("value_changed", self, "_on_key_changed")
-	connect("value_changed", get_parent(), "_on_key_changed")
+	connect("value_changed", Callable(listgrid, "_on_key_changed"))
+	connect("value_changed", Callable(self, "_on_key_changed"))
+	connect("value_changed", Callable(get_parent(), "_on_key_changed"))
 
 func _key(k):
 	# REUSE INDEX TO STORE PREVIOUS KEY
@@ -42,7 +42,7 @@ func _value(i, v):
 func set_var(v):
 	var opt_btn = $HBoxContainer/OptionButton
 	
-	opt_btn.connect("item_selected", self, "_on_datatype_selected")
+	opt_btn.connect("item_selected", Callable(self, "_on_datatype_selected"))
 	
 	var type_of = typeof(v)
 	var datatype = datatypes[type_of]
@@ -76,19 +76,19 @@ func unset_datatype(i):
 			input_string.hide()
 		DT_BOOL:
 			input_bool.hide()
-			input_bool.disconnect("toggled", self, "_on_checkbox_toggled")
+			input_bool.disconnect("toggled", Callable(self, "_on_checkbox_toggled"))
 		DT_INT:
 			input_number.hide()
-			input_number.disconnect("value_changed", self, "_on_valinspinbox_changed")
+			input_number.disconnect("value_changed", Callable(self, "_on_valinspinbox_changed"))
 		DT_FLOAT:
 			input_number.hide()
-			input_number.disconnect("value_changed", self, "_on_valinspinbox_changed")
+			input_number.disconnect("value_changed", Callable(self, "_on_valinspinbox_changed"))
 		DT_STRING:
 			input_string.hide()
-			input_string.disconnect("text_changed", self, "_on_lineedit_changed")
+			input_string.disconnect("text_changed", Callable(self, "_on_lineedit_changed"))
 		DT_COLOR:
 			input_color.hide()
-			input_color.disconnect("color_changed", self, "_on_colorpicker_changed")
+			input_color.disconnect("color_changed", Callable(self, "_on_colorpicker_changed"))
 	
 func set_datatype(i):
 	match i:
@@ -99,28 +99,28 @@ func set_datatype(i):
 		DT_BOOL:
 			input_bool.show()
 			
-			input_bool.connect("toggled", self, "_on_checkbox_toggled")
+			input_bool.connect("toggled", Callable(self, "_on_checkbox_toggled"))
 		DT_INT:
 			input_number.show()
 			input_number.set_step(1)
 			input_number.set_use_rounded_values(true)
 			
-			input_number.connect("value_changed", self, "_on_valinspinbox_changed")
+			input_number.connect("value_changed", Callable(self, "_on_valinspinbox_changed"))
 		DT_FLOAT:
 			input_number.show()
 			input_number.set_step(0.001)
 			input_number.set_use_rounded_values(false)
 			
-			input_number.connect("value_changed", self, "_on_valinspinbox_changed")
+			input_number.connect("value_changed", Callable(self, "_on_valinspinbox_changed"))
 		DT_STRING:
 			input_string.show()
 			input_string.set_editable(true)
 			
-			input_string.connect("text_changed", self, "_on_lineedit_changed")
+			input_string.connect("text_changed", Callable(self, "_on_lineedit_changed"))
 		DT_COLOR:
 			input_color.show()
 			
-			input_color.connect("color_changed", self, "_on_colorpicker_changed")
+			input_color.connect("color_changed", Callable(self, "_on_colorpicker_changed"))
 
 func _on_checkbox_toggled(b):
 	emit_signal("value_changed", b, index)

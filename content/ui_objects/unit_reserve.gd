@@ -1,9 +1,9 @@
 extends MarginContainer
 
-onready var hp_bar = $MarginContainer/HBoxContainer/VBoxContainer/HPBar
-onready var hp_txt = $MarginContainer/HBoxContainer/VBoxContainer/HP
+@onready var hp_bar = $MarginContainer/HBoxContainer/VBoxContainer/HPBar
+@onready var hp_txt = $MarginContainer/HBoxContainer/VBoxContainer/HP
 
-onready var popup = $Button/PopupMenu
+@onready var popup = $Button/PopupMenu
 var popup_rect
 
 func _ready():
@@ -40,7 +40,7 @@ func set_hp_text():
 	hp_txt.set_text(txt_cur_hp + "/" + txt_max_hp)
 
 func connect_popup(n, i):
-	popup.connect("index_pressed", n, "_on_switch_popmenu_pressed", [i])
+	popup.connect("index_pressed", Callable(n, "_on_switch_popmenu_pressed").bind(i))
 
 func disable_switch_option():
 	popup.set_item_disabled(1, true)

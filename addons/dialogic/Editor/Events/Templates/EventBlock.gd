@@ -1,38 +1,38 @@
-tool
+@tool
 extends HBoxContainer
 
 # customization options for the event 
 
 # This is the default data that is going to be saved to json
-export(String) var event_name : String = 'Event name'
-export (Dictionary) var event_data: Dictionary = {'event_id':'dialogic_000'}
-export(Color) var event_color: Color = Color(0.6,0.6,0.6,1)
-export(Texture) var event_icon : Texture
+@export var event_name: String : String = 'Event name'
+@export (Dictionary) var event_data: Dictionary = {'event_id':'dialogic_000'}
+@export var event_color: Color: Color = Color(0.6,0.6,0.6,1)
+@export var event_icon: Texture2D : Texture2D
 
-export(PackedScene) var header_scene : PackedScene
-export(PackedScene) var body_scene : PackedScene
+@export var header_scene: PackedScene : PackedScene
+@export var body_scene: PackedScene : PackedScene
 
-export (bool) var expand_on_default := false
-export (bool) var needs_indentation := false
-export (String) var help_page_path := ""
-export (bool) var show_name_in_timeline := true
-export(int, "Main", "Logic", "Timeline", "Audio/Visual", "Godot") var event_category = 0
-export (int) var sorting_index = -1
+@export (bool) var expand_on_default := false
+@export (bool) var needs_indentation := false
+@export (String) var help_page_path := ""
+@export (bool) var show_name_in_timeline := true
+@export var event_category = 0 # (int, "Main", "Logic", "Timeline", "Audio/Visual", "Godot")
+@export (int) var sorting_index = -1
 signal option_action(action_name)
 
 
 ### internal node eferences
-onready var panel = $PanelContainer
-onready var selected_style = $PanelContainer/SelectedStyle
-onready var warning = $PanelContainer/MarginContainer/VBoxContainer/Header/CenterContainer/IconPanel/Warning
-onready var title_label = $PanelContainer/MarginContainer/VBoxContainer/Header/TitleLabel
-onready var icon_texture  = $PanelContainer/MarginContainer/VBoxContainer/Header/CenterContainer/IconPanel/IconTexture
-onready var expand_control = $PanelContainer/MarginContainer/VBoxContainer/Header/ExpandControl
-onready var header_content_container = $PanelContainer/MarginContainer/VBoxContainer/Header/Content
-onready var body_container = $PanelContainer/MarginContainer/VBoxContainer/Body
-onready var body_content_container = $PanelContainer/MarginContainer/VBoxContainer/Body/Content
-onready var indent_node = $Indent
-onready var help_button = $PanelContainer/MarginContainer/VBoxContainer/Header/HelpButton
+@onready var panel = $PanelContainer
+@onready var selected_style = $PanelContainer/SelectedStyle
+@onready var warning = $PanelContainer/MarginContainer/VBoxContainer/Header/CenterContainer/IconPanel/Warning
+@onready var title_label = $PanelContainer/MarginContainer/VBoxContainer/Header/TitleLabel
+@onready var icon_texture  = $PanelContainer/MarginContainer/VBoxContainer/Header/CenterContainer/IconPanel/IconTexture
+@onready var expand_control = $PanelContainer/MarginContainer/VBoxContainer/Header/ExpandControl
+@onready var header_content_container = $PanelContainer/MarginContainer/VBoxContainer/Header/Content
+@onready var body_container = $PanelContainer/MarginContainer/VBoxContainer/Body
+@onready var body_content_container = $PanelContainer/MarginContainer/VBoxContainer/Body/Content
+@onready var indent_node = $Indent
+@onready var help_button = $PanelContainer/MarginContainer/VBoxContainer/Header/HelpButton
 var header_node
 var body_node
 
@@ -81,11 +81,11 @@ func get_header():
 
 func set_warning(text):
 	warning.show()
-	warning.hint_tooltip = text
+	warning.tooltip_text = text
 
 
 func remove_warning(text = ''):
-	if warning.hint_tooltip == text or text == '':
+	if warning.tooltip_text == text or text == '':
 		warning.hide()
 
 
@@ -94,7 +94,7 @@ func set_preview(text: String):
 
 
 func set_indent(indent: int):
-	indent_node.rect_min_size = Vector2(indent_size * indent, 0)
+	indent_node.custom_minimum_size = Vector2(indent_size * indent, 0)
 	indent_node.visible = indent != 0
 	current_indent_level = indent
 	update()
@@ -108,7 +108,7 @@ func set_expanded(expanded: bool):
 ##								PRIVATE METHODS
 ## *****************************************************************************
 
-func _set_event_icon(icon: Texture):
+func _set_event_icon(icon: Texture2D):
 	icon_texture.texture = icon
 	var _scale = DialogicUtil.get_editor_scale(self)
 	var cpanel = $PanelContainer/MarginContainer/VBoxContainer/Header/CenterContainer
@@ -120,9 +120,9 @@ func _set_event_icon(icon: Texture):
 		icon_texture.self_modulate = get_color("font_color", "Editor")
 	# Resizing the icon acording to the scale
 	var icon_size = 38
-	cpanel.rect_min_size = Vector2(icon_size, icon_size) * _scale
-	ip.rect_min_size = cpanel.rect_min_size
-	ipc.rect_min_size = ip.rect_min_size
+	cpanel.custom_minimum_size = Vector2(icon_size, icon_size) * _scale
+	ip.custom_minimum_size = cpanel.custom_minimum_size
+	ipc.custom_minimum_size = ip.custom_minimum_size
 	#rect_min_size.y = 50 * _scale
 	#icon_texture.rect_size = icon_texture.rect_size * _scale
 	
@@ -156,7 +156,7 @@ func _setup_event():
 		_set_header(header_scene)
 	if body_scene != null:
 		_set_body(body_scene)
-		body_content_container.add_constant_override('margin_left', 40*DialogicUtil.get_editor_scale(self))
+		body_content_container.add_theme_constant_override('offset_left', 40*DialogicUtil.get_editor_scale(self))
 	if event_color != null:
 		$PanelContainer/MarginContainer/VBoxContainer/Header/CenterContainer/IconPanel.set("self_modulate", event_color)
 
@@ -165,7 +165,7 @@ func _set_content(container: Control, scene: PackedScene):
 	for c in container.get_children():
 		container.remove_child(c)
 	if scene != null:
-		var node = scene.instance()
+		var node = scene.instantiate()
 		node.editor_reference = editor_reference
 		container.add_child(node)
 #		node.set_owner(get_tree().get_edited_scene_root())
@@ -213,8 +213,8 @@ func _on_gui_input(event):
 			expand_control.set_expanded(not expand_control.expanded)
 	# For opening the context menu
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_RIGHT and event.pressed:
-			$PopupMenu.rect_global_position = get_global_mouse_position()
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			$PopupMenu.global_position = get_global_mouse_position()
 			var popup = $PopupMenu.popup()
 
 
@@ -261,9 +261,9 @@ func _ready():
 	## DO SOME STYLING
 	$PanelContainer/SelectedStyle.modulate = get_color("accent_color", "Editor")
 	warning.texture = get_icon("NodeWarning", "EditorIcons")
-	title_label.add_color_override("font_color", Color.white)
+	title_label.add_theme_color_override("font_color", Color.WHITE)
 	if not get_constant("dark_theme", "Editor"):
-		title_label.add_color_override("font_color", get_color("font_color", "Editor"))
+		title_label.add_theme_color_override("font_color", get_color("font_color", "Editor"))
 	
 	indent_size = indent_size * DialogicUtil.get_editor_scale(self)
 	
@@ -272,9 +272,9 @@ func _ready():
 	set_focus_mode(1) # Allowing this node to grab focus
 	
 	# signals
-	panel.connect("gui_input", self, '_on_gui_input')
-	expand_control.connect("state_changed", self, "_on_ExpandControl_state_changed")
-	$PopupMenu.connect("index_pressed", self, "_on_OptionsControl_action")
+	panel.connect("gui_input", Callable(self, '_on_gui_input'))
+	expand_control.connect("state_changed", Callable(self, "_on_ExpandControl_state_changed"))
+	$PopupMenu.connect("index_pressed", Callable(self, "_on_OptionsControl_action"))
 	
 	# load icons
 	#if help_page_path != "":
@@ -285,23 +285,23 @@ func _ready():
 	# If there is any external data, it will be set already BEFORE the event is added to tree
 	# if you have a header
 	if get_header():
-		get_header().connect("data_changed", self, "_on_Header_data_changed")
-		get_header().connect("request_open_body", expand_control, "set_expanded", [true])
-		get_header().connect("request_close_body", expand_control, "set_expanded", [false])
-		get_header().connect("request_selection", self, "_request_selection")
-		get_header().connect("request_set_body_enabled", self, "_request_set_body_enabled")
-		get_header().connect("set_warning", self, "set_warning")
-		get_header().connect("remove_warning", self, "remove_warning")
+		get_header().connect("data_changed", Callable(self, "_on_Header_data_changed"))
+		get_header().connect("request_open_body", Callable(expand_control, "set_expanded").bind(true))
+		get_header().connect("request_close_body", Callable(expand_control, "set_expanded").bind(false))
+		get_header().connect("request_selection", Callable(self, "_request_selection"))
+		get_header().connect("request_set_body_enabled", Callable(self, "_request_set_body_enabled"))
+		get_header().connect("set_warning", Callable(self, "set_warning"))
+		get_header().connect("remove_warning", Callable(self, "remove_warning"))
 		get_header().load_data(event_data)
 	# if you have a body
 	if get_body():
-		get_body().connect("data_changed", self, "_on_Body_data_changed")
-		get_body().connect("request_open_body", expand_control, "set_expanded", [true])
-		get_body().connect("request_close_body", expand_control, "set_expanded", [false])
-		get_body().connect("request_set_body_enabled", self, "_request_set_body_enabled")
-		get_body().connect("request_selection", self, "_request_selection")
-		get_body().connect("set_warning", self, "set_warning")
-		get_body().connect("remove_warning", self, "remove_warning")
+		get_body().connect("data_changed", Callable(self, "_on_Body_data_changed"))
+		get_body().connect("request_open_body", Callable(expand_control, "set_expanded").bind(true))
+		get_body().connect("request_close_body", Callable(expand_control, "set_expanded").bind(false))
+		get_body().connect("request_set_body_enabled", Callable(self, "_request_set_body_enabled"))
+		get_body().connect("request_selection", Callable(self, "_request_selection"))
+		get_body().connect("set_warning", Callable(self, "set_warning"))
+		get_body().connect("remove_warning", Callable(self, "remove_warning"))
 		get_body().load_data(event_data)
 	
 	if get_body():

@@ -1,18 +1,18 @@
-tool
+@tool
 extends Control
 
 
-export(PackedScene) var HistoryRow = load("res://addons/dialogic/Example Assets/History/HistoryRow.tscn")
-export(PackedScene) var HistoryDefaultBackground = load("res://addons/dialogic/Example Assets/History/HistoryBackground.tscn")
-export(PackedScene) var HistoryOpenButton = load("res://addons/dialogic/Example Assets/History/HistoryButton.tscn")
-export(PackedScene) var HistoryCloseButton = load("res://addons/dialogic/Example Assets/History/HistoryButton.tscn")
-export(int) var Vertical_Separation = 16
+@export var HistoryRow: PackedScene = load("res://addons/dialogic/Example Assets/History/HistoryRow.tscn")
+@export var HistoryDefaultBackground: PackedScene = load("res://addons/dialogic/Example Assets/History/HistoryBackground.tscn")
+@export var HistoryOpenButton: PackedScene = load("res://addons/dialogic/Example Assets/History/HistoryButton.tscn")
+@export var HistoryCloseButton: PackedScene = load("res://addons/dialogic/Example Assets/History/HistoryButton.tscn")
+@export var Vertical_Separation: int = 16
 
-onready var HistoryTimeline = $HistoryPopup/ScrollHistoryContainer/MarginContainer/HistoryTimeline
-onready var scrollbar = $HistoryPopup/ScrollHistoryContainer.get_v_scrollbar()
-onready var ScrollHistoryContainer = $HistoryPopup/ScrollHistoryContainer
-onready var HistoryPopup = $HistoryPopup
-onready var HistoryAudio = $HistoryPopup/HistoryAudio
+@onready var HistoryTimeline = $HistoryPopup/ScrollHistoryContainer/MarginContainer/HistoryTimeline
+@onready var scrollbar = $HistoryPopup/ScrollHistoryContainer.get_v_scroll_bar()
+@onready var ScrollHistoryContainer = $HistoryPopup/ScrollHistoryContainer
+@onready var HistoryPopup = $HistoryPopup
+@onready var HistoryAudio = $HistoryPopup/HistoryAudio
 
 var HistoryButton 
 var CloseButton
@@ -20,7 +20,7 @@ var HistoryBackground
 
 var is_history_open = false
 var is_mouse_on_button = false
-var block_dialog_advance = false setget , history_advance_block
+var block_dialog_advance = false: get = history_advance_block
 
 var lastQuestionNode = null
 var curTheme = null
@@ -38,16 +38,16 @@ var lineBreakAfterName = true
 var scrollToggle = false
 
 func _ready():
-	var testHistoryRow = HistoryRow.instance()
-	assert(testHistoryRow.has_method('add_history'), 'HistoryRow Scene must implement add_history(string, string) method.')
+	var testHistoryRow = HistoryRow.instantiate()
+	assert(testHistoryRow.has_method('add_history')) #,'HistoryRow Scene must implement add_history(string, string) method.')
 	testHistoryRow.queue_free()
 	
-	HistoryBackground = HistoryDefaultBackground.instance()
+	HistoryBackground = HistoryDefaultBackground.instantiate()
 	HistoryPopup.add_child(HistoryBackground)
 	HistoryPopup.move_child(HistoryBackground, 0)
 	
 	#Scrollbar only updates when visible, so need it to be handled
-	scrollbar.connect("changed",self,"handle_scrollbar_changed")
+	scrollbar.connect("changed", Callable(self, "handle_scrollbar_changed"))
 	
 func handle_scrollbar_changed():
 	#It's firing every frame, we only want to check it once on opening 
@@ -61,18 +61,18 @@ func handle_scrollbar_changed():
 
 func initalize_history():
 	if get_parent().settings.get_value('history', 'enable_open_button', true):
-		HistoryButton = HistoryOpenButton.instance()
+		HistoryButton = HistoryOpenButton.instantiate()
 		add_child(HistoryButton)
-		HistoryButton.connect("pressed", self, '_on_toggle_history')
-		HistoryButton.connect("mouse_entered", self, '_on_HistoryButton_mouse_entered')
-		HistoryButton.connect("mouse_exited", self, '_on_HistoryButton_mouse_exited')
+		HistoryButton.connect("pressed", Callable(self, '_on_toggle_history'))
+		HistoryButton.connect("mouse_entered", Callable(self, '_on_HistoryButton_mouse_entered'))
+		HistoryButton.connect("mouse_exited", Callable(self, '_on_HistoryButton_mouse_exited'))
 		HistoryButton.disabled = false
 		HistoryButton.show()
 	
 	if get_parent().settings.get_value('history', 'enable_close_button', true):
-		CloseButton = HistoryCloseButton.instance()
+		CloseButton = HistoryCloseButton.instantiate()
 		add_child(CloseButton)
-		CloseButton.connect("pressed", self, '_on_toggle_history')
+		CloseButton.connect("pressed", Callable(self, '_on_toggle_history'))
 		CloseButton.disabled = true
 		CloseButton.hide()
 	
@@ -96,25 +96,25 @@ func initalize_history():
 	var container_margin_X = get_parent().settings.get_value('history', 'history_container_margin_x', 0)
 	var container_margin_y = get_parent().settings.get_value('history', 'history_container_margin_y', 0)
 	
-	HistoryPopup.margin_left = screen_margin_x
-	HistoryPopup.margin_right = -screen_margin_x
-	HistoryPopup.margin_top = screen_margin_y
-	HistoryPopup.margin_bottom = -screen_margin_y
+	HistoryPopup.offset_left = screen_margin_x
+	HistoryPopup.offset_right = -screen_margin_x
+	HistoryPopup.offset_top = screen_margin_y
+	HistoryPopup.offset_bottom = -screen_margin_y
 	
-	ScrollHistoryContainer.margin_left = container_margin_X
-	ScrollHistoryContainer.margin_right = -container_margin_X
-	ScrollHistoryContainer.margin_top = container_margin_y
-	ScrollHistoryContainer.margin_bottom = -container_margin_y
+	ScrollHistoryContainer.offset_left = container_margin_X
+	ScrollHistoryContainer.offset_right = -container_margin_X
+	ScrollHistoryContainer.offset_top = container_margin_y
+	ScrollHistoryContainer.offset_bottom = -container_margin_y
 	
 	for button in [HistoryButton, CloseButton]:
 		if button == null:
 			continue
 		
-		var reference = button.get_parent().rect_size
+		var reference = button.get_parent().size
 		
 		# Adding audio when focused or hovered
-		button.connect('focus_entered', get_parent(), '_on_option_hovered', [button])
-		button.connect('mouse_entered', get_parent(), '_on_option_focused')
+		button.connect('focus_entered', Callable(get_parent(), '_on_option_hovered').bind(button))
+		button.connect('mouse_entered', Callable(get_parent(), '_on_option_focused'))
 		
 		# Button positioning
 		var anchor_values = [0,0,1,1]
@@ -128,49 +128,49 @@ func initalize_history():
 		# Top Center
 		elif button_anchor == 1:
 			anchor_values = [.5, 0, .5, 0]
-			position_offset.x = reference.x/2 - button.rect_size.x
+			position_offset.x = reference.x/2 - button.size.x
 			position_offset.y = 0
 		# Top Right
 		elif button_anchor == 2:
 			anchor_values = [1, 0, 1, 0]
-			position_offset.x = reference.x - button.rect_size.x
+			position_offset.x = reference.x - button.size.x
 			position_offset.y = 0
 		# 3 - Number skip because of the separator
 		# Center Left
 		elif button_anchor == 4:
 			anchor_values = [0, .5, 0, .5]
 			position_offset.x = 0
-			position_offset.y = reference.y/2 - button.rect_size.y
+			position_offset.y = reference.y/2 - button.size.y
 		# True Center
 		elif button_anchor == 5:
 			anchor_values = [.5, .5, .5, .5]
-			position_offset.x = reference.x/2 - button.rect_size.x
-			position_offset.y = reference.y/2 - button.rect_size.y
+			position_offset.x = reference.x/2 - button.size.x
+			position_offset.y = reference.y/2 - button.size.y
 		# Center Right
 		elif button_anchor == 6:
 			anchor_values = [1, .5, 1, .5]
-			position_offset.x = reference.x - button.rect_size.x
-			position_offset.y = reference.y/2 - button.rect_size.y
+			position_offset.x = reference.x - button.size.x
+			position_offset.y = reference.y/2 - button.size.y
 		# Number skip because of the separator
 		elif button_anchor == 8:
 			anchor_values = [0, 1, 0, 1]
 			position_offset.x = 0
-			position_offset.y = reference.y - button.rect_size.y
+			position_offset.y = reference.y - button.size.y
 		elif button_anchor == 9:
 			anchor_values = [.5, 1, .5, 1]
-			position_offset.x = reference.x/2 - button.rect_size.x
-			position_offset.y = reference.y - button.rect_size.y
+			position_offset.x = reference.x/2 - button.size.x
+			position_offset.y = reference.y - button.size.y
 		elif button_anchor == 10:
 			anchor_values = [1, 1, 1, 1]
-			position_offset.x = reference.x - button.rect_size.x
-			position_offset.y = reference.y - button.rect_size.y
+			position_offset.x = reference.x - button.size.x
+			position_offset.y = reference.y - button.size.y
 		
 		button.anchor_left = anchor_values[0]
 		button.anchor_top = anchor_values[1]
 		button.anchor_right = anchor_values[2]
 		button.anchor_bottom = anchor_values[3]
 		
-		button.rect_global_position = button.get_parent().rect_global_position + position_offset
+		button.global_position = button.get_parent().global_position + position_offset
 
 
 # Add history based on the passed event, using some logic to get it right
@@ -185,7 +185,7 @@ func add_history_row_event(eventData):
 	if eventData.event_id == 'dialogic_002' and eventData.get('type') == 1 and !logExits:
 		return
 	
-	var newHistoryRow = HistoryRow.instance()
+	var newHistoryRow = HistoryRow.instantiate()
 	HistoryTimeline.add_child(newHistoryRow)
 	if(reverseTimeline):
 		HistoryTimeline.move_child(newHistoryRow,0)
@@ -204,9 +204,9 @@ func add_history_row_event(eventData):
 		if characterName != '':
 			var charDelimiter = get_parent().settings.get_value('history', 'history_character_delimiter', '')
 			var parsed_name = DialogicParser.parse_definitions(get_parent(), characterName, true, false)
-			var characterColor = characterData.data.get('color', Color.white)
+			var characterColor = characterData.data.get('color', Color.WHITE)
 			if (!characterNameColorOn):
-				characterColor = Color.white
+				characterColor = Color.WHITE
 			var lineBreak = '' 
 			if (lineBreakAfterName):
 				lineBreak = '\n'
@@ -216,7 +216,7 @@ func add_history_row_event(eventData):
 	if eventData.has('voice_data'):
 		if eventData['voice_data'].has('0'):
 			audioData = eventData['voice_data']['0'].file
-			newHistoryRow.AudioButton.connect('pressed', self, '_on_audio_trigger', [audioData])
+			newHistoryRow.AudioButton.connect('pressed', Callable(self, '_on_audio_trigger').bind(audioData))
 	
 	
 	# event logging handled here

@@ -1,10 +1,10 @@
-tool
+@tool
 extends VBoxContainer
 
 
 func _ready():
 	var HistoryCheckbox = $"GridContainer/HistoryBox/SettingsCheckbox/CheckBox"
-	HistoryCheckbox.connect('toggled', self, '_on_HistoryLogging_toggled')
+	HistoryCheckbox.connect('toggled', Callable(self, '_on_HistoryLogging_toggled'))
 	_on_HistoryLogging_toggled(HistoryCheckbox.pressed)
 
 

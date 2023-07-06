@@ -1,4 +1,4 @@
-tool
+@tool
 extends Control
 
 var editor_file_dialog # EditorFileDialog
@@ -18,7 +18,7 @@ func _ready():
 	$ToolBar/Docs.text = dialogicTranslator.translate('Help')
 	$ToolBar/Web.text = dialogicTranslator.translate('Website')
 	
-	$MainPanel/MasterTreeContainer/MasterTree.connect("editor_selected", self, 'on_master_tree_editor_selected')
+	$MainPanel/MasterTreeContainer/MasterTree.connect("editor_selected", Callable(self, 'on_master_tree_editor_selected'))
 
 	# Updating the folder structure
 	DialogicUtil.update_resource_folder_structure()
@@ -27,39 +27,39 @@ func _ready():
 	# This part of the code is a bit terrible. But there is no better way
 	# of doing this in Godot at the moment. I'm sorry.
 	var separation = get_constant("separation", "BoxContainer")
-	$MainPanel.margin_left = separation
-	$MainPanel.margin_right = separation * -1
-	$MainPanel.margin_bottom = separation * -1
-	$MainPanel.margin_top = 38
+	$MainPanel.offset_left = separation
+	$MainPanel.offset_right = separation * -1
+	$MainPanel.offset_bottom = separation * -1
+	$MainPanel.offset_top = 38
 	var modifier = ''
 	var _scale = get_constant("inspector_margin", "Editor")
 	_scale = _scale * 0.125
 	if _scale == 1:
-		$MainPanel.margin_top = 30
+		$MainPanel.offset_top = 30
 	if _scale == 1.25:
 		modifier = '-1.25'
-		$MainPanel.margin_top = 37
+		$MainPanel.offset_top = 37
 	if _scale == 1.5:
 		modifier = '-1.25'
-		$MainPanel.margin_top = 46
+		$MainPanel.offset_top = 46
 	if _scale == 1.75:
 		modifier = '-1.25'
-		$MainPanel.margin_top = 53
+		$MainPanel.offset_top = 53
 	if _scale == 2:
-		$MainPanel.margin_top = 59
+		$MainPanel.offset_top = 59
 		modifier = '-2'
 	$ToolBar/NewTimelineButton.icon = load("res://addons/dialogic/Images/Toolbar/add-timeline" + modifier + ".svg")
-	$ToolBar/NewTimelineButton.hint_tooltip = dialogicTranslator.translate('Add Timeline')
+	$ToolBar/NewTimelineButton.tooltip_text = dialogicTranslator.translate('Add Timeline')
 	$ToolBar/NewCharactersButton.icon = load("res://addons/dialogic/Images/Toolbar/add-character" + modifier + ".svg")
-	$ToolBar/NewCharactersButton.hint_tooltip = dialogicTranslator.translate('Add Character')
+	$ToolBar/NewCharactersButton.tooltip_text = dialogicTranslator.translate('Add Character')
 	$ToolBar/NewValueButton.icon = load("res://addons/dialogic/Images/Toolbar/add-definition" + modifier + ".svg")
-	$ToolBar/NewValueButton.hint_tooltip = dialogicTranslator.translate('Add Value')
+	$ToolBar/NewValueButton.tooltip_text = dialogicTranslator.translate('Add Value')
 	$ToolBar/NewGlossaryEntryButton.icon = load("res://addons/dialogic/Images/Toolbar/add-glossary" + modifier + ".svg")
-	$ToolBar/NewGlossaryEntryButton.hint_tooltip = dialogicTranslator.translate('Add Glossary Entry')
+	$ToolBar/NewGlossaryEntryButton.tooltip_text = dialogicTranslator.translate('Add Glossary Entry')
 	$ToolBar/NewThemeButton.icon = load("res://addons/dialogic/Images/Toolbar/add-theme" + modifier + ".svg")
-	$ToolBar/NewThemeButton.hint_tooltip = dialogicTranslator.translate('Add Theme')
+	$ToolBar/NewThemeButton.tooltip_text = dialogicTranslator.translate('Add Theme')
 	
-	var modulate_color = Color.white
+	var modulate_color = Color.WHITE
 	if not get_constant("dark_theme", "Editor"):
 		modulate_color = get_color("property_color", "Editor")
 	$ToolBar/NewTimelineButton.modulate = modulate_color
@@ -73,13 +73,13 @@ func _ready():
 	$ToolBar/FoldTools/PlayTimeline.icon = get_icon("PlayScene", "EditorIcons")
 	
 	# Toolbar
-	$ToolBar/NewTimelineButton.connect('pressed', $MainPanel/MasterTreeContainer/MasterTree, 'new_timeline')
-	$ToolBar/NewCharactersButton.connect('pressed', $MainPanel/MasterTreeContainer/MasterTree, 'new_character')
-	$ToolBar/NewThemeButton.connect('pressed', $MainPanel/MasterTreeContainer/MasterTree, 'new_theme')
-	$ToolBar/NewValueButton.connect('pressed', $MainPanel/MasterTreeContainer/MasterTree, 'new_value_definition')
-	$ToolBar/NewGlossaryEntryButton.connect('pressed', $MainPanel/MasterTreeContainer/MasterTree, 'new_glossary_entry')
+	$ToolBar/NewTimelineButton.connect('pressed', Callable($MainPanel/MasterTreeContainer/MasterTree, 'new_timeline'))
+	$ToolBar/NewCharactersButton.connect('pressed', Callable($MainPanel/MasterTreeContainer/MasterTree, 'new_character'))
+	$ToolBar/NewThemeButton.connect('pressed', Callable($MainPanel/MasterTreeContainer/MasterTree, 'new_theme'))
+	$ToolBar/NewValueButton.connect('pressed', Callable($MainPanel/MasterTreeContainer/MasterTree, 'new_value_definition'))
+	$ToolBar/NewGlossaryEntryButton.connect('pressed', Callable($MainPanel/MasterTreeContainer/MasterTree, 'new_glossary_entry'))
 	$ToolBar/Web.icon = get_icon("Instance", "EditorIcons")
-	$ToolBar/Web.connect('pressed', OS, "shell_open", ["https://dialogic.coppolaemilio.com"])
+	$ToolBar/Web.connect('pressed', Callable(OS, "shell_open").bind("https://dialogic.coppolaemilio.com"))
 	$ToolBar/Docs.icon = get_icon("HelpSearch", "EditorIcons")
 	$ToolBar/DocumentationNavigation/Previous.icon = get_icon("Back", "EditorIcons")
 	$ToolBar/DocumentationNavigation/Next.icon = get_icon("Forward", "EditorIcons")
@@ -87,13 +87,13 @@ func _ready():
 		$MainPanel/MasterTreeContainer/MasterTree,
 		"select_documentation_item",
 		['/'])
-	$ToolBar/FoldTools/ButtonFold.connect('pressed', $MainPanel/TimelineEditor, 'fold_all_nodes')
-	$ToolBar/FoldTools/ButtonUnfold.connect('pressed', $MainPanel/TimelineEditor, 'unfold_all_nodes')
-	$ToolBar/FoldTools/PlayTimeline.connect('pressed', $MainPanel/TimelineEditor, 'play_timeline')
+	$ToolBar/FoldTools/ButtonFold.connect('pressed', Callable($MainPanel/TimelineEditor, 'fold_all_nodes'))
+	$ToolBar/FoldTools/ButtonUnfold.connect('pressed', Callable($MainPanel/TimelineEditor, 'unfold_all_nodes'))
+	$ToolBar/FoldTools/PlayTimeline.connect('pressed', Callable($MainPanel/TimelineEditor, 'play_timeline'))
 	
 	
 	#Connecting confirmation
-	$RemoveFolderConfirmation.connect('confirmed', self, '_on_RemoveFolderConfirmation_confirmed')
+	$RemoveFolderConfirmation.connect('confirmed', Callable(self, '_on_RemoveFolderConfirmation_confirmed'))
 	$RemoveConfirmation.window_title = dialogicTranslator.translate("RemoveResourcePopupTitle")
 	$RemoveFolderConfirmation.window_title = dialogicTranslator.translate("RemoveFolderPopupTitle")
 	$RemoveFolderConfirmation.dialog_text = dialogicTranslator.translate("RemoveFolderPopupText")
@@ -128,7 +128,7 @@ func popup_remove_confirmation(what):
 	else:
 		var remove_text = dialogicTranslator.translate('DeleteResourceText')
 		$RemoveConfirmation.dialog_text = remove_text.replace('[resource]', what)
-		$RemoveConfirmation.connect('confirmed', self, '_on_RemoveConfirmation_confirmed', [what])
+		$RemoveConfirmation.connect('confirmed', Callable(self, '_on_RemoveConfirmation_confirmed').bind(what))
 	
 	# popup time!
 	$RemoveConfirmation.popup_centered()
@@ -162,7 +162,7 @@ func _on_RemoveConfirmation_confirmed(what: String = ''):
 
 
 # Godot dialog
-func godot_dialog(filter, mode = EditorFileDialog.MODE_OPEN_FILE):
+func godot_dialog(filter, mode = EditorFileDialog.FILE_MODE_OPEN_FILE):
 	editor_file_dialog.mode = mode
 	editor_file_dialog.clear_filters()
 	editor_file_dialog.popup_centered_ratio(0.75)
@@ -170,7 +170,7 @@ func godot_dialog(filter, mode = EditorFileDialog.MODE_OPEN_FILE):
 	return editor_file_dialog
 
 
-func godot_dialog_connect(who, method_name, signal_name = "file_selected"):
+func godot_dialog_connect(who, Callable(method_name, signal_name = "file_selected")):
 	# You can pass multiple signal_name using an array
 	
 	# Checking if previous connections exist, if they do, disconnect them.
@@ -190,7 +190,7 @@ func godot_dialog_connect(who, method_name, signal_name = "file_selected"):
 				)
 	# Connect new signals
 	for new_signal_name in signal_name if typeof(signal_name) == TYPE_ARRAY else [signal_name]:
-		editor_file_dialog.connect(new_signal_name, who, method_name, [who])
+		editor_file_dialog.connect(new_signal_name, Callable(who, method_name).bind(who))
 	
 	file_picker_data['method'] = method_name
 	file_picker_data['node'] = who

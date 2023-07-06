@@ -1,14 +1,14 @@
 extends Control
 class_name DialogicBackgroundMusic
 
-onready var _track1 := $Track1
-onready var _track2 := $Track2
+@onready var _track1 := $Track1
+@onready var _track2 := $Track2
 
 var current_path = ""
 var current_track = null
 
 func _ready():
-	$Tween.connect("tween_completed", self, "_on_Tween_tween_completed")
+	$Tween.connect("tween_completed", Callable(self, "_on_Tween_tween_completed"))
 
 func crossfade_to(path: String, audio_bus:String, volume:float, fade_length: float) -> void:
 	# find a better solution for this

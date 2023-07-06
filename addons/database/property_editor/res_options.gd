@@ -1,4 +1,4 @@
-tool
+@tool
 extends OptionButton
 
 const NULL_VALUE_TEXT = "[empty]"
@@ -12,7 +12,7 @@ var resource_options # THE POPUP, NOT SELF
 var drag_data
 var class_hint = "Resource"
 
-onready var cat_filesystem = get_parent().get_node("ChooseCat")
+@onready var cat_filesystem = get_parent().get_node("ChooseCat")
 
 const RES_EXTS = ["res", "tres"]
 const IMG_EXTS = ["bmp", "dds", "exr", "hdr", "jpg", "jpeg", "png", "tga", "svg", "svgz", "webp"]
@@ -33,7 +33,7 @@ func _editor_plugin_is_set():
 	resource_options = main_screen.resource_options
 
 func _gui_input(event):
-	if event is InputEventMouseButton and event.get_button_index() == BUTTON_RIGHT and event.is_pressed():
+	if event is InputEventMouseButton and event.get_button_index() == MOUSE_BUTTON_RIGHT and event.is_pressed():
 		var mouse_pos = event.get_global_position()
 		
 		main_screen.selected_resoptions = self
@@ -61,7 +61,7 @@ func _item_selected(index:int):
 		main_screen.item_id_effect(self, id)
 		reset_text()
 
-func can_drop_data(_p, _d):
+func _can_drop_data(_p, _d):
 	return is_compatable_with_drag()
 
 func change_options(dir):
@@ -75,7 +75,7 @@ func change_options(dir):
 	else:
 		get_popup().set_allow_search(true)
 		
-		var main_dir = Directory.new()
+		var main_dir = DirAccess.new()
 		var err = main_dir.open(dir)
 		
 		match err:
@@ -88,7 +88,7 @@ func clear_value():
 	set_text(NULL_VALUE_TEXT)
 	emit_signal("resource_is_set", get_parent(), "")
 
-func drop_data(_p, data):
+func _drop_data(_p, data):
 	#print(data)
 	match data["type"]:
 		"files_and_dirs":
@@ -99,14 +99,14 @@ func drop_data(_p, data):
 			set_by_filepath(filepath)
 			emit_signal("resource_is_set", get_parent(), filepath)
 
-func go_through_folder_for_options(dir:Directory, base_folder:String = ""):
-	dir.list_dir_begin(true, false)
+func go_through_folder_for_options(dir:DirAccess, base_folder:String = ""):
+	dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	var file_name = dir.get_next()
 	while file_name != "":
 		
 		# IF THE ITEM IS A FOLDER
 		if dir.current_is_dir():
-			var sub_directory = Directory.new()
+			var sub_directory = DirAccess.new()
 			sub_directory.open(dir.get_current_dir().plus_file(file_name))
 			var folder = file_name
 			if base_folder:
@@ -150,7 +150,7 @@ func get_icon_name(cn)->String:
 	match cn:
 		"Resource":
 			return "ResourcePreloader"
-		"Texture":
+		"Texture2D":
 			return "Image"
 		_:
 			return cn
@@ -165,7 +165,7 @@ func get_image_texture(full_filename)->ImageTexture:
 	var new_width = get_global_rect().size.x * 0.75
 	if image.get_width() > new_width:
 		var new_height = image.get_height() / image.get_width() * new_width
-		img_txt.set_size_override(Vector2(new_width, new_height))
+		img_txt.set_size_2d_override(Vector2(new_width, new_height))
 				
 	return img_txt
 
@@ -187,7 +187,7 @@ func is_compatable_with_file(file):
 	var extension = file.get_extension()
 	
 	match class_hint:
-		"Texture":
+		"Texture2D":
 			if extension in IMG_EXTS:
 				return true
 		_:

@@ -1,10 +1,10 @@
-tool
+@tool
 extends State
 
 class_name MenuState
 
-export(NodePath) var np_associated_menu
-export(NodePath) var np_focus_btn
+@export var np_associated_menu: NodePath
+@export var np_focus_btn: NodePath
 var associated_menu
 var focus_btn
 

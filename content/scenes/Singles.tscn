@@ -1,7 +1,7 @@
 [gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://content/scenes/dialogturn_state.gd" type="Script" id=1]
-[ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="FontFile" id=2]
 [ext_resource path="res://content/scenes/battle.gd" type="Script" id=3]
 [ext_resource path="res://content/scenes/outcome_state.gd" type="Script" id=4]
 [ext_resource path="res://content/gameobjects/units/Foe.tscn" type="PackedScene" id=5]
@@ -9,7 +9,7 @@
 [ext_resource path="res://content/gameobjects/units/Ally.tscn" type="PackedScene" id=7]
 [ext_resource path="res://content/ui_objects/AllyBar.tscn" type="PackedScene" id=8]
 [ext_resource path="res://content/ui_objects/MoveBtn.tscn" type="PackedScene" id=9]
-[ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=10]
+[ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture2D" id=10]
 [ext_resource path="res://content/scripts/side_of_units.gd" type="Script" id=11]
 [ext_resource path="res://data/mons/bulbasaur.tres" type="Resource" id=12]
 [ext_resource path="res://data/mons/totodile.tres" type="Resource" id=13]
@@ -51,7 +51,7 @@ shader_param/extent = 0.0
 
 [sub_resource type="StyleBoxFlat" id=12]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="FontFile" id=1]
 size = 20
 font_data = ExtResource( 2 )
 
@@ -186,20 +186,20 @@ anchor_mode = 0
 [node name="UI_Layer" type="CanvasLayer" parent="."]
 
 [node name="MarginContainer" type="MarginContainer" parent="UI_Layer"]
-margin_right = 1024.0
-margin_bottom = 600.0
+offset_right = 1024.0
+offset_bottom = 600.0
 mouse_filter = 2
 theme = SubResource( 2 )
-custom_constants/margin_right = 25
-custom_constants/margin_top = 40
-custom_constants/margin_left = 25
-custom_constants/margin_bottom = 40
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_bottom = 40
 
 [node name="StatusBars" type="Control" parent="UI_Layer/MarginContainer"]
-margin_left = 25.0
-margin_top = 40.0
-margin_right = 999.0
-margin_bottom = 560.0
+offset_left = 25.0
+offset_top = 40.0
+offset_right = 999.0
+offset_bottom = 560.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/MarginContainer/StatusBars"]
 anchor_right = 1.0
@@ -208,139 +208,139 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="Foes" type="HBoxContainer" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer"]
-margin_right = 974.0
-margin_bottom = 76.0
+offset_right = 974.0
+offset_bottom = 76.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="FoeBar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Foes" instance=ExtResource( 6 )]
-margin_right = 189.0
-margin_bottom = 76.0
+offset_right = 189.0
+offset_bottom = 76.0
 
 [node name="MidMargin" type="MarginContainer" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer"]
-margin_top = 80.0
-margin_right = 974.0
-margin_bottom = 229.0
+offset_top = 80.0
+offset_right = 974.0
+offset_bottom = 229.0
 size_flags_vertical = 3
 
 [node name="Allies" type="HBoxContainer" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer"]
-margin_left = 785.0
-margin_top = 233.0
-margin_right = 974.0
-margin_bottom = 341.0
+offset_left = 785.0
+offset_top = 233.0
+offset_right = 974.0
+offset_bottom = 341.0
 size_flags_horizontal = 8
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AllyBar" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer/Allies" instance=ExtResource( 8 )]
-margin_right = 189.0
-margin_bottom = 108.0
+offset_right = 189.0
+offset_bottom = 108.0
 
 [node name="EndMargin" type="MarginContainer" parent="UI_Layer/MarginContainer/StatusBars/VBoxContainer"]
-margin_top = 345.0
-margin_right = 974.0
-margin_bottom = 520.0
-custom_constants/margin_top = 175
+offset_top = 345.0
+offset_right = 974.0
+offset_bottom = 520.0
+theme_override_constants/margin_top = 175
 
 [node name="Commands" type="GridContainer" parent="UI_Layer/MarginContainer"]
-margin_left = 856.0
-margin_top = 488.0
-margin_right = 999.0
-margin_bottom = 560.0
+offset_left = 856.0
+offset_top = 488.0
+offset_right = 999.0
+offset_bottom = 560.0
 size_flags_horizontal = 8
 size_flags_vertical = 8
 columns = 2
 
 [node name="Fight" type="Button" parent="UI_Layer/MarginContainer/Commands"]
-margin_right = 66.0
-margin_bottom = 34.0
+offset_right = 66.0
+offset_bottom = 34.0
 text = "Fight"
 align = 0
 
 [node name="Switch" type="Button" parent="UI_Layer/MarginContainer/Commands"]
-margin_left = 70.0
-margin_right = 143.0
-margin_bottom = 34.0
+offset_left = 70.0
+offset_right = 143.0
+offset_bottom = 34.0
 text = "Switch"
 align = 0
 
 [node name="Items" type="Button" parent="UI_Layer/MarginContainer/Commands"]
-margin_top = 38.0
-margin_right = 66.0
-margin_bottom = 72.0
+offset_top = 38.0
+offset_right = 66.0
+offset_bottom = 72.0
 disabled = true
 text = "Items"
 align = 0
 
 [node name="Run" type="Button" parent="UI_Layer/MarginContainer/Commands"]
-margin_left = 70.0
-margin_top = 38.0
-margin_right = 143.0
-margin_bottom = 72.0
+offset_left = 70.0
+offset_top = 38.0
+offset_right = 143.0
+offset_bottom = 72.0
 disabled = true
 text = "Run"
 align = 0
 
 [node name="Moves" type="HBoxContainer" parent="UI_Layer/MarginContainer"]
 visible = false
-margin_left = 25.0
-margin_top = 40.0
-margin_right = 999.0
-margin_bottom = 560.0
+offset_left = 25.0
+offset_top = 40.0
+offset_right = 999.0
+offset_bottom = 560.0
 
 [node name="BeginMargin" type="MarginContainer" parent="UI_Layer/MarginContainer/Moves"]
-margin_right = 473.0
-margin_bottom = 520.0
+offset_right = 473.0
+offset_bottom = 520.0
 size_flags_horizontal = 3
 
 [node name="List" type="VBoxContainer" parent="UI_Layer/MarginContainer/Moves"]
-margin_left = 477.0
-margin_top = 314.0
-margin_right = 770.0
-margin_bottom = 520.0
+offset_left = 477.0
+offset_top = 314.0
+offset_right = 770.0
+offset_bottom = 520.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_vertical = 8
-custom_constants/separation = 5
+theme_override_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button" type="Button" parent="UI_Layer/MarginContainer/Moves/List"]
-margin_left = 236.0
-margin_right = 293.0
-margin_bottom = 34.0
+offset_left = 236.0
+offset_right = 293.0
+offset_bottom = 34.0
 size_flags_horizontal = 8
 text = "Back"
 align = 2
 
 [node name="Move1" parent="UI_Layer/MarginContainer/Moves/List" instance=ExtResource( 9 )]
-margin_top = 39.0
-margin_right = 293.0
-margin_bottom = 77.0
+offset_top = 39.0
+offset_right = 293.0
+offset_bottom = 77.0
 
 [node name="Move2" parent="UI_Layer/MarginContainer/Moves/List" instance=ExtResource( 9 )]
-margin_top = 82.0
-margin_right = 293.0
-margin_bottom = 120.0
+offset_top = 82.0
+offset_right = 293.0
+offset_bottom = 120.0
 
 [node name="Move3" parent="UI_Layer/MarginContainer/Moves/List" instance=ExtResource( 9 )]
-margin_top = 125.0
-margin_right = 293.0
-margin_bottom = 163.0
+offset_top = 125.0
+offset_right = 293.0
+offset_bottom = 163.0
 
 [node name="Move4" parent="UI_Layer/MarginContainer/Moves/List" instance=ExtResource( 9 )]
-margin_top = 168.0
-margin_right = 293.0
-margin_bottom = 206.0
+offset_top = 168.0
+offset_right = 293.0
+offset_bottom = 206.0
 
 [node name="EndMargin" type="MarginContainer" parent="UI_Layer/MarginContainer/Moves"]
-margin_left = 774.0
-margin_right = 974.0
-margin_bottom = 520.0
-custom_constants/margin_left = 200
+offset_left = 774.0
+offset_right = 974.0
+offset_bottom = 520.0
+theme_override_constants/margin_left = 200
 
 [node name="ShadowBg" type="ColorRect" parent="UI_Layer"]
 unique_name_in_owner = true
@@ -354,50 +354,50 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/ShadowBg/Switch"]
-margin_right = 340.0
-margin_bottom = 600.0
+offset_right = 340.0
+offset_bottom = 600.0
 size_flags_horizontal = 3
 theme = SubResource( 14 )
-custom_constants/separation = 0
+theme_override_constants/separation = 0
 
 [node name="MenuButton" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
-margin_bottom = 100.0
+offset_bottom = 100.0
 
 [node name="MenuButton1" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
-margin_top = 100.0
-margin_bottom = 200.0
+offset_top = 100.0
+offset_bottom = 200.0
 
 [node name="MenuButton2" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
-margin_top = 200.0
-margin_bottom = 300.0
+offset_top = 200.0
+offset_bottom = 300.0
 
 [node name="MenuButton3" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
-margin_top = 300.0
-margin_bottom = 400.0
+offset_top = 300.0
+offset_bottom = 400.0
 
 [node name="MenuButton4" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
-margin_top = 400.0
-margin_bottom = 500.0
+offset_top = 400.0
+offset_bottom = 500.0
 
 [node name="MenuButton5" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource( 21 )]
-margin_top = 500.0
+offset_top = 500.0
 
 [node name="MarginContainer" type="MarginContainer" parent="UI_Layer/ShadowBg/Switch"]
-margin_left = 344.0
-margin_right = 1024.0
-margin_bottom = 600.0
+offset_left = 344.0
+offset_right = 1024.0
+offset_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/ShadowBg/Switch/MarginContainer"]
-margin_right = 680.0
-margin_bottom = 600.0
+offset_right = 680.0
+offset_bottom = 600.0
 
 [node name="Button" type="Button" parent="UI_Layer/ShadowBg/Switch/MarginContainer/VBoxContainer"]
-margin_left = 638.0
-margin_top = 580.0
-margin_right = 680.0
-margin_bottom = 600.0
+offset_left = 638.0
+offset_top = 580.0
+offset_right = 680.0
+offset_bottom = 600.0
 size_flags_horizontal = 8
 size_flags_vertical = 10
 text = "Back"

@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Beep.wav-8a40c87ada5a0fb3b17e7da786a6259a.sample"
+type="AudioStreamWAV"
+uid="uid://clhab8fde4w4i"
+path="res://.godot/imported/Beep.wav-8a40c87ada5a0fb3b17e7da786a6259a.sample"
 
 [deps]
 
 source_file="res://addons/dialogic/Example Assets/Sound Effects/Beep.wav"
-dest_files=[ "res://.import/Beep.wav-8a40c87ada5a0fb3b17e7da786a6259a.sample" ]
+dest_files=["res://.godot/imported/Beep.wav-8a40c87ada5a0fb3b17e7da786a6259a.sample"]
 
 [params]
 

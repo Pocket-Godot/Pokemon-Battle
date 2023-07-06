@@ -1,0 +1,151 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/dialogic/Editor/Events/Parts/Audio/EventPart_AudioPicker.gd" type="Script" id=1]
+[ext_resource path="res://addons/dialogic/Editor/Events/styles/SectionPanel.tres" type="StyleBox" id=2]
+[ext_resource path="res://addons/dialogic/Editor/Events/Parts/Audio/AudioFilePicker.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/dialogic/Editor/Events/styles/InputFieldsStyle.tres" type="Theme" id=4]
+
+[node name="AudioPicker" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -718.0
+offset_bottom = -580.0
+theme = ExtResource( 4 )
+theme_override_styles/panel = ExtResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+event_name = "AudioEvent"
+
+[node name="VBox" type="VBoxContainer" parent="."]
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 300.0
+offset_bottom = 66.0
+
+[node name="AudioFilePicker" parent="VBox" instance=ExtResource( 3 )]
+visible = false
+offset_right = 294.0
+
+[node name="adv_settings" type="HBoxContainer" parent="VBox"]
+offset_right = 294.0
+offset_bottom = 61.0
+theme_override_constants/separation = 8
+
+[node name="AudioVolume" type="PanelContainer" parent="VBox/adv_settings"]
+offset_right = 88.0
+offset_bottom = 61.0
+theme_override_styles/panel = ExtResource( 2 )
+
+[node name="VBox" type="VBoxContainer" parent="VBox/adv_settings/AudioVolume"]
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 82.0
+offset_bottom = 57.0
+
+[node name="Label" type="Label" parent="VBox/adv_settings/AudioVolume/VBox"]
+offset_right = 76.0
+offset_bottom = 14.0
+text = "Volume:"
+
+[node name="Volume" type="SpinBox" parent="VBox/adv_settings/AudioVolume/VBox"]
+offset_top = 18.0
+offset_right = 76.0
+offset_bottom = 52.0
+min_value = -80.0
+max_value = 24.0
+step = 0.01
+suffix = "dB"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioBus" type="PanelContainer" parent="VBox/adv_settings"]
+offset_left = 96.0
+offset_right = 181.0
+offset_bottom = 61.0
+theme_override_styles/panel = ExtResource( 2 )
+
+[node name="VBox" type="VBoxContainer" parent="VBox/adv_settings/AudioBus"]
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 79.0
+offset_bottom = 57.0
+
+[node name="Label" type="Label" parent="VBox/adv_settings/AudioBus/VBox"]
+offset_right = 73.0
+offset_bottom = 14.0
+text = "AudioBus:"
+
+[node name="BusSelector" type="OptionButton" parent="VBox/adv_settings/AudioBus/VBox"]
+offset_top = 18.0
+offset_right = 73.0
+offset_bottom = 38.0
+size_flags_vertical = 5
+text = "Master"
+items = [ "Master", null, false, 0, null ]
+selected = 0
+
+[node name="AudioRegion" type="PanelContainer" parent="VBox/adv_settings"]
+visible = false
+offset_left = 187.0
+offset_right = 419.0
+offset_bottom = 51.0
+theme_override_styles/panel = ExtResource( 2 )
+
+[node name="VBox" type="VBoxContainer" parent="VBox/adv_settings/AudioRegion"]
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 226.0
+offset_bottom = 47.0
+
+[node name="Label" type="Label" parent="VBox/adv_settings/AudioRegion/VBox"]
+offset_right = 220.0
+offset_bottom = 14.0
+text = "Audio-region:"
+
+[node name="HBox" type="HBoxContainer" parent="VBox/adv_settings/AudioRegion/VBox"]
+offset_top = 18.0
+offset_right = 220.0
+offset_bottom = 42.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartAtLabel" type="Label" parent="VBox/adv_settings/AudioRegion/VBox/HBox"]
+offset_top = 5.0
+offset_right = 33.0
+offset_bottom = 19.0
+text = "Start:"
+
+[node name="StartAt" type="SpinBox" parent="VBox/adv_settings/AudioRegion/VBox/HBox"]
+offset_left = 37.0
+offset_right = 111.0
+offset_bottom = 24.0
+tooltip_text = "Leave both at 0 to use the whole file."
+max_value = 9999.0
+step = 0.1
+suffix = "sec"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StopAtLabel" type="Label" parent="VBox/adv_settings/AudioRegion/VBox/HBox"]
+offset_left = 115.0
+offset_top = 5.0
+offset_right = 142.0
+offset_bottom = 19.0
+text = "End:"
+
+[node name="StopAt" type="SpinBox" parent="VBox/adv_settings/AudioRegion/VBox/HBox"]
+offset_left = 146.0
+offset_right = 220.0
+offset_bottom = 24.0
+tooltip_text = "Leave both at 0 to use the whole file."
+max_value = 9999.0
+step = 0.1
+suffix = "sec"
+__meta__ = {
+"_edit_use_anchors_": false
+}

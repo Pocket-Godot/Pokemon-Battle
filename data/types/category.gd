@@ -1,11 +1,11 @@
-tool
+@tool
 extends Resource
 
-export (Color) var color
-export (Texture) var default_palette
-export (String, FILE, "*.tscn") var fp_hit_effect
+@export var color: Color
+@export var default_palette: Texture2D
+@export_file("*.tscn") var fp_hit_effect: String
 
-export (Dictionary) var defensive_effectivenesses
+@export var defensive_effectivenesses: Dictionary
 
 func get_def_eff(key_type)->float:
 	if defensive_effectivenesses.has(key_type):

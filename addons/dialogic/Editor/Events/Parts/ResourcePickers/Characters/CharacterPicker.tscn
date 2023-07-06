@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/dialogic/Editor/Events/Parts/ResourcePickers/Characters/EventPart_CharacterPicker.gd" type="Script" id=2]
+[ext_resource path="res://addons/dialogic/Editor/Theme/PickerTheme.tres" type="Theme" id=3]
+[ext_resource path="res://addons/dialogic/Editor/Events/Parts/ResourcePickers/ResourcePickerMenu.tscn" type="PackedScene" id=4]
+
+[node name="CharacterPicker" type="VBoxContainer"]
+offset_right = 161.0
+offset_bottom = 30.0
+custom_minimum_size = Vector2( 0, 30 )
+size_flags_vertical = 4
+theme = ExtResource( 3 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBox" type="HBoxContainer" parent="."]
+offset_right = 161.0
+offset_bottom = 30.0
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="MenuButton" parent="HBox" instance=ExtResource( 4 )]
+offset_top = 4.0
+offset_right = 95.0
+offset_bottom = 26.0
+text = "Character"
+
+[node name="NoCharacterContainer" type="HBoxContainer" parent="."]
+visible = false
+offset_top = 26.0
+offset_right = 399.0
+offset_bottom = 46.0
+
+[node name="NoCharacterLabel1" type="Label" parent="NoCharacterContainer"]
+offset_top = 3.0
+offset_right = 261.0
+offset_bottom = 17.0
+text = "You haven't created a character yet. Click"
+
+[node name="NoCharacterButton" type="Button" parent="NoCharacterContainer"]
+offset_left = 265.0
+offset_right = 306.0
+offset_bottom = 20.0
+text = "here"
+
+[node name="NoCharacterLabel2" type="Label" parent="NoCharacterContainer"]
+offset_left = 310.0
+offset_top = 3.0
+offset_right = 399.0
+offset_bottom = 17.0
+text = "to create one."

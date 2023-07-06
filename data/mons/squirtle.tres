@@ -4,8 +4,8 @@
 [ext_resource path="res://data/moves/tackle.tres" type="Resource" id=2]
 [ext_resource path="res://data/moves/watergun.tres" type="Resource" id=3]
 [ext_resource path="res://data/types/water.tres" type="Resource" id=4]
-[ext_resource path="res://content/sprites/pkmn/front/007.png" type="Texture" id=5]
-[ext_resource path="res://content/sprites/pkmn/back/007.png" type="Texture" id=6]
+[ext_resource path="res://content/sprites/pkmn/front/007.png" type="Texture2D" id=5]
+[ext_resource path="res://content/sprites/pkmn/back/007.png" type="Texture2D" id=6]
 
 [resource]
 script = ExtResource( 1 )

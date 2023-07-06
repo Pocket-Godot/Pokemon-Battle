@@ -6,22 +6,22 @@
 [node name="HBoxContainer" instance=ExtResource( 1 )]
 
 [node name="Name" parent="." index="0"]
-margin_right = 510.0
+offset_right = 510.0
 
 [node name="OptionButton" type="OptionButton" parent="." index="1"]
-margin_left = 514.0
-margin_right = 1024.0
-margin_bottom = 600.0
+offset_left = 514.0
+offset_right = 1024.0
+offset_bottom = 600.0
 size_flags_horizontal = 3
 toggle_mode = false
 text = "New Resource"
 script = ExtResource( 2 )
 
 [node name="ChooseCat" type="FileDialog" parent="." index="2"]
-margin_left = 709.0
-margin_right = 1024.0
-margin_bottom = 600.0
-window_title = "Open a Directory"
+offset_left = 709.0
+offset_right = 1024.0
+offset_bottom = 600.0
+window_title = "Open a DirAccess"
 mode = 2
 current_dir = "res://data"
 current_path = "res://data/"

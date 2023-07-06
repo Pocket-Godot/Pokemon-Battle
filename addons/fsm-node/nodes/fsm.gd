@@ -1,11 +1,11 @@
-tool
+@tool
 extends Node
 
 class_name FSM, "icons/fsm.svg"
 
 var current_state
 var state_tranistion_indexes
-export(NodePath) var starting_state
+@export var starting_state: NodePath
 
 # GRAPH
 var associated_graph_edit
@@ -14,7 +14,7 @@ var connections = []
 func _ready():
 	
 	# IF THIS IS CALLED IN THE EDITOR
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		
 		# CONNECT EVERYTHING TOGETHER
 		for c in connections:
@@ -40,7 +40,7 @@ func _ready():
 					break
 
 func _notification(what):
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		match what:
 			
 			NOTIFICATION_MOVED_IN_PARENT:
@@ -62,7 +62,7 @@ func _notification(what):
 						if target_indx != selfgraph_indx:
 							graph_fsm_edit_root.move_child(associated_graph_edit, target_indx)
 
-func _get_configuration_warning():
+func _get_configuration_warnings():
 	# to get called by update_configuration_warning() when there's a change in tree
 	for c in get_children():
 		if c.is_class("State"):
@@ -85,7 +85,7 @@ func get_class():
 	return "FSM"
 
 func is_class(c):
-	return c == get_class() or .is_class(c)
+	return c == get_class() or super.is_class(c)
 
 func node_is_higher(node_a, node_b):
 	var rel_path = node_a.get_path_to(node_b)
@@ -114,10 +114,10 @@ func node_is_higher(node_a, node_b):
 				_:
 					# FIND THE HIGHEST PARENT WHERE THEY ARE SIBLINGS TO BE COMPARED TO
 					var array_c = array_d.slice(0, array_d.size() - 3)
-					var np_c = PoolStringArray(array_c).join("/")
+					var np_c = "/".join(PackedStringArray(array_c))
 					node_c = node_a.get_node(np_c)
 					break
 	
-	var np_d = PoolStringArray(array_d).join("/")
+	var np_d = "/".join(PackedStringArray(array_d))
 	var node_d = node_a.get_node(np_d)
 	return node_c.get_index() < node_d.get_index()

@@ -1,4 +1,4 @@
-tool
+@tool
 extends State
 
 var root_node
@@ -24,17 +24,17 @@ const MAXROLL_MOVECRIT = 10000
 const MAXROLL_EFFCHANC = 1000
 
 var targets = []
-export(String, FILE, "*.tscn") var fp_hit_effect
+@export var fp_hit_effect # (String, FILE, "*.tscn")
 var damages = []
 var default_hit_effect
 var hit_effects = {}
 
 # SWITCHING
-export(NodePath) var np_allies
+@export var np_allies: NodePath
 var nd_allies
-export(NodePath) var np_reserves
+@export var np_reserves: NodePath
 var nd_reserves
-export(NodePath) var np_foes
+@export var np_foes: NodePath
 var nd_foes
 var target_reserve_index
 
@@ -49,7 +49,7 @@ signal you_lose
 signal foe_loses
 
 func _ready():
-	if !Engine.editor_hint:
+	if !Engine.is_editor_hint():
 		root_node = get_node("/root/Battle")
 		
 		randomize()
@@ -74,12 +74,12 @@ func _activate():
 		subturns.append(enemy_turn)
 	
 	# DIALOGIC
-	node_dialog.connect("text_complete", self, "_on_text_complete")
+	node_dialog.connect("text_complete", Callable(self, "_on_text_complete"))
 	
 	next_subturn()
 
 func _deactivate():
-	node_dialog.disconnect("text_complete", self, "_on_text_complete")
+	node_dialog.disconnect("text_complete", Callable(self, "_on_text_complete"))
 
 func _on_dialogic_node_added(nd):
 	node_dialog = nd.get_node("DialogNode")
@@ -134,7 +134,7 @@ func end_of_subturn():
 	
 	subturns.remove(0)
 	
-	if subturns.empty():
+	if subturns.is_empty():
 		emit_signal("end_turn")
 		Dialogic.change_timeline('battle-commands')
 	else:
@@ -169,12 +169,12 @@ func connect_within_action_sequences():
 		
 		animplayer_pending.append(n)
 		
-		n.connect("next", self, "_move_anim_next")
-		n.connect("animation_finished", self, "_move_anim_finished", [n])
+		n.connect("next", Callable(self, "_move_anim_next"))
+		n.connect("animation_finished", Callable(self, "_move_anim_finished").bind(n))
 
 func _move_anim_finished(_s, anim_player):
-	anim_player.disconnect("next", self, "_move_anim_next")
-	anim_player.disconnect("animation_finished", self, "_move_anim_finished")
+	anim_player.disconnect("next", Callable(self, "_move_anim_next"))
+	anim_player.disconnect("animation_finished", Callable(self, "_move_anim_finished"))
 	
 	animplayer_pending.erase(anim_player)
 	
@@ -193,12 +193,12 @@ func _move_anim_next():
 				var t = targets[i]
 				
 				# HIT EFFECTS
-				var inst_hitsprite = hit_effects[i].instance()
+				var inst_hitsprite = hit_effects[i].instantiate()
 				t.add_child(inst_hitsprite)
 				
 				var tanim_player = inst_hitsprite.get_node("AnimationPlayer")
 				animplayer_pending.append(tanim_player)
-				tanim_player.connect("animation_finished", self, "_hiteffect_finished", [tanim_player])
+				tanim_player.connect("animation_finished", Callable(self, "_hiteffect_finished").bind(tanim_player))
 			
 				# HEALTH BAR
 				t.cur_hp -= d
@@ -206,30 +206,30 @@ func _move_anim_next():
 				var heath_bar = t.associated_bar
 				var bar_tween = heath_bar.get_node("%HPBar")
 				animplayer_pending.append(bar_tween)
-				bar_tween.connect("tween_all_completed", self, "_bar_completed", [bar_tween])
+				bar_tween.connect("tween_all_completed", Callable(self, "_bar_completed").bind(bar_tween))
 			
 				# KNOCK OUTS
 				if t.cur_hp <= 0:
 					knockedout_targets.append(t)
 				
 		if knockedout_targets.size():
-			var knockedout_names = PoolStringArray([])
+			var knockedout_names = PackedStringArray([])
 			
 			for t in knockedout_targets:
 				knockedout_names.append(t.name)
 				
-			var str_knockedout_names = knockedout_names.join(", ")
+			var str_knockedout_names = ", ".join(knockedout_names)
 			Dialogic.set_variable("knock_outs", str_knockedout_names)
 
 func _bar_completed(tween):
-	tween.disconnect("tween_all_completed", self, "_bar_completed")
+	tween.disconnect("tween_all_completed", Callable(self, "_bar_completed"))
 	
 	animplayer_pending.erase(tween)
 	
 	upon_empty_animation()
 
 func _hiteffect_finished(_s, hiteffect_player):
-	hiteffect_player.disconnect("animation_finished", self, "_hiteffect_finished")
+	hiteffect_player.disconnect("animation_finished", Callable(self, "_hiteffect_finished"))
 	
 	animplayer_pending.erase(hiteffect_player)
 	
@@ -246,7 +246,7 @@ func play_car():
 	action["anim_node"].play(action["track"])
 	
 func upon_empty_animation():
-	if animplayer_pending.empty():
+	if animplayer_pending.is_empty():
 		emit_signal("all_anims_finished")
 		
 func play_animations(anim: String, nm_arr: String = ""):
@@ -286,11 +286,11 @@ func move_calculations(d:Dictionary):
 			
 	targets = d["targets"]
 	
-	var arr_misses = PoolStringArray([])
-	var arr_noeffects = PoolStringArray([])
-	var arr_crits = PoolStringArray([])
-	var arr_supereffectives = PoolStringArray([])
-	var arr_notveryeffectives = PoolStringArray([])
+	var arr_misses = PackedStringArray([])
+	var arr_noeffects = PackedStringArray([])
+	var arr_crits = PackedStringArray([])
+	var arr_supereffectives = PackedStringArray([])
+	var arr_notveryeffectives = PackedStringArray([])
 	for i in targets.size():
 		var t = targets[i]
 		
@@ -358,30 +358,30 @@ func move_calculations(d:Dictionary):
 	# TEXT DIALOGUES VARS
 	#	SINGLE-TARGET
 	if arr_misses.size() + arr_noeffects.size() + arr_supereffectives.size() + arr_notveryeffectives.size() == 1:
-		if !arr_misses.empty():
+		if !arr_misses.is_empty():
 			Dialogic.set_variable("misses", arr_misses[0])
-		elif !arr_noeffects.empty():
+		elif !arr_noeffects.is_empty():
 			Dialogic.set_variable("no_effects", "")
-		elif !arr_supereffectives.empty():
+		elif !arr_supereffectives.is_empty():
 			Dialogic.set_variable("super_effectives", "")
 		else:
 			Dialogic.set_variable("notvery_effectives", "")
 	
 	#	MULTI-TARGETS
 	else:
-		if !arr_misses.empty():
+		if !arr_misses.is_empty():
 			var str_misses = join_list_en(arr_misses)
 			Dialogic.set_variable("misses", str_misses)
 		
-		if !arr_noeffects.empty():
+		if !arr_noeffects.is_empty():
 			var str_noeffects = join_list_en(arr_noeffects, " or ")
 			Dialogic.set_variable("no_effects", arr_noeffects)
 		
-		if !arr_supereffectives.empty():
+		if !arr_supereffectives.is_empty():
 			var str_supereffectives = on_list_en(arr_supereffectives)
 			Dialogic.set_variable("super_effectives", arr_supereffectives)
 		
-		if !arr_notveryeffectives.empty():
+		if !arr_notveryeffectives.is_empty():
 			var str_notveryeffectives = join_list_en(arr_notveryeffectives, " or ")
 			Dialogic.set_variable("notvery_effectives", arr_notveryeffectives)
 
@@ -398,7 +398,7 @@ func sucessful_hit(roll, base_accuracy):
 
 # TEXTS
 
-func join_list_en(psa:PoolStringArray, last_delimiter:String = " and "):
+func join_list_en(psa:PackedStringArray, last_delimiter:String = " and "):
 	var final_string = ""
 	
 	for i in psa.size():
@@ -410,7 +410,7 @@ func join_list_en(psa:PoolStringArray, last_delimiter:String = " and "):
 	
 	return final_string
 
-func on_list_en(psa:PoolStringArray):
+func on_list_en(psa:PackedStringArray):
 	var final_string = " on "
 	final_string += join_list_en(psa)
 	return final_string

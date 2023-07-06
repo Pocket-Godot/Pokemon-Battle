@@ -4,10 +4,10 @@
 [ext_resource path="res://addons/dialogic/Editor/Common/TLabel.tscn" type="PackedScene" id=2]
 
 [node name="ButtonStylePicker" type="GridContainer"]
-margin_right = 380.0
-margin_bottom = 112.0
+offset_right = 380.0
+offset_bottom = 112.0
 size_flags_horizontal = 3
-custom_constants/hseparation = 10
+theme_override_constants/h_separation = 10
 columns = 2
 script = ExtResource( 1 )
 __meta__ = {
@@ -17,109 +17,109 @@ __meta__ = {
 [node name="TLabel" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 5.0
-margin_right = 126.0
-margin_bottom = 19.0
+offset_top = 5.0
+offset_right = 126.0
+offset_bottom = 19.0
 text = "Text Color"
 text_key = "Text Color"
 
 [node name="TextColor" type="HBoxContainer" parent="."]
-margin_left = 136.0
-margin_right = 296.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 160, 0 )
+offset_left = 136.0
+offset_right = 296.0
+offset_bottom = 24.0
+custom_minimum_size = Vector2( 160, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CheckBox" type="CheckBox" parent="TextColor"]
-margin_right = 24.0
-margin_bottom = 24.0
+offset_right = 24.0
+offset_bottom = 24.0
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="TextColor"]
-margin_left = 28.0
-margin_right = 160.0
-margin_bottom = 24.0
+offset_left = 28.0
+offset_right = 160.0
+offset_bottom = 24.0
 size_flags_horizontal = 3
 color = Color( 1, 1, 1, 1 )
 
 [node name="TLabel2" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 33.0
-margin_right = 126.0
-margin_bottom = 47.0
+offset_top = 33.0
+offset_right = 126.0
+offset_bottom = 47.0
 text = "Flat background"
 text_key = "Flat background"
 
 [node name="FlatBackground" type="HBoxContainer" parent="."]
-margin_left = 136.0
-margin_top = 28.0
-margin_right = 296.0
-margin_bottom = 52.0
+offset_left = 136.0
+offset_top = 28.0
+offset_right = 296.0
+offset_bottom = 52.0
 
 [node name="CheckBox" type="CheckBox" parent="FlatBackground"]
-margin_right = 24.0
-margin_bottom = 24.0
+offset_right = 24.0
+offset_bottom = 24.0
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="FlatBackground"]
 visible = false
-margin_left = 28.0
-margin_right = 160.0
-margin_bottom = 24.0
+offset_left = 28.0
+offset_right = 160.0
+offset_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="BackgroundTextureLabel" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 61.0
-margin_right = 126.0
-margin_bottom = 75.0
-text = "Background Texture"
-text_key = "Background Texture"
+offset_top = 61.0
+offset_right = 126.0
+offset_bottom = 75.0
+text = "Background Texture2D"
+text_key = "Background Texture2D"
 
 [node name="BackgroundTexture" type="HBoxContainer" parent="."]
-margin_left = 136.0
-margin_top = 56.0
-margin_right = 296.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 123, 0 )
+offset_left = 136.0
+offset_top = 56.0
+offset_right = 296.0
+offset_bottom = 80.0
+custom_minimum_size = Vector2( 123, 0 )
 
 [node name="CheckBox" type="CheckBox" parent="BackgroundTexture"]
-margin_right = 24.0
-margin_bottom = 24.0
+offset_right = 24.0
+offset_bottom = 24.0
 
 [node name="Button" type="Button" parent="BackgroundTexture"]
-margin_left = 28.0
-margin_right = 160.0
-margin_bottom = 24.0
+offset_left = 28.0
+offset_right = 160.0
+offset_bottom = 24.0
 size_flags_horizontal = 3
 text = "Don't change"
 
 [node name="TextureModulationLabel" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 89.0
-margin_right = 126.0
-margin_bottom = 103.0
-text = "Texture Modulation"
-text_key = "Texture Modulation"
+offset_top = 89.0
+offset_right = 126.0
+offset_bottom = 103.0
+text = "Texture2D Modulation"
+text_key = "Texture2D Modulation"
 
 [node name="TextureModulation" type="HBoxContainer" parent="."]
-margin_left = 136.0
-margin_top = 84.0
-margin_right = 296.0
-margin_bottom = 108.0
-rect_min_size = Vector2( 123, 0 )
+offset_left = 136.0
+offset_top = 84.0
+offset_right = 296.0
+offset_bottom = 108.0
+custom_minimum_size = Vector2( 123, 0 )
 
 [node name="CheckBox" type="CheckBox" parent="TextureModulation"]
-margin_right = 24.0
-margin_bottom = 24.0
+offset_right = 24.0
+offset_bottom = 24.0
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="TextureModulation"]
-margin_left = 28.0
-margin_right = 160.0
-margin_bottom = 24.0
+offset_left = 28.0
+offset_right = 160.0
+offset_bottom = 24.0
 size_flags_horizontal = 3
 color = Color( 1, 1, 1, 1 )
 

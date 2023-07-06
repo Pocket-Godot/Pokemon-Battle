@@ -2,14 +2,14 @@ extends Control
 
 
 ## The timeline to load when starting the scene
-export(String, "TimelineDropdown") var timeline: String
-export(bool) var add_canvas = true
-export(bool) var reset_saves = true
+@export var timeline: String # (String, "TimelineDropdown")
+@export var add_canvas: bool = true
+@export var reset_saves: bool = true
 
 func _ready():
 	if reset_saves:
 		Dialogic.reset_saves()
-	var d = Dialogic.start(timeline, '', "res://addons/dialogic/Nodes/DialogNode.tscn", add_canvas)
+	var d = Dialogic.start(Callable(timeline, '').bind("res://addons/dialogic/Nodes/DialogNode.tscn"), add_canvas)
 	get_parent().call_deferred('add_child', d)
 	_copy_signals(d if not add_canvas else d.dialog_node)	
 	queue_free()
@@ -24,7 +24,7 @@ func _copy_signals(dialogic:Node):
 			continue
 		var conns = self.get_signal_connection_list(s['name'])
 		for c in conns:
-			dialogic.connect(c['signal'], c['target'], c['method'], c['binds'], c['flags'])
+			dialogic.connect(c['signal'], Callable(c['target'], c['method']).bind(c['binds'), c['flags'])
 
 
 var _signals_to_copy = [
@@ -40,7 +40,7 @@ var _signals_to_copy = [
 ## 						SIGNALS (proxy copy of DialogNode signals)
 ## -----------------------------------------------------------------------------
 # Event end/start
-signal event_start(type, event)
+signal event_start(Callable(type, event))
 signal event_end(type)
 # Text Signals
 signal text_complete(text_data)

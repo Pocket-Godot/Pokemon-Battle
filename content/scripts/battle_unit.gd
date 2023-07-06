@@ -1,33 +1,33 @@
-tool
-extends Sprite
+@tool
+extends Sprite2D
 
-var reserve_index := 0 setget set_reserve_index
+var reserve_index := 0: set = set_reserve_index
 var display_name
 var species
 
 # ANIMATIONS
-export(bool) var is_facing_front
-export(Vector2) var proportional_offset setget set_proportional_offset
-export(Vector2) var relative_forward setget set_relative_forward
-export(Vector2) var relative_backward setget set_relative_backward
-export(float) var relative_right setget set_relative_right
+@export var is_facing_front: bool
+@export var proportional_offset: Vector2: set = set_proportional_offset
+@export var relative_forward: Vector2: set = set_relative_forward
+@export var relative_backward: Vector2: set = set_relative_backward
+@export var relative_right: float: set = set_relative_right
 var original_position:Vector2
 
 #	MATERIALS
-export(Color, RGB) var glow_color setget set_glow_color
-export(float) var glow_extent setget set_glow_extent
+@export var glow_color : set = set_glow_color
+@export var glow_extent: float: set = set_glow_extent
 
 # MOVESETS
 var moveset
 
 # UI
-export(NodePath) var np_associated_bar setget set_np_associated_bar
+@export var np_associated_bar: NodePath: set = set_np_associated_bar
 var associated_bar
 
 # BATTLE PARAMETERS
-var max_hp:int setget set_maxhp
+var max_hp:int: set = set_maxhp
 signal maxhp_iset
-var cur_hp:int setget set_curhp
+var cur_hp:int: set = set_curhp
 signal curhp_iset
 
 func _ready():
@@ -90,11 +90,11 @@ func set_relative_right(val:float):
 func set_glow_color(val:Color):
 	glow_color = val
 	var v3 = Vector3(glow_color.r, glow_color.g, glow_color.b)
-	get_material().set_shader_param("glow_color", v3)
+	get_material().set_shader_parameter("glow_color", v3)
 	
 func set_glow_extent(val:float):
 	glow_extent = val
-	get_material().set_shader_param("extent", glow_extent)
+	get_material().set_shader_parameter("extent", glow_extent)
 
 #	UI
 
@@ -106,26 +106,26 @@ func set_np_associated_bar(val:NodePath):
 		set_associated_bar(get_node(val))
 
 func set_associated_bar(val):
-	if associated_bar and !Engine.editor_hint:
-		disconnect("maxhp_iset", associated_bar, "_maxhp_iset")
-		disconnect("curhp_iset", associated_bar, "_curhp_iset")
+	if associated_bar and !Engine.is_editor_hint():
+		disconnect("maxhp_iset", Callable(associated_bar, "_maxhp_iset"))
+		disconnect("curhp_iset", Callable(associated_bar, "_curhp_iset"))
 	
 	if val:
 		associated_bar = val
-		if !Engine.editor_hint:
-			connect("maxhp_iset", associated_bar, "_maxhp_iset")
-			connect("curhp_iset", associated_bar, "_curhp_iset")
+		if !Engine.is_editor_hint():
+			connect("maxhp_iset", Callable(associated_bar, "_maxhp_iset"))
+			connect("curhp_iset", Callable(associated_bar, "_curhp_iset"))
 
 #		HEALTH
 
 func set_maxhp(val:int):
 	max_hp = val
-	if !Engine.editor_hint:
+	if !Engine.is_editor_hint():
 		emit_signal("maxhp_iset", val)
 
 func set_curhp(val:int, instant:bool=false):
 	cur_hp = val
-	if !Engine.editor_hint:
+	if !Engine.is_editor_hint():
 		emit_signal("curhp_iset", val, instant)
 
 # METHODS

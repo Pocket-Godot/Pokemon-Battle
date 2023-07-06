@@ -1,4 +1,4 @@
-tool
+@tool
 extends ScrollContainer
 
 # store last attempts since godot sometimes misses drop events
@@ -7,18 +7,18 @@ var _last_event_button_drop_attempt = ''
 var _mouse_exited = false
 
 # todo, getting timeline like this is prone to fail someday
-onready var timeline_editor = get_parent()
+@onready var timeline_editor = get_parent()
 
 func _ready():
-	connect("mouse_entered", self, '_on_mouse_entered')
-	connect("mouse_exited", self, '_on_mouse_exited')
-	connect("gui_input", self, '_on_gui_input')
+	connect("mouse_entered", Callable(self, '_on_mouse_entered'))
+	connect("mouse_exited", Callable(self, '_on_mouse_exited'))
+	connect("gui_input", Callable(self, '_on_gui_input'))
 
 
-func can_drop_data(position, data):
+func _can_drop_data(position, data):
 	if data != null and data is Dictionary and data.has("source"):
 		if data["source"] == "EventButton":
-			if _last_event_button_drop_attempt.empty():
+			if _last_event_button_drop_attempt.is_empty():
 				timeline_editor.create_drag_and_drop_event(data["event_id"])
 			_is_drag_receiving = true
 			_last_event_button_drop_attempt = data["event_id"]
@@ -32,7 +32,7 @@ func cancel_drop():
 	timeline_editor.cancel_drop_event()
 
 	
-func drop_data(position, data):
+func _drop_data(position, data):
 	# add event
 	if (data["source"] == "EventButton"):
 		timeline_editor.drop_event()
@@ -57,17 +57,17 @@ func _on_mouse_entered():
 	
   
 func _input(event):
-	if (event is InputEventMouseButton and is_visible_in_tree() and event.button_index == BUTTON_LEFT):
+	if (event is InputEventMouseButton and is_visible_in_tree() and event.button_index == MOUSE_BUTTON_LEFT):
 		if (_mouse_exited and _is_drag_receiving):
 			cancel_drop()
 
 
 func _on_gui_input(event):
 	# godot sometimes misses drop events
-	if (event is InputEventMouseButton and event.button_index == BUTTON_LEFT):
+	if (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
 		if (_is_drag_receiving):
 			if (_last_event_button_drop_attempt != ''):
-				drop_data(Vector2.ZERO, { "source": "EventButton", "event_id": _last_event_button_drop_attempt} )
+				_drop_data(Vector2.ZERO, { "source": "EventButton", "event_id": _last_event_button_drop_attempt} )
 			_is_drag_receiving = false
 
 
@@ -127,9 +127,9 @@ func _draw():
 
 					# Drawing the line from the Question/Condition node to the End Branch one.
 					draw_rect(Rect2(
-								Vector2(pos.x + line_size -scroll_horizontal, pos.y-scroll_vertical)+event.rect_position,
+								Vector2(pos.x + line_size -scroll_horizontal, pos.y-scroll_vertical)+event.position,
 								Vector2(line_width,
-								(end_reference.rect_global_position.y - event.rect_global_position.y) - (43 * _scale))
+								(end_reference.global_position.y - event.global_position.y) - (43 * _scale))
 							),
 							line_color, true)
 
@@ -144,16 +144,16 @@ func _draw():
 					pass
 				else:
 					draw_rect(Rect2(
-							Vector2(pos.x + line_size -scroll_horizontal, pos.y - scroll_vertical)+event.rect_position,
-							Vector2(line_width, event.rect_size.y - (40 * _scale))
+							Vector2(pos.x + line_size -scroll_horizontal, pos.y - scroll_vertical)+event.position,
+							Vector2(line_width, event.size.y - (40 * _scale))
 						),
 						line_color,
 						true)
 		else:
 			# Root (level 0) Vertical Line
 			draw_rect(Rect2(
-					Vector2(pos.x-scroll_horizontal, pos.y - scroll_vertical)+event.rect_position,
-					Vector2(line_width, event.rect_size.y - (40 * _scale))
+					Vector2(pos.x-scroll_horizontal, pos.y - scroll_vertical)+event.position,
+					Vector2(line_width, event.size.y - (40 * _scale))
 					),
 				line_color,
 				true)
@@ -176,10 +176,10 @@ func _draw():
 			arc_start = rendering_scale_correction(_scale, arc_start)
 
 			draw_arc(
-				Vector2(arc_start.x-scroll_horizontal, arc_start.y - scroll_vertical) + event.rect_position,
+				Vector2(arc_start.x-scroll_horizontal, arc_start.y - scroll_vertical) + event.position,
 				arc_radius,
-				deg2rad(start_angle),
-				deg2rad(end_angle),
+				deg_to_rad(start_angle),
+				deg_to_rad(end_angle),
 				arc_point_count, #point count
 				line_color,
 				line_width - (1 * _scale),
@@ -198,10 +198,10 @@ func _draw():
 			arc_start = rendering_scale_correction(_scale, arc_start)
 
 			draw_arc(
-				Vector2(arc_start.x-scroll_horizontal, arc_start.y - scroll_vertical) + event.rect_position,
+				Vector2(arc_start.x-scroll_horizontal, arc_start.y - scroll_vertical) + event.position,
 				arc_radius,
-				deg2rad(start_angle),
-				deg2rad(end_angle),
+				deg_to_rad(start_angle),
+				deg_to_rad(end_angle),
 				arc_point_count,
 				line_color,
 				line_width - (1 * _scale),

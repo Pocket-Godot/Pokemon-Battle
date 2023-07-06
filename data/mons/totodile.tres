@@ -3,8 +3,8 @@
 [ext_resource path="res://data/mons/category.gd" type="Script" id=1]
 [ext_resource path="res://data/moves/watergun.tres" type="Resource" id=2]
 [ext_resource path="res://data/types/water.tres" type="Resource" id=3]
-[ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture" id=4]
-[ext_resource path="res://content/sprites/pkmn/back/158.png" type="Texture" id=5]
+[ext_resource path="res://content/sprites/pkmn/front/158.png" type="Texture2D" id=4]
+[ext_resource path="res://content/sprites/pkmn/back/158.png" type="Texture2D" id=5]
 
 [resource]
 script = ExtResource( 1 )

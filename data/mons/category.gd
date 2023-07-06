@@ -1,17 +1,17 @@
 extends Resource
 
-export(Texture) var front
-export(Texture) var back
+@export var front: Texture2D
+@export var back: Texture2D
 
-export(Resource) var type1
-export(Resource) var type2
+@export var type1: Resource
+@export var type2: Resource
 
-export(Resource) var move1
-export(Resource) var move2
-export(Resource) var move3
-export(Resource) var move4
+@export var move1: Resource
+@export var move2: Resource
+@export var move3: Resource
+@export var move4: Resource
 
-export(int) var hp := 10
+@export var hp: int := 10
 
 func get_name()->String:
 	return resource_path.get_file().get_basename().capitalize()

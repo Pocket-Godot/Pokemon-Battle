@@ -20,7 +20,7 @@ enum PIVOT {
 
 static func get_position(node: Node) -> Vector2:
 	if node is Control:
-		return node.rect_position
+		return node.position
 	if node is Node2D:
 		return node.global_position
 
@@ -29,9 +29,9 @@ static func get_position(node: Node) -> Vector2:
 static func get_size(node: Node) -> Vector2:
 	if node is Control:
 		return node.get_size()
-	elif node is AnimatedSprite:
-		var frames = (node as AnimatedSprite).frames
-		var animation = (node as AnimatedSprite).animation
+	elif node is AnimatedSprite2D:
+		var frames = (node as AnimatedSprite2D).frames
+		var animation = (node as AnimatedSprite2D).animation
 		# scale can be negative
 		var scale =  Vector2(abs(node.scale.x), abs(node.scale.y))
 		return frames.get_frame(animation, 0).get_size() * scale
@@ -44,12 +44,12 @@ static func get_size(node: Node) -> Vector2:
 
 static func get_scale(node: Node) -> Vector2:
 	if node is Control:
-		return node.rect_scale
+		return node.scale
 	return node.scale
 
 static func get_rotation(node: Node):
 	if node is Control:
-		return node.rect_rotation
+		return node.rotation
 	elif node is Node2D:
 		return node.rotation_degrees
 
@@ -154,12 +154,12 @@ static func get_property_initial_value(node: Node, property: String):
 
 	if p[0] == 'shader_param':
 		var material: ShaderMaterial
-		if node is MeshInstance:
-			material = node.get_surface_material(0)
+		if node is MeshInstance3D:
+			material = node.get_surface_override_material(0)
 		else:
 			material = node.material
 
-		return material.get_shader_param(p[1])
+		return material.get_shader_parameter(p[1])
 
 	if node_property_name:
 		if key:
@@ -179,7 +179,7 @@ static func map_property_to_godot_property(node: Node, property: String) -> Dict
 		"x", "position:x":
 			if node is Control:
 				return {
-					property_name = "rect_position",
+					property_name = "position",
 					key = "x",
 				}
 
@@ -191,7 +191,7 @@ static func map_property_to_godot_property(node: Node, property: String) -> Dict
 		"y", "position:y":
 			if node is Control:
 				return {
-					property_name = "rect_position",
+					property_name = "position",
 					key = "y",
 				}
 
@@ -212,7 +212,7 @@ static func map_property_to_godot_property(node: Node, property: String) -> Dict
 		"position":
 			if node is Control:
 				return {
-					property_name = "rect_position"
+					property_name = "position"
 				}
 			
 			return {
@@ -228,7 +228,7 @@ static func map_property_to_godot_property(node: Node, property: String) -> Dict
 			var property_name = "rotation"
 
 			if node is Control:
-				property_name = "rect_rotation"
+				property_name = "rotation"
 			elif node is Node2D:
 				property_name = "rotation_degrees"
 
@@ -280,13 +280,13 @@ static func map_property_to_godot_property(node: Node, property: String) -> Dict
 
 	if p[0] == 'shader_param':
 		var material: ShaderMaterial
-		if node is MeshInstance:
-			material = node.get_surface_material(0)
+		if node is MeshInstance3D:
+			material = node.get_surface_override_material(0)
 		else:
 			material = node.material
 
 		return {
-			callback = funcref(material, 'set_shader_param'),
+			callback = funcref(material, 'set_shader_parameter'),
 			param = p[1]
 		}
 

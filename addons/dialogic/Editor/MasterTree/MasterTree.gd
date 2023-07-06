@@ -1,18 +1,18 @@
-tool
+@tool
 extends Tree
 
 var editor_reference
-onready var timeline_editor = get_node('../../TimelineEditor')
-onready var character_editor = get_node('../../CharacterEditor')
-onready var value_editor = get_node('../../ValueEditor')
-onready var glossary_entry_editor = get_node('../../GlossaryEntryEditor')
-onready var settings_editor = get_node('../../SettingsEditor')
-onready var theme_editor = get_node('../../ThemeEditor')
-onready var documentation_viewer = get_node('../../DocumentationViewer')
-onready var empty_editor = get_node('../../Empty')
-onready var filter_tree_edit = get_node('../FilterMasterTreeEdit')
+@onready var timeline_editor = get_node('../../TimelineEditor')
+@onready var character_editor = get_node('../../CharacterEditor')
+@onready var value_editor = get_node('../../ValueEditor')
+@onready var glossary_entry_editor = get_node('../../GlossaryEntryEditor')
+@onready var settings_editor = get_node('../../SettingsEditor')
+@onready var theme_editor = get_node('../../ThemeEditor')
+@onready var documentation_viewer = get_node('../../DocumentationViewer')
+@onready var empty_editor = get_node('../../Empty')
+@onready var filter_tree_edit = get_node('../FilterMasterTreeEdit')
 
-onready var tree = self
+@onready var tree = self
 
 var timeline_icon
 var character_icon
@@ -52,20 +52,20 @@ func _ready():
 	var modifier = ''
 	var _scale = DialogicUtil.get_editor_scale(self)
 	
-	rect_min_size.x = 150
+	custom_minimum_size.x = 150
 	if _scale == 1.25:
 		modifier = '-1.25'
-		rect_min_size.x = 180
+		custom_minimum_size.x = 180
 	if _scale == 1.5:
 		modifier = '-1.25'
-		rect_min_size.x = 250
+		custom_minimum_size.x = 250
 	if _scale == 1.75:
 		modifier = '-1.25'
-		rect_min_size.x = 250
+		custom_minimum_size.x = 250
 	if _scale == 2:
 		modifier = '-2'
-		rect_min_size.x = 360
-	rect_size.x = 0
+		custom_minimum_size.x = 360
+	size.x = 0
 	
 	# Icons
 	timeline_icon = load("res://addons/dialogic/Images/Resources/timeline" + modifier + ".svg")
@@ -86,7 +86,7 @@ func _ready():
 		var sub_tree = tree.create_item(root)
 		# set the item
 		sub_tree.set_icon(0, get_icon("Folder", "EditorIcons"))
-		sub_tree.set_icon_modulate(0, get_color("folder_icon_modulate", "FileDialog"))
+		sub_tree.set_icon_modulate(0, get_color("folder_icon_color", "FileDialog"))
 		# set info
 		sub_tree.set_text(0, tree_info[0])
 		sub_tree.collapsed = DialogicUtil.get_folder_meta(tree_info[0], 'folded')
@@ -117,13 +117,13 @@ func _ready():
 	create_rmb_context_menus()
 	
 	# connecting signals
-	connect('item_selected', self, '_on_item_selected')
-	connect('item_rmb_selected', self, '_on_item_rmb_selected')
-	connect('item_collapsed', self, '_on_item_collapsed')
-	connect('gui_input', self, '_on_gui_input')
-	connect('item_edited', self, '_on_item_edited')
-	$RenamerReset.connect("timeout", self, '_on_renamer_reset_timeout')
-	filter_tree_edit.connect("text_changed", self, '_on_filter_tree_edit_changed')
+	connect('item_selected', Callable(self, '_on_item_selected'))
+	connect('item_rmb_selected', Callable(self, '_on_item_rmb_selected'))
+	connect('item_collapsed', Callable(self, '_on_item_collapsed'))
+	connect('gui_input', Callable(self, '_on_gui_input'))
+	connect('item_edited', Callable(self, '_on_item_edited'))
+	$RenamerReset.connect("timeout", Callable(self, '_on_renamer_reset_timeout'))
+	filter_tree_edit.connect("text_changed", Callable(self, '_on_filter_tree_edit_changed'))
 	
 	# build all tree parts
 	build_full_tree()
@@ -135,7 +135,7 @@ func _ready():
 	hide_all_editors() 
 	
 	# AutoSave timer
-	$AutoSave.connect("timeout", self, '_on_autosave_timeout')
+	$AutoSave.connect("timeout", Callable(self, '_on_autosave_timeout'))
 	$AutoSave.start(0.5)
 
 ## *****************************************************************************
@@ -163,7 +163,7 @@ func build_resource_folder(parent_folder_item:TreeItem, folder_data:Dictionary, 
 	for folder in folder_data["folders"].keys():
 		var folder_item = _add_folder_item(parent_folder_item, folder, folder_editor, folder_data["folders"][folder]['metadata'])
 		var contains_something = build_resource_folder(folder_item, folder_data["folders"][folder], selected_item, folder_editor, resource_type)
-		if (not filter_tree_term.empty()) and (not contains_something):
+		if (not filter_tree_term.is_empty()) and (not contains_something):
 			folder_item.free()
 	
 	## BUILD ALL THE FILE ITEMS
@@ -182,7 +182,7 @@ func build_resource_folder(parent_folder_item:TreeItem, folder_data:Dictionary, 
 		
 		# add the file item (considering the filter_term)
 		if (filter_tree_term == '') or (filter_tree_term.to_lower() in file_metadata['name'].to_lower()):
-			_add_resource_item(resource_type, parent_folder_item, file_metadata, not selected_item.empty() and file == selected_item)
+			_add_resource_item(resource_type, parent_folder_item, file_metadata, not selected_item.is_empty() and file == selected_item)
 	
 	# force redraw control
 	update()
@@ -196,11 +196,11 @@ func _add_folder_item(parent_item: TreeItem, folder_name: String, editor:String,
 	# set text and icon
 	folder_item.set_text(0, folder_name)
 	folder_item.set_icon(0, get_icon("Folder", "EditorIcons"))
-	folder_item.set_icon_modulate(0, get_color("folder_icon_modulate", "FileDialog"))
+	folder_item.set_icon_modulate(0, get_color("folder_icon_color", "FileDialog"))
 	# set metadata
 	folder_item.set_metadata(0, {'editor': editor, 'editable': true})
 	# set collapsed
-	if filter_tree_term.empty():
+	if filter_tree_term.is_empty():
 		folder_item.collapsed = meta_folder_info['folded']
 	return folder_item
 
@@ -281,7 +281,7 @@ func build_themes(selected_item: String=''):
 
 
 func _on_item_collapsed(item: TreeItem):
-	if filter_tree_term.empty() and item != null and 'Root' in item.get_metadata(0)['editor'] and not 'Documentation' in item.get_metadata(0)['editor']:
+	if filter_tree_term.is_empty() and item != null and 'Root' in item.get_metadata(0)['editor'] and not 'Documentation' in item.get_metadata(0)['editor']:
 		DialogicUtil.set_folder_meta(get_item_folder(item, ''), 'folded', item.collapsed)
 
 func build_documentation(selected_item: String=''):
@@ -473,30 +473,30 @@ func create_rmb_context_menus():
 	rmb_popup_menus["Documentation"] = documentation_popup
 	
 	# Connecting context menus
-	timeline_popup.connect('id_pressed', self, '_on_TimelinePopupMenu_id_pressed')
-	character_popup.connect('id_pressed', self, '_on_CharacterPopupMenu_id_pressed')
-	theme_popup.connect('id_pressed', self, '_on_ThemePopupMenu_id_pressed')
-	definition_popup.connect('id_pressed', self, '_on_DefinitionPopupMenu_id_pressed')
-	documentation_popup.connect('id_pressed', self, '_on_DocumentationPopupMenu_id_pressed')
+	timeline_popup.connect('id_pressed', Callable(self, '_on_TimelinePopupMenu_id_pressed'))
+	character_popup.connect('id_pressed', Callable(self, '_on_CharacterPopupMenu_id_pressed'))
+	theme_popup.connect('id_pressed', Callable(self, '_on_ThemePopupMenu_id_pressed'))
+	definition_popup.connect('id_pressed', Callable(self, '_on_DefinitionPopupMenu_id_pressed'))
+	documentation_popup.connect('id_pressed', Callable(self, '_on_DocumentationPopupMenu_id_pressed'))
 		
-	timeline_folder_popup.connect('id_pressed', self, '_on_TimelineRootPopupMenu_id_pressed')
-	character_folder_popup.connect('id_pressed', self, '_on_CharacterRootPopupMenu_id_pressed')
-	theme_folder_popup.connect('id_pressed', self, '_on_ThemeRootPopupMenu_id_pressed')
-	definition_folder_popup.connect('id_pressed', self, '_on_DefinitionRootPopupMenu_id_pressed')
-	documentation_folder_popup.connect('id_pressed', self, '_on_DocumentationPopupMenu_id_pressed')
+	timeline_folder_popup.connect('id_pressed', Callable(self, '_on_TimelineRootPopupMenu_id_pressed'))
+	character_folder_popup.connect('id_pressed', Callable(self, '_on_CharacterRootPopupMenu_id_pressed'))
+	theme_folder_popup.connect('id_pressed', Callable(self, '_on_ThemeRootPopupMenu_id_pressed'))
+	definition_folder_popup.connect('id_pressed', Callable(self, '_on_DefinitionRootPopupMenu_id_pressed'))
+	documentation_folder_popup.connect('id_pressed', Callable(self, '_on_DocumentationPopupMenu_id_pressed'))
 
 func add_rmb_popup_style(popup):
 	var menu_background = load("res://addons/dialogic/Editor/Events/styles/ResourceMenuPanelBackground.tres")
 	menu_background.bg_color = get_color("base_color", "Editor")
 	
-	popup.add_stylebox_override('panel', menu_background)
-	popup.add_stylebox_override('hover', StyleBoxEmpty.new())
-	popup.add_color_override('font_color_hover', get_color("accent_color", "Editor"))
+	popup.add_theme_stylebox_override('panel', menu_background)
+	popup.add_theme_stylebox_override('hover', StyleBoxEmpty.new())
+	popup.add_theme_color_override('font_color_hover', get_color("accent_color", "Editor"))
 
 func _on_item_rmb_selected(position):
 	var item = get_selected().get_metadata(0)
 	if item.has('editor'):
-		rmb_popup_menus[item["editor"]].rect_position = get_viewport().get_mouse_position()
+		rmb_popup_menus[item["editor"]].position = get_viewport().get_mouse_position()
 		rmb_popup_menus[item["editor"]].popup()
 
 ## item paths (for the folder structure management)
@@ -586,7 +586,7 @@ func _on_TimelineRootPopupMenu_id_pressed(id):
 	if id == 0: # Add Timeline
 		new_timeline()
 	if id == 1: # add subfolder
-		DialogicUtil.add_folder(get_item_path(get_selected()), "New Folder "+str(OS.get_unix_time()))
+		DialogicUtil.add_folder(get_item_path(get_selected()), "New Folder "+str(Time.get_unix_time_from_system()))
 		build_timelines()
 	if id == 2: # remove folder and substuff
 		if get_selected().get_parent() == get_root():
@@ -599,7 +599,7 @@ func _on_CharacterRootPopupMenu_id_pressed(id):
 	if id == 0: # Add Character
 		new_character()
 	if id == 1: # add subfolder
-		DialogicUtil.add_folder(get_item_path(get_selected()), "New Folder "+str(OS.get_unix_time()))
+		DialogicUtil.add_folder(get_item_path(get_selected()), "New Folder "+str(Time.get_unix_time_from_system()))
 		
 		build_characters()
 	if id == 2: # remove folder and substuff
@@ -615,7 +615,7 @@ func _on_DefinitionRootPopupMenu_id_pressed(id):
 	if id == 1: # Add Glossary Definition
 		new_glossary_entry()
 	if id == 2: # add subfolder
-		DialogicUtil.add_folder(get_item_path(get_selected()), "New Folder "+str(OS.get_unix_time()))
+		DialogicUtil.add_folder(get_item_path(get_selected()), "New Folder "+str(Time.get_unix_time_from_system()))
 		build_definitions()
 	if id == 3: # remove folder and substuff
 		if get_selected().get_parent() == get_root():
@@ -628,7 +628,7 @@ func _on_ThemeRootPopupMenu_id_pressed(id):
 	if id == 0: # Add Theme
 		new_theme()
 	if id == 1: # add subfolder
-		DialogicUtil.add_folder(get_item_path(get_selected()), "New Folder "+str(OS.get_unix_time()))
+		DialogicUtil.add_folder(get_item_path(get_selected()), "New Folder "+str(Time.get_unix_time_from_system()))
 		build_themes()
 	if id == 2: # remove folder and substuff
 		if get_selected().get_parent() == get_root():
@@ -698,7 +698,7 @@ func remove_selected():
 
 
 func rename_selected():
-	yield(get_tree(), "idle_frame")
+	await get_tree().idle_frame
 	_start_rename()
 	edit_selected()
 
@@ -706,7 +706,7 @@ func rename_selected():
 ##					 		DRAGGING ITEMS
 ## *****************************************************************************
 
-func can_drop_data(position, data) -> bool:
+func _can_drop_data(position, data) -> bool:
 	var item = get_item_at_position(position)
 	if item == null:
 		return false
@@ -721,7 +721,7 @@ func can_drop_data(position, data) -> bool:
 					return true
 	return false
 
-func drop_data(position, data):
+func _drop_data(position, data):
 	var item = get_item_at_position(position)
 	var drop_section = get_drop_section_at_position(position)
 	if not data.has('item_type'):
@@ -749,7 +749,7 @@ func drop_data(position, data):
 	dragging_item = null
 	build_full_tree()
 
-func get_drag_data(position):
+func _get_drag_data(position):
 	var item = get_item_at_position(position)
 	# if it is a folder and it's not one of the root folders
 	if 'Root' in item.get_metadata(0)['editor'] and item.get_parent().get_parent():
@@ -765,7 +765,7 @@ func get_drag_data(position):
 	return null
 
 func instance_drag_preview(icon, text):
-	dragging_item = drag_preview.instance()
+	dragging_item = drag_preview.instantiate()
 	dragging_item.get_node("Panel").self_modulate = get_color("base_color", "Editor")
 	dragging_item.get_node("Panel/HBox/Icon").texture = icon
 	dragging_item.get_node("Panel/HBox/Label").text = text
@@ -774,7 +774,7 @@ func instance_drag_preview(icon, text):
 func _process(delta):
 	if dragging_item != null:
 		if Input.is_mouse_button_pressed(1):
-			dragging_item.rect_global_position = get_global_mouse_position()+Vector2(10,10)
+			dragging_item.global_position = get_global_mouse_position()+Vector2(10,10)
 		else:
 			dragging_item.queue_free()
 			dragging_item = null
@@ -868,7 +868,7 @@ func save_current_resource():
 
 func _on_filter_tree_edit_changed(value):
 	filter_tree_term = value
-	if not filter_tree_term.empty():
+	if not filter_tree_term.is_empty():
 		timelines_tree.collapsed = false
 		characters_tree.collapsed = false
 		definitions_tree.collapsed = false

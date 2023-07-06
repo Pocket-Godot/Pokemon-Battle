@@ -1,9 +1,9 @@
-tool
+@tool
 extends ScrollContainer
 
 var editor_reference
 
-onready var nodes = {
+@onready var nodes = {
 	# Theme
 	'themes': $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer/HBoxContainer/ThemePicker,
 	'canvas_layer' : $VBoxContainer/HBoxContainer3/VBoxContainer/VBoxContainer/HBoxContainer3/CanvasLayer,
@@ -82,30 +82,30 @@ func _ready():
 	update_data()
 	
 	# Themes
-	nodes['themes'].connect('about_to_show', self, 'build_PickerMenu')
+	nodes['themes'].connect('about_to_popup', Callable(self, 'build_PickerMenu'))
 	nodes['themes'].custom_icon = load("res://addons/dialogic/Images/Resources/theme.svg")
 	# TODO move to theme section later
-	nodes['canvas_layer'].connect('value_changed', self, '_on_canvas_layer_text_changed')
+	nodes['canvas_layer'].connect('value_changed', Callable(self, '_on_canvas_layer_text_changed'))
 
 	# Input
-	nodes['delay_after_options'].connect('text_changed', self, '_on_delay_options_text_changed')
-	nodes['default_action_key'].connect('pressed', self, '_on_default_action_key_presssed')
-	nodes['default_action_key'].connect('item_selected', self, '_on_default_action_key_item_selected')
+	nodes['delay_after_options'].connect('text_changed', Callable(self, '_on_delay_options_text_changed'))
+	nodes['default_action_key'].connect('pressed', Callable(self, '_on_default_action_key_presssed'))
+	nodes['default_action_key'].connect('item_selected', Callable(self, '_on_default_action_key_item_selected'))
 	
 	# Connect hotkey settings 1-4
 	for i in range(1, 5):
 		var key = str('choice_hotkey_', i)
-		nodes[key].connect('pressed', self, '_on_hotkey_action_key_presssed', [key])
-		nodes[key].connect('item_selected', self, '_on_default_action_key_item_selected', [key])
+		nodes[key].connect('pressed', Callable(self, '_on_hotkey_action_key_presssed').bind(key))
+		nodes[key].connect('item_selected', Callable(self, '_on_default_action_key_item_selected').bind(key))
 	
-	AudioServer.connect("bus_layout_changed", self, "update_bus_selector")
-	nodes['text_event_audio_default_bus'].connect('item_selected', self, '_on_text_audio_default_bus_item_selected')
+	AudioServer.connect("bus_layout_changed", Callable(self, "update_bus_selector"))
+	nodes['text_event_audio_default_bus'].connect('item_selected', Callable(self, '_on_text_audio_default_bus_item_selected'))
 	
 	## History timeline connections
-	nodes['history_button_position'].connect('item_selected', self, '_on_button_history_button_position_selected')
-	nodes['history_character_delimiter'].connect('text_changed', self, '_on_text_changed', ['history', 'history_character_delimiter'])
-	nodes['text_arrivals'].connect('text_changed', self, '_on_text_changed', ['history', 'text_arrivals'])
-	nodes['text_exits'].connect('text_changed', self, '_on_text_changed', ['history', 'text_exits'])
+	nodes['history_button_position'].connect('item_selected', Callable(self, '_on_button_history_button_position_selected'))
+	nodes['history_character_delimiter'].connect('text_changed', Callable(self, '_on_text_changed').bind('history', 'history_character_delimiter'))
+	nodes['text_arrivals'].connect('text_changed', Callable(self, '_on_text_changed').bind('history', 'text_arrivals'))
+	nodes['text_exits'].connect('text_changed', Callable(self, '_on_text_changed').bind('history', 'text_exits'))
 	
 	for button in ['history_button_position']:
 		var button_positions_popup = nodes[button].get_popup()
@@ -131,31 +131,31 @@ func _ready():
 		button_positions_popup.add_icon_item(
 			get_icon("ControlAlignBottomRight", "EditorIcons"), "Bottom Right", 8)
 	
-	nodes['history_screen_margin_x'].connect("value_changed", self, '_spinbox_val_changed', ['history_screen_margin_x'])
-	nodes['history_screen_margin_y'].connect("value_changed", self, '_spinbox_val_changed', ['history_screen_margin_y'])
-	nodes['history_container_margin_x'].connect("value_changed", self, '_spinbox_val_changed', ['history_container_margin_x'])
-	nodes['history_container_margin_y'].connect("value_changed", self, '_spinbox_val_changed', ['history_container_margin_y'])
+	nodes['history_screen_margin_x'].connect("value_changed", Callable(self, '_spinbox_val_changed').bind('history_screen_margin_x'))
+	nodes['history_screen_margin_y'].connect("value_changed", Callable(self, '_spinbox_val_changed').bind('history_screen_margin_y'))
+	nodes['history_container_margin_x'].connect("value_changed", Callable(self, '_spinbox_val_changed').bind('history_container_margin_x'))
+	nodes['history_container_margin_y'].connect("value_changed", Callable(self, '_spinbox_val_changed').bind('history_container_margin_y'))
 	
 	## The custom event section
-	nodes['new_custom_event_open'].connect("pressed", self, "new_custom_event_pressed")
+	nodes['new_custom_event_open'].connect("pressed", Callable(self, "new_custom_event_pressed"))
 	nodes['new_custom_event_section'].hide()
-	nodes['new_custom_event_name'].connect("text_changed", self, "custom_event_name_entered")
-	nodes['new_custom_event_id'].connect("text_changed", self, "custom_event_id_entered")
-	nodes['new_custom_event_cancel'].connect("pressed", self, "cancel_custom_event")
-	nodes['new_custom_event_create'].connect("pressed", self, "create_custom_event")
-	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.set('custom_colors/font_color', get_color("error_color", "Editor"))
+	nodes['new_custom_event_name'].connect("text_changed", Callable(self, "custom_event_name_entered"))
+	nodes['new_custom_event_id'].connect("text_changed", Callable(self, "custom_event_id_entered"))
+	nodes['new_custom_event_cancel'].connect("pressed", Callable(self, "cancel_custom_event"))
+	nodes['new_custom_event_create'].connect("pressed", Callable(self, "create_custom_event"))
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.set('theme_override_colors/font_color', get_color("error_color", "Editor"))
 	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/CustomEventsDocs.icon = get_icon("HelpSearch", "EditorIcons")
-	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/CustomEventsDocs.connect("pressed", self, 'open_custom_event_docs')
+	$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/CustomEventsDocs.connect("pressed", Callable(self, 'open_custom_event_docs'))
 	
 	## The Animation Section
-	nodes['default_join_animation'].connect('about_to_show', self, '_on_AnimationDefault_about_to_show', [nodes['default_join_animation'], '_in'])
-	nodes['default_leave_animation'].connect('about_to_show', self, '_on_AnimationDefault_about_to_show', [nodes['default_leave_animation'], 'out'])
-	nodes['default_join_animation'].get_popup().connect('index_pressed', self, '_on_AnimationDefault_index_pressed', [nodes['default_join_animation'], 'default_join_animation'])
-	nodes['default_leave_animation'].get_popup().connect('index_pressed', self, '_on_AnimationDefault_index_pressed', [nodes['default_leave_animation'], 'default_leave_animation'])
+	nodes['default_join_animation'].connect('about_to_popup', Callable(self, '_on_AnimationDefault_about_to_show').bind(nodes['default_join_animation'], '_in'))
+	nodes['default_leave_animation'].connect('about_to_popup', Callable(self, '_on_AnimationDefault_about_to_show').bind(nodes['default_leave_animation'], 'out'))
+	nodes['default_join_animation'].get_popup().connect('index_pressed', Callable(self, '_on_AnimationDefault_index_pressed').bind(nodes['default_join_animation'], 'default_join_animation'))
+	nodes['default_leave_animation'].get_popup().connect('index_pressed', Callable(self, '_on_AnimationDefault_index_pressed').bind(nodes['default_leave_animation'], 'default_leave_animation'))
 	nodes['default_join_animation'].custom_icon = get_icon("Animation", "EditorIcons")
 	nodes['default_leave_animation'].custom_icon = get_icon("Animation", "EditorIcons")
-	nodes['default_join_animation_length'].connect('value_changed', self, '_on_AnimationDefaultLength_value_changed', ['default_join_animation_length'])
-	nodes['default_leave_animation_length'].connect('value_changed', self, '_on_AnimationDefaultLength_value_changed', ['default_leave_animation_length'])
+	nodes['default_join_animation_length'].connect('value_changed', Callable(self, '_on_AnimationDefaultLength_value_changed').bind('default_join_animation_length'))
+	nodes['default_leave_animation_length'].connect('value_changed', Callable(self, '_on_AnimationDefaultLength_value_changed').bind('default_leave_animation_length'))
 
 func update_data():
 	# Reloading the settings
@@ -180,7 +180,7 @@ func load_values(settings: ConfigFile, section: String, key: Array):
 			elif nodes[k] is SpinBox:
 				nodes[k].value = settings.get_value(section, k)
 			else:
-				nodes[k].pressed = settings.get_value(section, k, false)
+				nodes[k].button_pressed = settings.get_value(section, k, false)
 
 
 func refresh_themes(settings: ConfigFile):
@@ -334,22 +334,22 @@ func cancel_custom_event():
 
 func create_custom_event():
 	# do checks for incomplete input
-	if nodes['new_custom_event_directory'].text.empty():
+	if nodes['new_custom_event_directory'].text.is_empty():
 		print('[D] No directory specified!')
 		$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = "Enter a directory name!"
 		return
-	if nodes['new_custom_event_name'].text.empty():
+	if nodes['new_custom_event_name'].text.is_empty():
 		print('[D] No name specified!')
 		$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = "Enter a event name!"
 		return
-	if nodes['new_custom_event_id'].text.empty():
+	if nodes['new_custom_event_id'].text.is_empty():
 		print('[D] No id specified!')
 		$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = "Enter an id!"
 		return
 	
 	# create new directory
 	var dir_name = 'res://dialogic/custom-events/'+nodes['new_custom_event_directory'].text
-	var dir = Directory.new()
+	var dir = DirAccess.new()
 	if dir.dir_exists(dir_name):
 		$VBoxContainer/HBoxContainer3/VBoxContainer2/CustomEvents/HBoxContainer/Message.text = "The folder already exists!"
 		print("[D] Custom Events folder '"+nodes['new_custom_event_directory'].text+"' already exists!")
@@ -362,7 +362,7 @@ func create_custom_event():
 	
 	# Updating the script location of the example
 	var scene = load(dir_name+"/EventPart_Example.tscn")
-	var scene_instance = scene.instance()
+	var scene_instance = scene.instantiate()
 	scene_instance.set_script(load(dir_name+"/EventPart_Example.gd"))
 	var packed_scene = PackedScene.new()
 	packed_scene.pack(scene_instance)
@@ -372,7 +372,7 @@ func create_custom_event():
 	dir.rename(dir_name+'/event_yourname_000.gd', dir_name+'/event_'+nodes['new_custom_event_id'].text+'.gd')
 	
 	# edit the EventBlock scene
-	var event_block_scene = load(dir_name+'/EventBlock.tscn').instance(PackedScene.GEN_EDIT_STATE_INSTANCE)
+	var event_block_scene = load(dir_name+'/EventBlock.tscn').instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
 	event_block_scene.event_name = nodes['new_custom_event_name'].text
 	event_block_scene.event_data = {'event_id':nodes['new_custom_event_id'].text}
 	event_block_scene.event_icon = load("res://addons/dialogic/Images/Event Icons/Main Icons/custom-event.svg")
@@ -439,8 +439,8 @@ func build_PickerMenuFolder(menu:PopupMenu, folder_structure:Dictionary, current
 		menu.set_item_metadata(index, {'file':file})
 		index += 1
 	
-	if not menu.is_connected("index_pressed", self, "_on_ThemePicker_index_pressed"):
-		menu.connect("index_pressed", self, '_on_ThemePicker_index_pressed', [menu])
+	if not menu.is_connected("index_pressed", Callable(self, "_on_ThemePicker_index_pressed")):
+		menu.connect("index_pressed", Callable(self, '_on_ThemePicker_index_pressed').bind(menu))
 	
 	return current_folder_name
 

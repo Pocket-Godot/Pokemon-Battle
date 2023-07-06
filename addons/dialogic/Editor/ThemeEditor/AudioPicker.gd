@@ -1,4 +1,4 @@
-tool
+@tool
 extends GridContainer
 
 signal data_updated(section)
@@ -7,7 +7,7 @@ var loading = false
 var editor_reference
 var path = ""
 
-onready var n : Dictionary = {
+@onready var n : Dictionary = {
 	'enable': $"FileHBoxContainer/EnableCheckBox",
 	'path': $"FileHBoxContainer/PathButton",
 	'volume': $"VolumeHBoxContainer/VolumeSpinBox",
@@ -21,7 +21,7 @@ onready var n : Dictionary = {
 func _ready():
 	editor_reference = find_parent('EditorView')
 	
-	AudioServer.connect("bus_layout_changed", self, "_on_bus_layout_changed")
+	AudioServer.connect("bus_layout_changed", Callable(self, "_on_bus_layout_changed"))
 	update_audio_bus_option_buttons()
 
 func set_data(data):
@@ -68,8 +68,8 @@ func _set_disabled(disabled):
 	n['audio_bus'].set_disabled(disabled)
 
 func _on_PathButton_pressed():
-	editor_reference.godot_dialog("*.ogg, *.wav", EditorFileDialog.MODE_OPEN_ANY)
-	editor_reference.godot_dialog_connect(self, "_on_Path_selected", ["dir_selected", "file_selected"])
+	editor_reference.godot_dialog("*.ogg, *.wav", EditorFileDialog.FILE_MODE_OPEN_ANY)
+	editor_reference.godot_dialog_connect(self, Callable("_on_Path_selected", ["dir_selected", "file_selected"]))
 
 func _on_Path_selected(selected_path, target = ""):
 	if typeof(selected_path) == TYPE_STRING and path != "":

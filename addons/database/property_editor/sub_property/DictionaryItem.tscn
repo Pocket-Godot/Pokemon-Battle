@@ -10,8 +10,8 @@ size_flags_horizontal = 3
 script = ExtResource( 1 )
 
 [node name="Key" parent="." instance=ExtResource( 2 )]
-margin_left = 0.0
-margin_right = 510.0
+offset_left = 0.0
+offset_right = 510.0
 
 [node name="Value" parent="." instance=ExtResource( 2 )]
 

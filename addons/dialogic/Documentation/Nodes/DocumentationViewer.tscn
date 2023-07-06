@@ -22,8 +22,8 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HSplit"]
-margin_right = 230.0
-margin_bottom = 600.0
+offset_right = 230.0
+offset_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.3
@@ -32,17 +32,17 @@ __meta__ = {
 }
 
 [node name="FilterEntry" type="LineEdit" parent="HSplit/VBoxContainer"]
-margin_right = 230.0
-margin_bottom = 24.0
+offset_right = 230.0
+offset_bottom = 24.0
 placeholder_text = "Filter Documentation"
 placeholder_alpha = 0.502
 
 [node name="DocumentationTree" parent="HSplit/VBoxContainer" instance=ExtResource( 2 )]
-margin_top = 28.0
-margin_right = 230.0
+offset_top = 28.0
+offset_right = 230.0
 
 [node name="DocsPageViewer" parent="HSplit" instance=ExtResource( 1 )]
-margin_left = 242.0
+offset_left = 242.0
 size_flags_horizontal = 3
 
 [connection signal="text_changed" from="HSplit/VBoxContainer/FilterEntry" to="." method="_on_FilterEntry_text_changed"]
