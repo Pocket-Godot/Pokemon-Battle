@@ -1,60 +1,44 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://dr5qh8nbvt00k"]
 
-[ext_resource path="res://content/ui_objects/stylebox.tres" type="Theme" id=1]
-[ext_resource path="res://content/ui_objects/move_btn.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://content/ui_objects/move_btn.gd" id="2"]
 
-[node name="Move" type="MarginContainer"]
-offset_right = 10.0
-offset_bottom = 24.0
-theme = ExtResource( 1 )
-script = ExtResource( 2 )
-
-[node name="Button" type="Button" parent="."]
-offset_right = 221.0
-offset_bottom = 24.0
+[node name="Button" type="Button" node_paths=PackedStringArray("label_name", "label_type", "label_category", "label_pp")]
+offset_right = 255.0
+offset_bottom = 36.0
+script = ExtResource("2")
+label_name = NodePath("MarginContainer/HBoxContainer/Name")
+label_type = NodePath("MarginContainer/HBoxContainer/Type")
+label_category = NodePath("MarginContainer/HBoxContainer/Category")
+label_pp = NodePath("MarginContainer/HBoxContainer/PP")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-offset_right = 221.0
-offset_bottom = 24.0
+layout_mode = 2
+offset_right = 255.0
+offset_bottom = 36.0
 mouse_filter = 2
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_top = 5
 theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-offset_left = 5.0
-offset_top = 5.0
-offset_right = 216.0
-offset_bottom = 19.0
+layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 25
 
 [node name="Name" type="Label" parent="MarginContainer/HBoxContainer"]
-offset_right = 77.0
-offset_bottom = 14.0
+layout_mode = 2
 text = "Move Name"
-valign = 1
 
 [node name="Type" type="Label" parent="MarginContainer/HBoxContainer"]
-offset_left = 102.0
-offset_right = 149.0
-offset_bottom = 14.0
+layout_mode = 2
 text = "Normal"
-valign = 1
 
 [node name="Category" type="Label" parent="MarginContainer/HBoxContainer"]
 visible = false
-offset_left = 174.0
-offset_right = 226.0
-offset_bottom = 14.0
+layout_mode = 2
 text = "Physical"
-valign = 1
 
 [node name="PP" type="Label" parent="MarginContainer/HBoxContainer"]
-offset_left = 174.0
-offset_right = 211.0
-offset_bottom = 14.0
+layout_mode = 2
 text = "40/40"
-align = 2
-valign = 1

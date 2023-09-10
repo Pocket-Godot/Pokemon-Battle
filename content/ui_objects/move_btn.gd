@@ -1,9 +1,9 @@
-extends MarginContainer
+extends Button
 
-@onready var label_name = $MarginContainer/HBoxContainer/Name
-@onready var label_type = $MarginContainer/HBoxContainer/Type
-@onready var label_category = $MarginContainer/HBoxContainer/Category
-@onready var label_pp = $MarginContainer/HBoxContainer/PP
+@export var label_name: Label
+@export var label_type: Label
+@export var label_category: Label
+@export var label_pp: Label
 
 func update_movedata(move):
 	var move_name = move.get_name()

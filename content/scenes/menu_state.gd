@@ -3,18 +3,13 @@ extends State
 
 class_name MenuState
 
-@export var np_associated_menu: NodePath
-@export var np_focus_btn: NodePath
-var associated_menu
-var focus_btn
-
-func _ready():
-	associated_menu = get_node(np_associated_menu)
-	focus_btn = get_node(np_focus_btn)
+@export var associated_menu: Control
+@export var focus_btn: BaseButton
 
 func _activate():
 	associated_menu.show()
 	focus_btn.grab_focus()
+
 
 func _deactivate():
 	associated_menu.hide()
