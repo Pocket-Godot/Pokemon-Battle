@@ -50,6 +50,12 @@ variables={
 }
 }
 text/autocolor_names=true
+layout/styles={
+"Default": {
+"inherits": ""
+}
+}
+layout/default_style="Default"
 
 [display]
 
