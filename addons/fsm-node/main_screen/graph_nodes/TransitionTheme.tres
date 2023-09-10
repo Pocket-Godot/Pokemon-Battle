@@ -1,48 +1,56 @@
-[gd_resource type="Theme" load_steps=8 format=2]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://c2w8ded1mc8uj"]
 
-[ext_resource path="res://addons/fsm-node/main_screen/graph_nodes/TransitionFrame.svg" type="Texture2D" id=1]
-[ext_resource path="res://addons/fsm-node/main_screen/graph_nodes/PortArrowhead.svg" type="Texture2D" id=2]
-[ext_resource path="res://addons/fsm-node/main_screen/graph_nodes/TransitionSelectedFrame.svg" type="Texture2D" id=3]
-[ext_resource path="res://addons/fsm-node/main_screen/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" type="FontFile" id=4]
+[ext_resource type="Texture2D" uid="uid://cy64drtu6cpgx" path="res://addons/fsm-node/main_screen/graph_nodes/TransitionFrame.svg" id="1"]
+[ext_resource type="Texture2D" uid="uid://o1qmda38f18a" path="res://addons/fsm-node/main_screen/graph_nodes/PortArrowhead.svg" id="2"]
+[ext_resource type="Texture2D" uid="uid://dxt3sg6t4i024" path="res://addons/fsm-node/main_screen/graph_nodes/TransitionSelectedFrame.svg" id="3"]
+[ext_resource type="FontFile" uid="uid://dtabj53vskhjd" path="res://addons/fsm-node/main_screen/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" id="4"]
 
-[sub_resource type="FontFile" id=3]
-size = 20
-font_data = ExtResource( 4 )
+[sub_resource type="FontFile" id="3"]
+fallbacks = Array[Font]([ExtResource("4")])
+face_index = null
+embolden = null
+transform = null
+cache/0/14/0/ascent = 0.0
+cache/0/14/0/descent = 0.0
+cache/0/14/0/underline_position = 0.0
+cache/0/14/0/underline_thickness = 0.0
+cache/0/14/0/scale = 1.0
+cache/0/14/0/kerning_overrides/14/0 = Vector2(0, 0)
+cache/0/14/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/14/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
-[sub_resource type="StyleBoxTexture" id=1]
-texture = ExtResource( 1 )
-region_rect = Rect2( 0, 0, 60, 60 )
-margin_left = 20.0
-margin_right = 20.0
-margin_top = 20.0
-margin_bottom = 20.0
+[sub_resource type="StyleBoxTexture" id="1"]
+texture = ExtResource("1")
+region_rect = Rect2(0, 0, 60, 60)
 
-[sub_resource type="StyleBoxTexture" id=2]
-texture = ExtResource( 3 )
-region_rect = Rect2( 0, 0, 60, 60 )
-margin_left = 20.0
-margin_right = 20.0
-margin_top = 20.0
-margin_bottom = 20.0
+[sub_resource type="StyleBoxTexture" id="2"]
+texture = ExtResource("3")
+region_rect = Rect2(0, 0, 60, 60)
 
 [resource]
-default_font = SubResource( 3 )
-GraphNode/colors/close_color = Color( 0, 0, 0, 1 )
-GraphNode/colors/resizer_color = Color( 0, 0, 0, 1 )
-GraphNode/colors/title_color = Color( 0, 0, 0, 1 )
+default_font = SubResource("3")
+GraphNode/colors/close_color = Color(0, 0, 0, 1)
+GraphNode/colors/resizer_color = Color(0, 0, 0, 1)
+GraphNode/colors/title_color = Color(0, 0, 0, 1)
 GraphNode/constants/close_offset = 18
 GraphNode/constants/port_offset = 3
 GraphNode/constants/separation = 1
 GraphNode/constants/title_offset = 20
-GraphNode/fonts/title_font = SubResource( 3 )
+GraphNode/fonts/title_font = SubResource("3")
 GraphNode/icons/close = null
-GraphNode/icons/port = ExtResource( 2 )
+GraphNode/icons/port = ExtResource("2")
 GraphNode/icons/resizer = null
 GraphNode/styles/breakpoint = null
 GraphNode/styles/comment = null
 GraphNode/styles/commentfocus = null
 GraphNode/styles/defaultfocus = null
 GraphNode/styles/defaultframe = null
-GraphNode/styles/frame = SubResource( 1 )
+GraphNode/styles/frame = SubResource("1")
 GraphNode/styles/position = null
-GraphNode/styles/selectedframe = SubResource( 2 )
+GraphNode/styles/selectedframe = SubResource("2")

@@ -1,129 +1,87 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://bsn5gsigfkuui"]
 
-[ext_resource path="res://addons/fsm-node/main_screen/toolbar_icons/SelectState.svg" type="Texture2D" id=3]
-[ext_resource path="res://addons/fsm-node/main_screen/toolbar_icons/SelectTransition.svg" type="Texture2D" id=4]
-[ext_resource path="res://addons/fsm-node/main_screen/toolbar_icons/AddState.svg" type="Texture2D" id=6]
-[ext_resource path="res://addons/fsm-node/main_screen/toolbar_icons/AddTransition.svg" type="Texture2D" id=7]
-
-[sub_resource type="ButtonGroup" id=1]
+[ext_resource type="Texture2D" uid="uid://bcnq8dsdxf4iq" path="res://addons/fsm-node/main_screen/toolbar_icons/SelectState.svg" id="3"]
+[ext_resource type="Texture2D" uid="uid://ks8eb8iq54ei" path="res://addons/fsm-node/main_screen/toolbar_icons/SelectTransition.svg" id="4"]
+[ext_resource type="Texture2D" uid="uid://bevl3h8i4dvx1" path="res://addons/fsm-node/main_screen/toolbar_icons/AddState.svg" id="6"]
+[ext_resource type="Texture2D" uid="uid://bjty0sg1t0tp5" path="res://addons/fsm-node/main_screen/toolbar_icons/AddTransition.svg" id="7"]
 
 [node name="VBoxContainer" type="VBoxContainer"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-offset_right = 96.0
-offset_bottom = 26.0
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_bottom = 2
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-offset_left = 2.0
-offset_right = 96.0
-offset_bottom = 24.0
-theme_override_constants/separation = 4
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
 visible = false
-offset_right = 30.0
-offset_bottom = 24.0
-theme_override_constants/separation = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="Select" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer"]
-offset_right = 12.0
-offset_bottom = 24.0
+layout_mode = 2
 toggle_mode = true
-pressed = true
-group = SubResource( 1 )
+flat = true
 
 [node name="Move" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer"]
-offset_left = 18.0
-offset_right = 30.0
-offset_bottom = 24.0
+layout_mode = 2
 toggle_mode = true
-group = SubResource( 1 )
+flat = true
 
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer"]
 visible = false
-offset_bottom = 24.0
-theme_override_constants/separation = 0
+layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
 visible = false
-offset_right = 62.0
-offset_bottom = 24.0
-theme_override_constants/separation = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="State" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
-offset_right = 28.0
-offset_bottom = 24.0
+layout_mode = 2
 toggle_mode = true
-pressed = true
-icon = ExtResource( 3 )
+icon = ExtResource("3")
+flat = true
 
 [node name="Transition" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
-offset_left = 34.0
-offset_right = 62.0
-offset_bottom = 24.0
+layout_mode = 2
 toggle_mode = true
-pressed = true
-icon = ExtResource( 4 )
+icon = ExtResource("4")
+flat = true
 
 [node name="VSeparator2" type="VSeparator" parent="MarginContainer/HBoxContainer"]
 visible = false
-offset_bottom = 24.0
-theme_override_constants/separation = 0
+layout_mode = 2
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
-offset_right = 80.0
-offset_bottom = 24.0
-theme_override_constants/separation = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="AddState" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer3"]
-offset_right = 28.0
-offset_bottom = 24.0
+layout_mode = 2
 disabled = true
-icon = ExtResource( 6 )
+icon = ExtResource("6")
+flat = true
 
 [node name="AddTransition" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer3"]
-offset_left = 34.0
-offset_right = 62.0
-offset_bottom = 24.0
+layout_mode = 2
 disabled = true
-icon = ExtResource( 7 )
+icon = ExtResource("7")
+flat = true
 
 [node name="Remove" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer3"]
-offset_left = 68.0
-offset_right = 80.0
-offset_bottom = 24.0
+layout_mode = 2
 disabled = true
-group = SubResource( 1 )
+flat = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-offset_top = 26.0
-offset_right = 96.0
-offset_bottom = 72.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
-offset_right = 96.0
-offset_bottom = 46.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 30

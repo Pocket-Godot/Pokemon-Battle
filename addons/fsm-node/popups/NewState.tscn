@@ -1,31 +1,31 @@
 [gd_scene format=2]
 
 [node name="NewState" type="ConfirmationDialog"]
-offset_right = 200.0
-offset_bottom = 70.0
+margin_right = 200.0
+margin_bottom = 70.0
 window_title = "New State"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 192.0
-offset_bottom = 34.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 192.0
+margin_bottom = 34.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-offset_right = 184.0
-offset_bottom = 24.0
+margin_right = 184.0
+margin_bottom = 24.0
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
-offset_top = 5.0
-offset_right = 46.0
-offset_bottom = 19.0
+margin_top = 5.0
+margin_right = 46.0
+margin_bottom = 19.0
 text = "Name: "
 
 [node name="Name" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
-offset_left = 50.0
-offset_right = 184.0
-offset_bottom = 24.0
+margin_left = 50.0
+margin_right = 184.0
+margin_bottom = 24.0
 size_flags_horizontal = 3

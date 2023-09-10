@@ -1,13 +1,11 @@
 @tool
+@icon("icons/state.svg")
+class_name State
 extends FSM_Component
+## A node representing one type of behavior that would be in effect when active.
 
-class_name State, "icons/state.svg"
-
-@export var transitions # (Array, NodePath)
-var transition_nodes = []
-
-func _get_configuration_warnings():
-	return "" if get_parent().is_class("FSM") else "Parent should be FSM."
+## The list of Transitions it connects to.
+@export var transitions: Array[Transition]
 
 func _ready():
 	super._ready()
@@ -16,15 +14,14 @@ func _ready():
 		set_physics_process(false)
 		set_process(false)
 		set_process_input(false)
-		
-		for np in transitions:
-			transition_nodes += [get_node(np)]
 
-func get_class():
-	return "State"
 
+func _get_configuration_warning():
+	return "" if get_parent().is_class("FSM") else "Parent should be FSM."
+
+
+## Sets the state whether to be active.
 func set_active(b:bool):
-	print(String(b), get_name())
 	active = b
 	
 	set_physics_process(active)
@@ -34,6 +31,8 @@ func set_active(b:bool):
 	
 	emit_signal("activate" if active else "deactivate")
 
+
+## Sets all transitions it's connected to whether to be active.
 func set_transitions():
-	for t in transition_nodes:
+	for t in transitions:
 		t.set_active(active)

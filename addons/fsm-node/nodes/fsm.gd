@@ -1,15 +1,20 @@
 @tool
+@icon("icons/fsm.svg")
+class_name FSM
 extends Node
-
-class_name FSM, "icons/fsm.svg"
+## A node that manages which State is to be active. Has [FSM_Component]s as its children nodes.
+##
+## In the FSM workspace, it is represented as a [GraphEdit], showing all its FSM component children and their relations.
 
 var current_state
 var state_tranistion_indexes
-@export var starting_state: NodePath
 
-# GRAPH
+# For Graph Workspace
 var associated_graph_edit
 var connections = []
+
+## The State it starts with when the project is played. If not set, it will instead start with the first child State.
+@export var starting_state: State
 
 func _ready():
 	
@@ -28,16 +33,17 @@ func _ready():
 		
 		# IF THE starting_state IS DEFNIED, WE'LL USE IT
 		if starting_state:
-			current_state = get_node(starting_state)
+			current_state = starting_state
 			current_state.set_active(true)
 	
 		# OTHERWISE, WE'LL USE THE FIRST STATE IN OUR CHILDREN
 		else:
 			for c in get_children():
-				if c.is_class("State"):
+				if c is State:
 					current_state = c
 					c.set_active(true)
 					break
+
 
 func _notification(what):
 	if Engine.is_editor_hint():
@@ -62,30 +68,39 @@ func _notification(what):
 						if target_indx != selfgraph_indx:
 							graph_fsm_edit_root.move_child(associated_graph_edit, target_indx)
 
-func _get_configuration_warnings():
+
+func _get_configuration_warning():
 	# to get called by update_configuration_warning() when there's a change in tree
 	for c in get_children():
-		if c.is_class("State"):
+		if c is State:
 			return ""
 	return "Add at least one State to this node."
-	
+
+
+## Activates a state. 
 func activate_state(s):
-	# SET STATE
 	current_state = s
 	current_state.set_active(true)
 
+
+## Changes from one state to another.
 func change_state(s):
 	deactivate_state()
 	activate_state(s)
 
+
+## Deactivates the current state.
 func deactivate_state():
 	current_state.set_active(false)
+
 
 func get_class():
 	return "FSM"
 
+
 func is_class(c):
 	return c == get_class() or super.is_class(c)
+
 
 func node_is_higher(node_a, node_b):
 	var rel_path = node_a.get_path_to(node_b)
