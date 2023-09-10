@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" path="res://content/ui_objects/FoeBar.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://content/gameobjects/units/Ally.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://content/ui_objects/AllyBar.tscn" id="8"]
-[ext_resource type="PackedScene" path="res://content/ui_objects/MoveBtn.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://dr5qh8nbvt00k" path="res://content/ui_objects/MoveBtn.tscn" id="9"]
 [ext_resource type="Texture2D" uid="uid://bich3ha8ag6tn" path="res://content/sprites/pkmn/front/158.png" id="10"]
 [ext_resource type="Script" path="res://content/scripts/side_of_units.gd" id="11"]
 [ext_resource type="Resource" path="res://data/mons/bulbasaur.tres" id="12"]
@@ -38,13 +38,13 @@ void fragment(){
 	COLOR.rgb += glow_color * extent;
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hx4g4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ttfyp"]
 resource_local_to_scene = true
 shader = SubResource("8")
 shader_parameter/glow_color = Vector3(1, 1, 1)
 shader_parameter/extent = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1gbm5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wqls7"]
 resource_local_to_scene = true
 shader = SubResource("8")
 shader_parameter/glow_color = Vector3(1, 1, 1)
@@ -90,13 +90,13 @@ graph_offset = Vector2(20, 0)
 [node name="Moves" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu", "focus_btn")]
 script = ExtResource("20")
 associated_menu = NodePath("../../UI_Layer/List")
-focus_btn = NodePath("../../UI_Layer/List/Move1")
+focus_btn = NodePath("../../UI_Layer/List/Move1/Button")
 graph_offset = Vector2(700, 60)
 
 [node name="Switch" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu", "focus_btn")]
 script = ExtResource("22")
 associated_menu = NodePath("../../UI_Layer/ShadowBg/Switch")
-focus_btn = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton")
+focus_btn = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton/Button")
 graph_offset = Vector2(940, -100)
 
 [node name="DialogTurn" type="Node" parent="FSM"]
@@ -112,7 +112,7 @@ np_foes = NodePath("../../Foes")
 script = ExtResource("23")
 np_backbtn = NodePath("../../UI_Layer/ShadowBg/Switch/MarginContainer/VBoxContainer/Button")
 associated_menu = NodePath("../../UI_Layer/ShadowBg/Switch")
-focus_btn = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton")
+focus_btn = NodePath("../../UI_Layer/List/Move1/Button")
 graph_offset = Vector2(100, 560)
 
 [node name="YouWin" type="Node" parent="FSM"]
@@ -159,7 +159,7 @@ script = ExtResource("11")
 species = Array[Resource]([ExtResource("13"), ExtResource("15"), ExtResource("14")])
 
 [node name="Foe" parent="Foes" instance=ExtResource("5")]
-material = SubResource("ShaderMaterial_hx4g4")
+material = SubResource("ShaderMaterial_ttfyp")
 texture = ExtResource("10")
 np_associated_bar = NodePath("../../UI_Layer/VBoxContainer/MarginContainer/VBoxContainer/Foes/FoeBar")
 proportional_offset = Vector2(0, 0)
@@ -174,7 +174,7 @@ script = ExtResource("11")
 species = Array[Resource]([ExtResource("12"), ExtResource("18"), ExtResource("16")])
 
 [node name="You" parent="Allies" instance=ExtResource("7")]
-material = SubResource("ShaderMaterial_1gbm5")
+material = SubResource("ShaderMaterial_wqls7")
 np_associated_bar = NodePath("../../UI_Layer/VBoxContainer/MarginContainer/VBoxContainer/Allies/AllyBar")
 proportional_offset = Vector2(0, 0)
 glow_extent = 0.0
@@ -309,6 +309,37 @@ theme_override_constants/separation = 0
 [node name="MenuButton" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource("21")]
 layout_mode = 2
 
+[node name="Button" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton" index="0"]
+layout_mode = 2
+
+[node name="PopupMenu" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton/Button" index="0"]
+item_count = 2
+item_0/text = "Summary"
+item_0/id = 0
+item_1/text = "Switch"
+item_1/id = 1
+
+[node name="MarginContainer" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton" index="1"]
+layout_mode = 2
+
+[node name="HBoxContainer" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton/MarginContainer" index="0"]
+layout_mode = 2
+
+[node name="VBoxContainer" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton/MarginContainer/HBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="HBoxContainer" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton/MarginContainer/HBoxContainer/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="Name" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="HPBar" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton/MarginContainer/HBoxContainer/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="HP" parent="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton/MarginContainer/HBoxContainer/VBoxContainer" index="2"]
+layout_mode = 2
+
 [node name="MenuButton1" parent="UI_Layer/ShadowBg/Switch/VBoxContainer" instance=ExtResource("21")]
 layout_mode = 2
 
@@ -343,3 +374,6 @@ text = "Back"
 [connection signal="pressed" from="UI_Layer/VBoxContainer/PanelContainer/Commands/Switch" to="FSM/ToSwitch" method="_condition"]
 [connection signal="pressed" from="UI_Layer/List/Button" to="FSM/BackToCommands" method="_condition"]
 [connection signal="pressed" from="UI_Layer/ShadowBg/Switch/MarginContainer/VBoxContainer/Button" to="FSM/BackToCommands" method="_condition"]
+
+[editable path="UI_Layer/List/Move1"]
+[editable path="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton"]

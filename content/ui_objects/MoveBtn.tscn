@@ -2,19 +2,20 @@
 
 [ext_resource type="Script" path="res://content/ui_objects/move_btn.gd" id="2"]
 
-[node name="Button" type="Button" node_paths=PackedStringArray("label_name", "label_type", "label_category", "label_pp")]
-offset_right = 255.0
-offset_bottom = 36.0
+[node name="Move" type="MarginContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="." node_paths=PackedStringArray("label_name", "label_type", "label_category", "label_pp")]
+layout_mode = 2
 script = ExtResource("2")
-label_name = NodePath("MarginContainer/HBoxContainer/Name")
-label_type = NodePath("MarginContainer/HBoxContainer/Type")
-label_category = NodePath("MarginContainer/HBoxContainer/Category")
-label_pp = NodePath("MarginContainer/HBoxContainer/PP")
+label_name = NodePath("../MarginContainer/HBoxContainer/Name")
+label_type = NodePath("../MarginContainer/HBoxContainer/Type")
+label_category = NodePath("../MarginContainer/HBoxContainer/Category")
+label_pp = NodePath("../MarginContainer/HBoxContainer/PP")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-offset_right = 255.0
-offset_bottom = 36.0
 mouse_filter = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
