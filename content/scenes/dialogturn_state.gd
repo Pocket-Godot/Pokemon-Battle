@@ -24,7 +24,7 @@ const MAXROLL_MOVECRIT = 10000
 const MAXROLL_EFFCHANC = 1000
 
 var targets = []
-@export var fp_hit_effect # (String, FILE, "*.tscn")
+@export_file("*.tscn") var fp_hit_effect:String
 var damages = []
 var default_hit_effect
 var hit_effects = {}
@@ -86,7 +86,7 @@ func _on_dialogic_node_added(nd):
 
 func _on_text_complete(text_data):
 	if text_data["event_id"] == "dialogic_001":
-		Dialogic.next_event()
+		DialogicSingleton.next_event()
 
 # TURNS
 

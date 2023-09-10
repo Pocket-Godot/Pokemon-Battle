@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://beiy3h4r21vk"
-path="res://.godot/imported/icon.svg-0a9fcbcd88c543869a46b6f858ba7238.ctex"
+uid="uid://cr3k80d5t432h"
+path="res://.godot/imported/icon_sketch.svg-b661724e6a6f9f2876703a2f32fec0ba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogic/custom-events/play_move/icon.svg"
-dest_files=["res://.godot/imported/icon.svg-0a9fcbcd88c543869a46b6f858ba7238.ctex"]
+source_file="res://dialogic-custom-events/anim_unit/icon_sketch.svg"
+dest_files=["res://.godot/imported/icon_sketch.svg-b661724e6a6f9f2876703a2f32fec0ba.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cr4neq3muwi3h"
-path="res://.godot/imported/icon_sketch.svg-2dc2666dc9ce0c3e20f1b8d6c023434b.ctex"
+path="res://.godot/imported/icon_sketch.svg-ec4a1cc4d8f8ccb9ee335a0e8b3a69af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dialogic/custom-events/play_move/icon_sketch.svg"
-dest_files=["res://.godot/imported/icon_sketch.svg-2dc2666dc9ce0c3e20f1b8d6c023434b.ctex"]
+source_file="res://dialogic-custom-events/play_move/icon_sketch.svg"
+dest_files=["res://.godot/imported/icon_sketch.svg-ec4a1cc4d8f8ccb9ee335a0e8b3a69af.ctex"]
 
 [params]
 

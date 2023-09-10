@@ -1,0 +1,2 @@
+[call_node path="Battle/FSM/DialogTurn" method="switch_out_koed_allies" args=]"]
+

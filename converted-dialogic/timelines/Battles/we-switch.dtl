@@ -1,0 +1,12 @@
+[user_name], return!
+
+# Custom event: * "anim_name": "Recall", "event_id": "pkmn_btl_002" *
+
+[call_node path="Battle/FSM/DialogTurn" method="switch_unit" args=]"]
+
+Go, [user_name]!
+
+# Custom event: * "anim_name": "Send Out", "event_id": "pkmn_btl_002" *
+
+[call_node path="Battle/FSM/UsedMove" method="end_of_subturn" args=]"]
+

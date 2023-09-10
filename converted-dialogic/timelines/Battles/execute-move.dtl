@@ -1,0 +1,30 @@
+[user_name] used [move_name]!
+
+if {Battles.misses} != "SKIP":
+
+	[misses] evaded the attack!
+
+if {Battles.no_effects} != "SKIP":
+
+	It doesn't affect [no_effects]!
+
+# Custom event: * "custom_method": "play_knockout_animation", "event_id": "pkmn_btl_001", "target_anim": "Faint" *
+
+if {Battles.super_effectives} != "SKIP":
+
+	It's super effective[super_effectives]!
+
+if {Battles.notvery_effectives} != "SKIP":
+
+	It's not very effective[notvery_effectives]......
+
+if {Battles.knock_outs} != "SKIP":
+
+	# Custom event: * "anim_name": "Faint", "event_id": "pkmn_btl_002", "target_anim": "Faint", "target_array": "knockedout_targets" *
+
+	[knock_outs] fainted!
+
+	[call_node path="Node/FSM/DialogTurn" method="upon_no_more_reserves" args=]"]
+
+[call_node path="Battle/FSM/DialogTurn" method="end_of_subturn" args=]"]
+

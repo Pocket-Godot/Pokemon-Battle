@@ -1,8 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3]
 
-[ext_resource path="res://dialogic/custom-events/anim_unit/icon.svg" type="Texture2D" id=1]
-[ext_resource path="res://dialogic/custom-events/anim_unit/EventPart.tscn" type="PackedScene" id=2]
-[ext_resource path="res://addons/dialogic/Editor/Events/Templates/EventTemplate.tscn" type="PackedScene" id=3]
+[ext_resource type="Texture2D" uid="uid://dfqrvn6lnrvga" path="res://dialogic-custom-events/anim_unit/icon.svg" id="1"]
+[ext_resource type="PackedScene" path="res://dialogic-custom-events/anim_unit/EventPart.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://addons/dialogic/Editor/Events/Templates/EventTemplate.tscn" id="3"]
 
 [sub_resource type="Image" id=3]
 data = {

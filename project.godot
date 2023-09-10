@@ -20,6 +20,37 @@ config/icon="res://icon.png"
 
 DialogicSingleton="*res://addons/dialogic/Other/DialogicSingleton.gd"
 
+[dialogic]
+
+glossary/default_case_sensitive=true
+settings/text_speed=0.01
+text/skippable=true
+text/skippable_delay=0.1
+text/autoadvance_delay=1.0
+text/hide_empty_textbox=true
+animations/join_default_length=0.5
+animations/leave_default_length=0.5
+animations/leave_default_wait=true
+animations/join_default_wait=true
+choices/autofocus_first=false
+choices/delay=0.2
+choices/reveal_delay=0
+choices/reveal_by_input=false
+save/autosave_delay=60.0
+text/autopauses={}
+variables={
+"Battles": {
+"knock_outs": "SKIP",
+"misses": "SKIP",
+"move_name": "",
+"no_effects": "SKIP",
+"notvery_effectives": "SKIP",
+"super_effectives": "SKIP",
+"user_name": ""
+}
+}
+text/autocolor_names=true
+
 [display]
 
 window/stretch/mode="viewport"

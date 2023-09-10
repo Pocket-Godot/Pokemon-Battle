@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource path="res://addons/dialogic/Editor/Events/Parts/Text/CustomLineEdit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://dialogic/custom-events/inst_effect/EventPart.gd" type="Script" id=2]
+[ext_resource type="PackedScene" path="res://addons/dialogic/Editor/Events/Parts/Text/CustomLineEdit.tscn" id="1"]
+[ext_resource type="Script" path="res://dialogic-custom-events/inst_effect/EventPart.gd" id="2"]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 11.0
