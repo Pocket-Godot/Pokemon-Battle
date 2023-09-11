@@ -1,7 +1,7 @@
 @tool
 extends State
 
-@export var target_timeline: String = "you-win"
+@export_file("*dtl") var target_timeline: String
 
 func _activate():
 	Dialogic.change_timeline(target_timeline)
