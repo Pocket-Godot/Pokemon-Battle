@@ -1,9 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://dc3d7fkgoonqm"]
 
-[ext_resource path="res://content/gameobjects/units/Base.tscn" type="PackedScene" id=1]
-[ext_resource path="res://content/sprites/pkmn/back/001.png" type="Texture2D" id=2]
+[ext_resource type="PackedScene" uid="uid://ych63x0dq0n4" path="res://content/gameobjects/units/Base.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://cuex05sf5j5bh" path="res://content/sprites/pkmn/back/001.png" id="2"]
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id="8"]
 code = "shader_type canvas_item;
 
 uniform vec3 glow_color;
@@ -16,15 +16,15 @@ void fragment(){
 	COLOR.rgb += glow_color * extent;
 }"
 
-[sub_resource type="ShaderMaterial" id=9]
+[sub_resource type="ShaderMaterial" id="9"]
 resource_local_to_scene = true
-shader = SubResource( 8 )
-shader_param/glow_color = Vector3( 1, 1, 1 )
-shader_param/extent = 0.0
+shader = SubResource("8")
+shader_parameter/glow_color = Vector3(1, 1, 1)
+shader_parameter/extent = 0.0
 
-[node name="Ally" instance=ExtResource( 1 )]
-material = SubResource( 9 )
-texture = ExtResource( 2 )
-relative_forward = Vector2( 20, -20 )
-relative_backward = Vector2( -30, 30 )
+[node name="Ally" instance=ExtResource("1")]
+material = SubResource("9")
+texture = ExtResource("2")
+relative_forward = Vector2(20, -20)
+relative_backward = Vector2(-30, 30)
 relative_right = 25.0

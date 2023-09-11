@@ -14,7 +14,7 @@ var species
 var original_position:Vector2
 
 #	MATERIALS
-@export var glow_color : set = set_glow_color
+@export var glow_color : Color: set = set_glow_color
 @export var glow_extent: float: set = set_glow_extent
 
 # MOVESETS
@@ -65,7 +65,7 @@ func set_unit(i):
 	
 	# BATTLE PARAMETERS
 	set_maxhp(species.hp)
-	set_curhp(unit["cur_hp"], true)
+	set_curhp(unit["cur_hp"])
 
 #	ANIMATION
 
@@ -123,10 +123,10 @@ func set_maxhp(val:int):
 	if !Engine.is_editor_hint():
 		emit_signal("maxhp_iset", val)
 
-func set_curhp(val:int, instant:bool=false):
+func set_curhp(val:int):
 	cur_hp = val
 	if !Engine.is_editor_hint():
-		emit_signal("curhp_iset", val, instant)
+		emit_signal("curhp_iset", val, false)
 
 # METHODS
 	

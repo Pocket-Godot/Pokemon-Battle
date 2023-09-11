@@ -86,7 +86,7 @@ func _on_dialogic_node_added(nd):
 
 func _on_text_complete(text_data):
 	if text_data["event_id"] == "dialogic_001":
-		DialogicSingleton.next_event()
+		Dialogic.next_event()
 
 # TURNS
 
