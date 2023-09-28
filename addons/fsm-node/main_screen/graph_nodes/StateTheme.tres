@@ -110,5 +110,3 @@ GraphNode/styles/defaultframe = null
 GraphNode/styles/frame = SubResource("1")
 GraphNode/styles/position = null
 GraphNode/styles/selectedframe = SubResource("2")
-Inherited/base_type = &"Label"
-Inherited/colors/font_color = Color(1, 1, 0, 1)

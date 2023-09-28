@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3ny58o1u0vsd"]
+[gd_scene load_steps=4 format=3 uid="uid://c3ny58o1u0vsd"]
 
 [ext_resource type="Theme" uid="uid://dv06apwvadkn1" path="res://addons/fsm-node/main_screen/graph_nodes/StateTheme.tres" id="1"]
 [ext_resource type="Script" path="res://addons/fsm-node/main_screen/graph_nodes/ComponentGraphNode.gd" id="2"]
+
+[sub_resource type="Theme" id="Theme_nprn8"]
+Inherited/base_type = &"Label"
+Inherited/colors/font_color = Color(1, 0.87, 0.4, 1)
 
 [node name="State" type="GraphNode"]
 mouse_filter = 1
@@ -21,6 +25,7 @@ script = ExtResource("2")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = SubResource("Theme_nprn8")
 text = "State"
 
 [connection signal="dragged" from="." to="." method="_on_dragged"]

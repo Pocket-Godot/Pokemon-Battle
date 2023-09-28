@@ -3,6 +3,8 @@ extends EditorPlugin
 
 var editor_selection
 
+var scenedock_tree
+
 var MainPanel = preload("main_screen/MainPanel.tscn")
 var main_panel_instance
 
@@ -33,6 +35,9 @@ var select_transition:bool = true
 func _enter_tree():
 	editor_selection = get_editor_interface().get_selection()
 	editor_selection.selection_changed.connect(Callable(self, "_on_selection_changed"))
+	
+	var scenedock = get_editor_interface().get_base_control().find_children("Scene", "SceneTreeDock", true, false)[0]
+	scenedock_tree = scenedock.find_children("*", "Tree", true, false)[0]
 	
 	# Set up Main Screen
 	main_panel_instance = MainPanel.instantiate()
@@ -173,51 +178,36 @@ func _on_remove_pressed():
 
 
 func _make_new_state():
-	# GENERATE NEW EVENT
+	# Generate New Node
 	var inst_state = State.new()
-	
-	#	NAME OF NEW EVENT
-	var nd_input = popup_new_state.find_node("Name")
-	var new_name = nd_input.get_text()
-	if new_name:
-		inst_state.set_comp_name(new_name)
-		new_connection["new"] = new_name
-		
-		# CLEAR INPUT
-		nd_input.clear()
-		
-	#	SET OFFSET
-	if new_offset:
-		inst_state.graph_offset = new_offset
-		new_offset = Vector2()
-	
-	parent_fsm.add_child(inst_state)
-	inst_state.set_owner(get_tree().get_edited_scene_root())
-	emit_signal("new_comp")
+	make_new_comp(inst_state, popup_new_state)
 
 
 func _make_new_transition():
-	# GENERATE NEW EVENT
-	var inst_state = Transition.new()
-	
-	#	NAME OF NEW EVENT
-	var nd_input = popup_new_transition.find_node("Name")
+	# Instantiate New Node
+	var inst_transition = Transition.new()
+	make_new_comp(inst_transition, popup_new_transition)
+
+
+func make_new_comp(inst_comp, popup_new_comp):
+	#	Node Name
+	var nd_input = popup_new_comp.find_node("Name")
 	var new_name = nd_input.get_text()
 	if new_name:
-		inst_state.set_comp_name(new_name)
+		inst_comp.set_name(new_name)
 		new_connection["new"] = new_name
 		
-		# CLEAR INPUT
+		# Clear Input
 		nd_input.clear()
 		
-	#	SET OFFSET
+	#	Set Offset
 	if new_offset:
-		inst_state.graph_offset = new_offset
+		inst_comp.graph_offset = new_offset
 		new_offset = Vector2()
 	
-	parent_fsm.add_child(inst_state)
-	inst_state.set_owner(get_tree().get_edited_scene_root())
-	emit_signal("new_comp")
+	parent_fsm.add_child(inst_comp)
+	inst_comp.set_owner(get_tree().get_edited_scene_root())
+	new_comp.emit()
 
 
 func set_add_component_disabled(b:bool):
@@ -281,11 +271,13 @@ func _on_node_added_to_tree(node):
 					parent.connections += [{"from": node, "to": node.target_state}]
 			
 			# Inheritance
-			var path_node = current_root_node.get_path_to(node)
-			
-			# 	If path_node is not present in current_node_paths, then the component is inherited via scene.
-			if not path_node in current_node_paths:
-				graph_node.set_inheritance()
+			var node_path_array = get_nodepath_in_array(node)
+			var root_item = scenedock_tree.get_root()
+			if root_item:
+				var tree_item = get_treeitem_from_nodepath(root_item, node_path_array)
+				if tree_item:
+					if tree_item.get_custom_color(0) == Color(1, 0.87, 0.4, 1):
+						graph_node.set_inheritance()
 
 
 func _on_node_removed_from_tree(node):
@@ -313,6 +305,29 @@ func _on_node_in_tree_renamed(node):
 		
 	elif node is FSM_Component:
 		node.associated_graph_node.set_comp_name(node.get_name())
+
+
+func get_nodepath_in_array(base_node: Node)-> PackedStringArray:
+	var node_path = current_root_node.get_path_to(base_node)
+	var np_str = String(node_path)
+	var np_array = np_str.split("/")
+	return np_array
+
+
+func get_treeitem_from_nodepath(base_item:TreeItem, array_node: PackedStringArray)-> TreeItem:
+	var tree_item = base_item
+	
+	while tree_item != null:
+		if tree_item.get_text(0) == array_node[0]:
+			if array_node.size() == 1:
+				return tree_item
+			else:
+				array_node.slice(1)
+				tree_item = tree_item.get_next_in_tree()
+		else:
+			tree_item = tree_item.get_next()
+	
+	return null
 
 
 # INTERFACE INTERACTIONS

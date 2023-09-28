@@ -1,0 +1,5 @@
+[gd_resource type="Theme" format=3 uid="uid://cgg54us6cb15a"]
+
+[resource]
+Inherited/base_type = &"Label"
+Inherited/colors/font_color = Color(1, 0.87, 0.4, 1)
