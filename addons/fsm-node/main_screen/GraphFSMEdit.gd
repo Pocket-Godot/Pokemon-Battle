@@ -6,64 +6,63 @@ var title
 
 func _on_connection_request(str_from, from_port, str_to, to_port):
 	
-	# IF THE CONNECTION IS NOT ALREADY MADE
+	# If the connection is not already made,
 	if !is_node_connected(str_from, from_port, str_to, to_port):
-		var gn_from = get_node(str_from)
-		var gn_to = get_node(str_to)
+		var gn_from = get_node(NodePath(str_from))
+		var gn_to = get_node(NodePath(str_to))
 		var nd_from = gn_from.associated_component
+		var nd_to = gn_to.associated_component
 		
 		var connection_type = gn_from.get_connection_output_type(0)
 		if connection_type == 1:
-			# STATE TO TRANSITION
+			# State to Transition
 			
-			#	GET RELATIVE NODEPATH
-			var target_np = nd_from.get_path_to(gn_to.associated_component)
-			
-			#	IF THE CONNECTION IS SUCESSFULLY MADE,
+			#	If connection is successfully made,
 			if connect_node(str_from, from_port, str_to, to_port) == OK:
-				# ADD TRANSITION TO THE LIST
-				nd_from.transitions += [target_np]
-						
-				# UPDATE PROPERTY LIST
-				nd_from.property_list_changed_notify()
+				# Add Transition to the list
+				nd_from.transitions.append(nd_to)
+				
+				# Update property list
+				nd_from.notify_property_list_changed()
 		else:
-			# TRANSITION TO STATE
+			# Transition to State
 			
-			#	FOR EVERY CONNECTIONS
+			#	For every connections
 			for c in get_connection_list():
-				# IF FROM SIDE IS THE SAME
+				# If "from" side is the same,
 				if c["from"] == str_from:
 					
-					# DISCONNECT FROM THAT NODE
+					# Disconnect from that Node
 					_on_disconnection_request(c["from"], c["from_port"], c["to"], c["to_port"])
 					
-			#	IF THE CONNECTION IS SUCESSFULLY MADE,
+			#	If connection is successfully made,
 			if connect_node(str_from, from_port, str_to, to_port) == OK:
-				# SET TARGET STATE
-				nd_from.target_state = nd_from.get_path_to(gn_to.associated_component)
+				# Set target State
+				nd_from.target_state = nd_to
 				
-				# UPDATE PROPERTY LIST
-				nd_from.property_list_changed_notify()
+				# Update property list
+				nd_from.notify_property_list_changed()
+
 
 func _on_disconnection_request(str_from, from_port, str_to, to_port):
 	disconnect_node(str_from, from_port, str_to, to_port)
 	
-	var gn_from = get_node(str_from)
+	var gn_from = get_node(NodePath(str_from))
 	var nd_from = gn_from.associated_component
 	var connection_type = gn_from.get_connection_output_type(0)
 	if connection_type == 1:
-		# STATE TO TRANSITION
-		var gn_to = get_node(str_to)
+		# State to Transition
+		var gn_to = get_node(NodePath(str_to))
 		var nd_to = gn_to.associated_component
-		#	GET RELATIVE NODEPATH
-		var target_np = nd_from.get_path_to(nd_to)
-		nd_from.transitions.erase(target_np)
+		nd_from.transitions.erase(nd_to)
+	
 	else:
-		# TRANSITION TO STATE
+		# Transition to State
 		nd_from.target_state = null
 		
-	# UPDATE PROPERTY LIST
-	nd_from.property_list_changed_notify()
-	
+	# Update property list
+	nd_from.notify_property_list_changed()
+
+
 func set_associated_fsm(node):
 	associated_fsm = node
