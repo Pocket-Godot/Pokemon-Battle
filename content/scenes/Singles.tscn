@@ -38,13 +38,13 @@ void fragment(){
 	COLOR.rgb += glow_color * extent;
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0wh0a"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v2wy6"]
 resource_local_to_scene = true
 shader = SubResource("8")
 shader_parameter/glow_color = Vector3(1, 1, 1)
 shader_parameter/extent = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m4q7h"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p120t"]
 resource_local_to_scene = true
 shader = SubResource("8")
 shader_parameter/glow_color = Vector3(1, 1, 1)
@@ -85,31 +85,35 @@ script = ExtResource("17")
 script = ExtResource("20")
 associated_menu = NodePath("../../UI_Layer/VBoxContainer/PanelContainer")
 focus_btn = NodePath("../../UI_Layer/VBoxContainer/PanelContainer/Commands/Fight")
-transitions = [NodePath("../ToMoves")]
+transitions = [NodePath("../ToMoves"), NodePath("../ToSwitch")]
 graph_offset = Vector2(20, 0)
 
-[node name="Moves" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu", "focus_btn")]
+[node name="Moves" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu", "focus_btn", "transitions")]
 script = ExtResource("20")
 associated_menu = NodePath("../../UI_Layer/List")
 focus_btn = NodePath("../../UI_Layer/List/Move1")
+transitions = [NodePath("../BackToCommands"), NodePath("../ToDialogTurn")]
 graph_offset = Vector2(700, 60)
 
-[node name="Switch" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu")]
+[node name="Switch" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu", "transitions")]
 script = ExtResource("22")
 associated_menu = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer")
+transitions = [NodePath("../BackToCommands"), NodePath("../ToDialogTurn")]
 graph_offset = Vector2(940, -100)
 
-[node name="DialogTurn" type="Node" parent="FSM"]
+[node name="DialogTurn" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
 script = ExtResource("1")
 fp_hit_effect = "res://content/gameobjects/battle_animations/hit_effects/Default.tscn"
 np_allies = NodePath("../../Allies")
 np_reserves = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer")
 np_foes = NodePath("../../Foes")
+transitions = [NodePath("../ToWin"), NodePath("../ToLose"), NodePath("../OnKOedUnits"), NodePath("../BackToCommands")]
 graph_offset = Vector2(460, 440)
 
-[node name="SwitchOutKoed" type="Node" parent="FSM"]
+[node name="SwitchOutKoed" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
 script = ExtResource("23")
 np_backbtn = NodePath("../../UI_Layer/ShadowBg/Switch/MarginContainer/VBoxContainer/Button")
+transitions = [NodePath("../ToDialogTurn")]
 graph_offset = Vector2(100, 560)
 
 [node name="YouWin" type="Node" parent="FSM"]
@@ -127,28 +131,34 @@ script = ExtResource("19")
 target_state = NodePath("../Moves")
 graph_offset = Vector2(420, 20)
 
-[node name="ToSwitch" type="Node" parent="FSM"]
+[node name="ToSwitch" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
 script = ExtResource("19")
+target_state = NodePath("../Switch")
 graph_offset = Vector2(620, -100)
 
-[node name="BackToCommands" type="Node" parent="FSM"]
+[node name="BackToCommands" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
 script = ExtResource("19")
+target_state = NodePath("../Commands")
 graph_offset = Vector2(140, 240)
 
-[node name="ToDialogTurn" type="Node" parent="FSM"]
+[node name="ToDialogTurn" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
 script = ExtResource("19")
+target_state = NodePath("../DialogTurn")
 graph_offset = Vector2(840, 240)
 
-[node name="ToWin" type="Node" parent="FSM"]
+[node name="ToWin" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
 script = ExtResource("19")
+target_state = NodePath("../YouWin")
 graph_offset = Vector2(800, 520)
 
-[node name="ToLose" type="Node" parent="FSM"]
+[node name="ToLose" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
 script = ExtResource("19")
+target_state = NodePath("../YouLose")
 graph_offset = Vector2(780, 740)
 
-[node name="OnKOedUnits" type="Node" parent="FSM"]
+[node name="OnKOedUnits" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
 script = ExtResource("19")
+target_state = NodePath("../SwitchOutKoed")
 graph_offset = Vector2(460, 720)
 
 [node name="Foes" type="Node2D" parent="."]
@@ -158,7 +168,7 @@ script = ExtResource("11")
 species = Array[Resource]([ExtResource("13"), ExtResource("15"), ExtResource("14")])
 
 [node name="Foe" parent="Foes" instance=ExtResource("5")]
-material = SubResource("ShaderMaterial_0wh0a")
+material = SubResource("ShaderMaterial_v2wy6")
 texture = ExtResource("10")
 np_associated_bar = NodePath("../../UI_Layer/VBoxContainer/MarginContainer/VBoxContainer/Foes/FoeBar")
 
@@ -171,7 +181,7 @@ script = ExtResource("11")
 species = Array[Resource]([ExtResource("12"), ExtResource("18"), ExtResource("16")])
 
 [node name="You" parent="Allies" instance=ExtResource("7")]
-material = SubResource("ShaderMaterial_m4q7h")
+material = SubResource("ShaderMaterial_p120t")
 np_associated_bar = NodePath("../../UI_Layer/VBoxContainer/MarginContainer/VBoxContainer/Allies/AllyBar")
 
 [node name="Effects" type="Node2D" parent="."]
