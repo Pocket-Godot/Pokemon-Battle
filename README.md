@@ -2,7 +2,7 @@
 
 ## Getting Started
 ### Requirement
-* Godot Engine v3.2+
+* Godot Engine v4.1+
 
 ### Installation
 After downloading, open Godot Engine Project Manager. Click Import, go to the folder you've downloaded into, and select "project.godot".
@@ -20,5 +20,5 @@ It is recommended to remove all Pokemon references, especially when using this a
 ## Acknowledgements
 The following assets and plugins are used:
 * [Database](https://github.com/mechPenSketch/database) by mechPenSketch
-* [Dialogic 1.4.5](https://github.com/coppolaemilio/dialogic) by [Emilio Coppola](https://github.com/coppolaemilio) and other contributors.
+* [Dialogic 2.0-Alpha-9](https://github.com/coppolaemilio/dialogic) by [Emilio Coppola](https://github.com/coppolaemilio) and other contributors.
 * [FSM](https://github.com/mechPenSketch/FiniteStateMachine) by mechPenSketch
