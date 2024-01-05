@@ -10,7 +10,7 @@ var current_state
 var state_tranistion_indexes
 
 # For Graph Workspace
-var associated_graph_edit
+var associated_graph_edit: GraphEdit
 var connections = []
 
 ## The State it starts with when the project is played. If not set, it will instead start with the first child State.
@@ -18,25 +18,23 @@ var connections = []
 
 func _ready():
 	
-	# IF THIS IS CALLED IN THE EDITOR
+	# If called in the Editor
 	if Engine.is_editor_hint():
 		
-		# CONNECT EVERYTHING TOGETHER
-		for c in connections:
-			associated_graph_edit.connect_node(c["from"].associated_graph_node.get_name(), 0, c["to"].associated_graph_node.get_name(), 0)
+		associated_graph_edit.connect_comp_nodes(connections)
 		
-		# CALL _ready() AGAIN FOR WHEN THE SCENE CHANGES
+		# To call _ready() again when the scene changes
 		request_ready()
 	
-	# IF THIS IS NOT CALLED IN THE EDITOR
+	# Otherwise
 	else:
 		
-		# IF THE starting_state IS DEFNIED, WE'LL USE IT
 		if starting_state:
 			current_state = starting_state
 			current_state.set_active(true)
 	
-		# OTHERWISE, WE'LL USE THE FIRST STATE IN OUR CHILDREN
+		# If starting_state is undefined, set it as
+		# the first State child. 
 		else:
 			for c in get_children():
 				if c is State:
@@ -81,6 +79,11 @@ func _get_configuration_warning():
 func activate_state(s):
 	current_state = s
 	current_state.set_active(true)
+
+
+func add_connection(c: Dictionary):
+	if not c in connections:
+		connections.append(c)
 
 
 ## Changes from one state to another.

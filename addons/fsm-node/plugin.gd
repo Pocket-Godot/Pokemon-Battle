@@ -1,6 +1,7 @@
 @tool
 extends EditorPlugin
 
+var editor_interface
 var editor_selection
 
 var scenedock_tree
@@ -22,8 +23,10 @@ var current_root_node: Node
 var current_node_paths
 var graph_fsm_edit_root
 var GraphFsmEdit = preload("main_screen/GraphFSMEdit.tscn")
-var GraphNodes = {"state": preload("main_screen/graph_nodes/GraphState.tscn"),
-"transition":  preload("main_screen/graph_nodes/GraphTransition.tscn")}
+var GraphNodes = {
+		"state": preload("main_screen/graph_nodes/GraphState.tscn"),
+		"transition":  preload("main_screen/graph_nodes/GraphTransition.tscn")
+	}
 
 var toolbar_btns:Dictionary
 var toolbar_btns_pressed_methods:Dictionary
@@ -33,15 +36,16 @@ var select_state:bool = true
 var select_transition:bool = true
 
 func _enter_tree():
-	editor_selection = get_editor_interface().get_selection()
+	editor_interface = get_editor_interface()
+	editor_selection = editor_interface.get_selection()
 	editor_selection.selection_changed.connect(Callable(self, "_on_selection_changed"))
 	
-	var scenedock = get_editor_interface().get_base_control().find_children("Scene", "SceneTreeDock", true, false)[0]
+	var scenedock = editor_interface.get_base_control().find_children("Scene", "SceneTreeDock", true, false)[0]
 	scenedock_tree = scenedock.find_children("*", "Tree", true, false)[0]
 	
 	# Set up Main Screen
 	main_panel_instance = MainPanel.instantiate()
-	get_editor_interface().get_editor_main_screen().add_child(main_panel_instance)
+	editor_interface.get_editor_main_screen().add_child(main_panel_instance)
 	_make_visible(false)
 	
 	# Set up Toolbars
@@ -57,9 +61,9 @@ func _enter_tree():
 	}
 	
 	#	Reuse Godot Icons
-	toolbar_btns["select"].set_button_icon(get_editor_interface().get_base_control().get_theme_icon("ToolSelect", "EditorIcons"))
-	toolbar_btns["move"].set_button_icon(get_editor_interface().get_base_control().get_theme_icon("ToolMove", "EditorIcons"))
-	toolbar_btns["remove"].set_button_icon(get_editor_interface().get_base_control().get_theme_icon("Remove", "EditorIcons"))
+	toolbar_btns["select"].set_button_icon(editor_interface.get_base_control().get_theme_icon("ToolSelect", "EditorIcons"))
+	toolbar_btns["move"].set_button_icon(editor_interface.get_base_control().get_theme_icon("ToolMove", "EditorIcons"))
+	toolbar_btns["remove"].set_button_icon(editor_interface.get_base_control().get_theme_icon("Remove", "EditorIcons"))
 	
 	#	Define Press Methods
 	toolbar_btns_pressed_methods = {
@@ -134,7 +138,7 @@ func _on_selection_changed():
 		if n is FSM:
 			parent_fsm = n
 			set_add_component_disabled(false)
-			get_editor_interface().set_main_screen_editor("FSM")
+			editor_interface.set_main_screen_editor("FSM")
 			toolbar_btns["remove"].set_disabled(true)
 			return
 		elif n is FSM_Component:
@@ -230,13 +234,9 @@ func _on_node_added_to_tree(node):
 		graph_fsm_edit_root.add_child(gfe_instance)
 		node.associated_graph_edit = gfe_instance
 		gfe_instance.set_associated_fsm(node)
+		gfe_instance.editor_interface = editor_interface
 		
-		# Give it a Label
-		var fsm_title = Label.new()
-		fsm_title.set_text(node.get_name())
-		gfe_instance.get_zoom_hbox().add_child(fsm_title)
-		gfe_instance.get_zoom_hbox().move_child(fsm_title, 0)
-		gfe_instance.title = fsm_title
+		gfe_instance.add_title_label(node.get_name())
 		
 		# Connect Signals
 		gfe_instance.gui_input.connect(_on_fsm_input.bind(gfe_instance))
@@ -264,11 +264,11 @@ func _on_node_added_to_tree(node):
 			if is_state:
 				if node.transitions:
 					for t in node.transitions:
-						parent.connections += [{"from": node, "to": t}]
+						parent.add_connection({"from": node, "to": t})
 				
 			else:
 				if node.target_state:
-					parent.connections += [{"from": node, "to": node.target_state}]
+					parent.add_connection({"from": node, "to": node.target_state})
 			
 			# Inheritance
 			var node_path_array = get_nodepath_in_array(node)
@@ -287,16 +287,21 @@ func _on_node_removed_from_tree(node):
 		gfe.queue_free()
 		
 	elif node is FSM_Component:
-		# DISCONNECT FROM AFFECTED NODE
+		# Disconnect from other Comp Elements
 		var parent = node.get_parent()
-		if parent is FSM:
-			var parent_edit = parent.associated_graph_edit
-			var node_name = node.get_name()
-			for c in parent_edit.get_connection_list():
-				if c["from"] == node_name or c["to"] == node_name:
-					parent_edit.disconnect_node(c["from"], 0, c["to"], 0)
+		var graph_node = node.associated_graph_node
 		
-		node.associated_graph_node.queue_free()
+		if parent is FSM:
+			var erase_in_arr = []
+			
+			for c in parent.connections:
+				if c["from"] == graph_node or c["to"] == graph_node:
+					erase_in_arr.append(c)
+			
+			for d in erase_in_arr:
+				parent.connections.erase(d)
+		
+		graph_node.queue_free()
 
 
 func _on_node_in_tree_renamed(node):
