@@ -11,7 +11,7 @@ extends Resource
 @export var move3: Resource
 @export var move4: Resource
 
-@export var hp: int := 10
+@export var hp: int = 10
 
-func get_name()->String:
+func get_mon_name()->String:
 	return resource_path.get_file().get_basename().capitalize()
