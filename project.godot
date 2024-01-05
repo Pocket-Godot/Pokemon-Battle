@@ -13,7 +13,7 @@ config_version=5
 config/name="Pokemon Battle System"
 config/tags=PackedStringArray("pokemon")
 run/main_scene="res://content/scenes/Singles.tscn"
-config/features=PackedStringArray("4.1")
+config/features=PackedStringArray("4.2")
 config/icon="res://icon.png"
 
 [autoload]

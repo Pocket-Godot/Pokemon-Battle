@@ -2,7 +2,7 @@
 
 ## Getting Started
 ### Requirement
-* Godot Engine v4.1+
+* Godot Engine v4.2+
 
 ### Installation
 After downloading, open Godot Engine Project Manager. Click Import, go to the folder you've downloaded into, and select "project.godot".
