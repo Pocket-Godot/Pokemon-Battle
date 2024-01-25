@@ -18,8 +18,8 @@ var slot_name: String = ""
 
 func _execute() -> void:
 	if slot_name.is_empty():
-		if Dialogic.Save.get_latest_slot():
-			dialogic.Save.save(Dialogic.Save.get_latest_slot())
+		if dialogic.Save.get_latest_slot():
+			dialogic.Save.save(dialogic.Save.get_latest_slot())
 		else:
 			dialogic.Save.save()
 	else:
@@ -62,4 +62,4 @@ func get_shortcode_parameters() -> Dictionary:
 ################################################################################
 
 func build_event_editor():
-	add_header_edit('slot_name', ValueType.SINGLELINE_TEXT, 'Save to slot')
+	add_header_edit('slot_name', ValueType.SINGLELINE_TEXT, {'left_text':'Save to slot'})

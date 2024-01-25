@@ -20,5 +20,5 @@ It is recommended to remove all Pokemon references, especially when using this a
 ## Acknowledgements
 The following assets and plugins are used:
 * [Database](https://github.com/mechPenSketch/database) by mechPenSketch
-* [Dialogic 2.0-Alpha-9](https://github.com/coppolaemilio/dialogic) by [Emilio Coppola](https://github.com/coppolaemilio) and other contributors.
+* [Dialogic 2.0-Alpha-13](https://github.com/coppolaemilio/dialogic) by [Emilio Coppola](https://github.com/coppolaemilio) and other contributors.
 * [FSM](https://github.com/mechPenSketch/FiniteStateMachine) by mechPenSketch

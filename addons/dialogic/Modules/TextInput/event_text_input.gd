@@ -24,19 +24,20 @@ var allow_empty : bool = false
 ################################################################################
 
 func _execute() -> void:
-	dialogic.current_state = Dialogic.States.WAITING
+	dialogic.Inputs.auto_skip.enabled = false
+	dialogic.current_state = DialogicGameHandler.States.WAITING
 	dialogic.TextInput.show_text_input(text, default, placeholder, allow_empty)
 	dialogic.TextInput.input_confirmed.connect(_on_DialogicTextInput_input_confirmed, CONNECT_ONE_SHOT)
 
 
 func _on_DialogicTextInput_input_confirmed(input:String) -> void:
-	if !Dialogic.has_subsystem('VAR'):
+	if !dialogic.has_subsystem('VAR'):
 		printerr('[Dialogic] The TextInput event needs the variable subsystem to be present.')
 		finish()
 		return
 	dialogic.VAR.set_variable(variable, input)
 	dialogic.TextInput.hide_text_input()
-	dialogic.current_state = Dialogic.States.IDLE
+	dialogic.current_state = DialogicGameHandler.States.IDLE
 	finish()
 
 
@@ -49,8 +50,6 @@ func _init() -> void:
 	set_default_color('Color6')
 	event_category = "Logic"
 	event_sorting_index = 6
-	continue_at_end = true
-	expand_by_default = false
 
 
 ################################################################################
@@ -65,7 +64,7 @@ func get_shortcode_parameters() -> Dictionary:
 	return {
 		#param_name 	: property_info
 		"text"			: {"property": "text", 			"default": "Please enter some text:"},
-		"var"			: {"property": "variable", 		"default": ""},
+		"var"			: {"property": "variable", 		"default": "", "suggestions":get_var_suggestions},
 		"placeholder"	: {"property": "placeholder", 	"default": ""},
 		"default"		: {"property": "default", 		"default": ""},
 		"allow_empty"	: {"property": "allow_empty",	"default": false},
@@ -77,23 +76,23 @@ func get_shortcode_parameters() -> Dictionary:
 
 func build_event_editor() -> void:
 	add_header_label('Show an input and store it in')
-	add_header_edit('variable', ValueType.COMPLEX_PICKER, '', '', 
-			{'suggestions_func'	: get_var_suggestions, 
+	add_header_edit('variable', ValueType.DYNAMIC_OPTIONS,
+			{'suggestions_func'	: get_var_suggestions,
 			'icon'		 : load("res://addons/dialogic/Editor/Images/Pieces/variable.svg"),
 			'placeholder':'Select Variable'})
-	add_body_edit('text', ValueType.SINGLELINE_TEXT, 'Text:')
-	add_body_edit('placeholder', ValueType.SINGLELINE_TEXT, 'Placeholder:')
-	add_body_edit('default', ValueType.SINGLELINE_TEXT, 'Default:')
-	add_body_edit('allow_empty', ValueType.BOOL, 'Allow empty:')
+	add_body_edit('text', ValueType.SINGLELINE_TEXT, {'left_text':'Text:'})
+	add_body_edit('placeholder', ValueType.SINGLELINE_TEXT, {'left_text':'Placeholder:'})
+	add_body_edit('default', ValueType.SINGLELINE_TEXT, {'left_text':'Default:'})
+	add_body_edit('allow_empty', ValueType.BOOL, {'left_text':'Allow empty:'})
 
 
-func get_var_suggestions(filter:String) -> Dictionary:
+func get_var_suggestions(filter:String="") -> Dictionary:
 	var suggestions := {}
 	if filter:
 		suggestions[filter] = {
-			'value'			: filter, 
+			'value'			: filter,
 			'editor_icon'	: ["GuiScrollArrowRight", "EditorIcons"]}
 	var vars :Dictionary = ProjectSettings.get_setting('dialogic/variables', {})
-	for var_path in DialogicUtil.list_variables(vars):
+	for var_path in DialogicUtil.list_variables(vars, "", DialogicUtil.VarTypes.STRING):
 		suggestions[var_path] = {'value':var_path, 'icon':load("res://addons/dialogic/Editor/Images/Pieces/variable.svg")}
 	return suggestions

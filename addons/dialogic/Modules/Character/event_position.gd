@@ -24,16 +24,22 @@ var movement_time: float = 0
 ## 						EXECUTE
 ################################################################################
 func _execute() -> void:
+	var final_movement_time: float = movement_time
+
+	if dialogic.Inputs.auto_skip.enabled:
+		var time_per_event: float = dialogic.Inputs.auto_skip.time_per_event
+		final_movement_time = max(movement_time, time_per_event)
+
 	match action:
 		Actions.SET_RELATIVE:
-			dialogic.Portraits.move_portrait_position(position, vector, true, movement_time)
+			dialogic.Portraits.move_portrait_position(position, vector, true, final_movement_time)
 		Actions.SET_ABSOLUTE:
-			dialogic.Portraits.move_portrait_position(position, vector, false, movement_time)
+			dialogic.Portraits.move_portrait_position(position, vector, false, final_movement_time)
 		Actions.RESET_ALL:
-			dialogic.Portraits.reset_portrait_positions(movement_time)
+			dialogic.Portraits.reset_all_portrait_positions(final_movement_time)
 		Actions.RESET:
-			dialogic.Portraits.reset_portrait_position(position, movement_time)
-	
+			dialogic.Portraits.reset_portrait_position(position, final_movement_time)
+
 	finish()
 
 
@@ -46,12 +52,10 @@ func _init() -> void:
 	set_default_color('Color2')
 	event_category = "Other"
 	event_sorting_index = 2
-	continue_at_end = true
-	expand_by_default = false
 
 
 func _get_icon() -> Resource:
-	return load(self.get_script().get_path().get_base_dir().path_join('icon_position.png'))
+	return load(self.get_script().get_path().get_base_dir().path_join('event_portrait_position.svg'))
 
 ################################################################################
 ## 						SAVING/LOADING
@@ -64,8 +68,8 @@ func get_shortcode() -> String:
 func get_shortcode_parameters() -> Dictionary:
 	return {
 		#param_name 	: property_info
-		"action"		:  {"property": "action", 		"default": Actions.SET_RELATIVE, 
-								"suggestions": func(): return {"Set Relative":{'value':'0'}, "Set Absolute":{'value':'1'}, "Reset":{'value':'2'}, "Reset All":{'value':'3'}}},
+		"action"		:  {"property": "action", 		"default": Actions.SET_RELATIVE,
+								"suggestions": func(): return {"Set Relative":{'value':0, 'text_alt':['set_relative', 'relative']}, "Set Absolute":{'value':1, 'text_alt':['set_absolute', 'absolute']}, "Reset":{'value':2,'text_alt':['reset'] }, "Reset All":{'value':3,'text_alt':['reset_all']}}},
 		"position"		:  {"property": "position", 		"default": 0},
 		"vector"		:  {"property": "vector", 			"default": Vector2()},
 		"time"			:  {"property": "movement_time", 	"default": 0},
@@ -77,8 +81,8 @@ func get_shortcode_parameters() -> Dictionary:
 ################################################################################
 
 func build_event_editor():
-	add_header_edit('action', ValueType.FIXED_OPTION_SELECTOR, '', '', {
-		'selector_options': [
+	add_header_edit('action', ValueType.FIXED_OPTIONS, {
+		'options': [
 			{
 				'label': 'Change',
 				'value': Actions.SET_RELATIVE,
@@ -97,10 +101,10 @@ func build_event_editor():
 			}
 		]
 		})
-	add_header_edit("position", ValueType.INTEGER, "position", '', {}, 
+	add_header_edit("position", ValueType.NUMBER, {'left_text':"position", 'mode':1},
 			'action != Actions.RESET_ALL')
 	add_header_label('to (absolute)', 'action == Actions.SET_ABSOLUTE')
 	add_header_label('by (relative)', 'action == Actions.SET_RELATIVE')
-	add_header_edit("vector", ValueType.VECTOR2, "", '', {}, 
+	add_header_edit("vector", ValueType.VECTOR2, {},
 			'action != Actions.RESET and action != Actions.RESET_ALL')
-	add_body_edit("movement_time", ValueType.FLOAT, "AnimationTime:", "(0 for instant)")
+	add_body_edit("movement_time", ValueType.NUMBER, {'left_text':"AnimationTime:", "right_text":"(0 for instant)"})

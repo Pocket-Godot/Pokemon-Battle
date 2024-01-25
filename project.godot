@@ -18,7 +18,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Dialogic="*res://addons/dialogic/Other/DialogicGameHandler.gd"
+Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 
 [dialogic]
 
@@ -56,6 +56,22 @@ layout/styles={
 }
 }
 layout/default_style="Default"
+directories/dch_directory={}
+directories/dtl_directory={
+"battle-commands": "res://content/dialogic/general/battle-commands.dtl",
+"execute-move": "res://content/dialogic/general/execute-move.dtl",
+"switch-out-any-koes": "res://content/dialogic/general/switch-out-any-koes.dtl",
+"we-switch": "res://content/dialogic/general/we-switch.dtl",
+"you-lose": "res://content/dialogic/general/you-lose.dtl",
+"you-win": "res://content/dialogic/general/you-win.dtl"
+}
+layout/style_list=[]
+text/letter_speed=0.01
+text/initial_text_reveal_skippable=true
+text/text_reveal_skip_delay=0.1
+text/autoadvance_per_character_delay=0.1
+text/autoadvance_ignored_characters_enabled=true
+save/encryption_on_exports_only=true
 
 [display]
 
