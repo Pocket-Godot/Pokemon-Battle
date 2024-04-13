@@ -55,7 +55,7 @@ layout/styles={
 "inherits": ""
 }
 }
-layout/default_style="Default"
+layout/default_style="res://dialogic_styles/New_File.tres"
 directories/dch_directory={}
 directories/dtl_directory={
 "battle-commands": "res://content/dialogic/general/battle-commands.dtl",
@@ -65,7 +65,7 @@ directories/dtl_directory={
 "you-lose": "res://content/dialogic/general/you-lose.dtl",
 "you-win": "res://content/dialogic/general/you-win.dtl"
 }
-layout/style_list=[]
+layout/style_list=["res://dialogic_styles/battle.tres"]
 text/letter_speed=0.01
 text/initial_text_reveal_skippable=true
 text/text_reveal_skip_delay=0.1
