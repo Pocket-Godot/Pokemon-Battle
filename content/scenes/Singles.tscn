@@ -1,14 +1,10 @@
-[gd_scene load_steps=33 format=3 uid="uid://d3f46b46ab7du"]
+[gd_scene load_steps=27 format=3 uid="uid://d3f46b46ab7du"]
 
 [ext_resource type="Script" path="res://content/scenes/dialogturn_state.gd" id="1"]
-[ext_resource type="FontFile" uid="uid://b808glcuodqlf" path="res://themes/fonts/noto_sans_ui/NotoSansUI-Regular.ttf" id="2"]
 [ext_resource type="Script" path="res://content/scenes/battle.gd" id="3"]
 [ext_resource type="Script" path="res://content/scenes/outcome_state.gd" id="4"]
-[ext_resource type="PackedScene" path="res://content/gameobjects/units/Foe.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://content/ui_objects/FoeBar.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://f5ws8av0pjry" path="res://content/gameobjects/units/Foe.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dc3d7fkgoonqm" path="res://content/gameobjects/units/Ally.tscn" id="7"]
-[ext_resource type="PackedScene" path="res://content/ui_objects/AllyBar.tscn" id="8"]
-[ext_resource type="PackedScene" uid="uid://dr5qh8nbvt00k" path="res://content/ui_objects/MoveBtn.tscn" id="9"]
 [ext_resource type="Texture2D" uid="uid://bich3ha8ag6tn" path="res://content/sprites/pkmn/front/158.png" id="10"]
 [ext_resource type="Script" path="res://content/scripts/side_of_units.gd" id="11"]
 [ext_resource type="Resource" path="res://data/mons/bulbasaur.tres" id="12"]
@@ -19,10 +15,11 @@
 [ext_resource type="Script" path="res://addons/fsm-node/nodes/fsm.gd" id="17"]
 [ext_resource type="Resource" path="res://data/mons/charmander.tres" id="18"]
 [ext_resource type="Script" path="res://addons/fsm-node/nodes/transition.gd" id="19"]
+[ext_resource type="PackedScene" uid="uid://dg6dtl4qcgj4e" path="res://content/ui_objects/AllyBar.tscn" id="19_tjl2e"]
 [ext_resource type="Script" path="res://content/scenes/menu_state.gd" id="20"]
+[ext_resource type="PackedScene" path="res://content/ui_objects/FoeBar.tscn" id="20_gkrhe"]
 [ext_resource type="PackedScene" path="res://content/ui_objects/UnitReserve.tscn" id="21"]
 [ext_resource type="Script" path="res://content/scenes/menu_state_blkbg.gd" id="22"]
-[ext_resource type="Script" path="res://addons/dialogic/Modules/Text/node_dialog_text.gd" id="22_j2esj"]
 [ext_resource type="Script" path="res://content/scenes/menu_state_blkbg_disback.gd" id="23"]
 
 [sub_resource type="Shader" id="8"]
@@ -50,24 +47,6 @@ shader = SubResource("8")
 shader_parameter/glow_color = Vector3(1, 1, 1)
 shader_parameter/extent = 0.0
 
-[sub_resource type="StyleBoxFlat" id="12"]
-
-[sub_resource type="FontFile" id="1"]
-fallbacks = Array[Font]([ExtResource("2")])
-face_index = null
-embolden = null
-transform = null
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
-
-[sub_resource type="Theme" id="2"]
-default_font = SubResource("1")
-MenuButton/styles/normal = SubResource("12")
-
 [sub_resource type="StyleBoxFlat" id="13"]
 bg_color = Color(0.482353, 0.482353, 0.482353, 1)
 
@@ -81,17 +60,13 @@ timeline = "timeline-1627461926.json"
 [node name="FSM" type="Node" parent="."]
 script = ExtResource("17")
 
-[node name="Commands" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu", "focus_btn", "transitions")]
+[node name="Commands" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
 script = ExtResource("20")
-associated_menu = NodePath("../../UI_Layer/VBoxContainer/PanelContainer")
-focus_btn = NodePath("../../UI_Layer/VBoxContainer/PanelContainer/Commands/Fight")
 transitions = [NodePath("../ToMoves"), NodePath("../ToSwitch")]
 graph_offset = Vector2(20, 0)
 
-[node name="Moves" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu", "focus_btn", "transitions")]
+[node name="Moves" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
 script = ExtResource("20")
-associated_menu = NodePath("../../UI_Layer/List")
-focus_btn = NodePath("../../UI_Layer/List/Move1")
 transitions = [NodePath("../BackToCommands"), NodePath("../ToDialogTurn")]
 graph_offset = Vector2(700, 60)
 
@@ -167,10 +142,10 @@ scale = Vector2(2, 2)
 script = ExtResource("11")
 species = Array[Resource]([ExtResource("13"), ExtResource("15"), ExtResource("14")])
 
-[node name="Foe" parent="Foes" instance=ExtResource("5")]
+[node name="Foe" parent="Foes" node_paths=PackedStringArray("associated_bar") instance=ExtResource("5")]
 material = SubResource("ShaderMaterial_v2wy6")
 texture = ExtResource("10")
-np_associated_bar = NodePath("../../UI_Layer/VBoxContainer/MarginContainer/VBoxContainer/Foes/FoeBar")
+associated_bar = NodePath("../../UI/FoeBar")
 
 [node name="In-Between" type="Node2D" parent="."]
 
@@ -180,9 +155,15 @@ scale = Vector2(3, 3)
 script = ExtResource("11")
 species = Array[Resource]([ExtResource("12"), ExtResource("18"), ExtResource("16")])
 
-[node name="You" parent="Allies" instance=ExtResource("7")]
+[node name="You" parent="Allies" node_paths=PackedStringArray("associated_bar") instance=ExtResource("7")]
 material = SubResource("ShaderMaterial_p120t")
-np_associated_bar = NodePath("../../UI_Layer/VBoxContainer/MarginContainer/VBoxContainer/Allies/AllyBar")
+associated_bar = NodePath("../../UI/AllyBar")
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="AllyBar" parent="UI" instance=ExtResource("19_tjl2e")]
+
+[node name="FoeBar" parent="UI" instance=ExtResource("20_gkrhe")]
 
 [node name="Effects" type="Node2D" parent="."]
 
@@ -191,106 +172,27 @@ anchor_mode = 0
 
 [node name="UI_Layer" type="CanvasLayer" parent="."]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer"]
+[node name="MarginContainer" type="MarginContainer" parent="UI_Layer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="UI_Layer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-theme = SubResource("2")
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 40
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/VBoxContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="Foes" type="HBoxContainer" parent="UI_Layer/VBoxContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="FoeBar" parent="UI_Layer/VBoxContainer/MarginContainer/VBoxContainer/Foes" instance=ExtResource("6")]
-layout_mode = 2
-
-[node name="StatusBars" type="Control" parent="UI_Layer/VBoxContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Allies" type="HBoxContainer" parent="UI_Layer/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI_Layer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="AllyBar" parent="UI_Layer/VBoxContainer/MarginContainer/VBoxContainer/Allies" instance=ExtResource("8")]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="UI_Layer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Commands" type="GridContainer" parent="UI_Layer/VBoxContainer/PanelContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-columns = 2
-
-[node name="Fight" type="Button" parent="UI_Layer/VBoxContainer/PanelContainer/Commands"]
-layout_mode = 2
-text = "Fight"
-
-[node name="Switch" type="Button" parent="UI_Layer/VBoxContainer/PanelContainer/Commands"]
-layout_mode = 2
-text = "Switch"
-
-[node name="Items" type="Button" parent="UI_Layer/VBoxContainer/PanelContainer/Commands"]
+[node name="Items" type="Button" parent="UI_Layer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "Items"
 
-[node name="Run" type="Button" parent="UI_Layer/VBoxContainer/PanelContainer/Commands"]
+[node name="Run" type="Button" parent="UI_Layer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "Run"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="UI_Layer/VBoxContainer/PanelContainer"]
-layout_mode = 2
-script = ExtResource("22_j2esj")
-
-[node name="List" type="VBoxContainer" parent="UI_Layer"]
-visible = false
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -255.0
-offset_top = -195.0
-grow_horizontal = 0
-grow_vertical = 0
-size_flags_horizontal = 8
-size_flags_vertical = 8
-theme_override_constants/separation = 5
-
-[node name="Button" type="Button" parent="UI_Layer/List"]
-layout_mode = 2
-size_flags_horizontal = 8
-text = "Back"
-
-[node name="Move1" parent="UI_Layer/List" instance=ExtResource("9")]
-layout_mode = 2
-
-[node name="Move2" parent="UI_Layer/List" instance=ExtResource("9")]
-layout_mode = 2
-
-[node name="Move3" parent="UI_Layer/List" instance=ExtResource("9")]
-layout_mode = 2
-
-[node name="Move4" parent="UI_Layer/List" instance=ExtResource("9")]
-layout_mode = 2
 
 [node name="ShadowBg" type="ColorRect" parent="UI_Layer"]
 unique_name_in_owner = true
@@ -374,10 +276,6 @@ size_flags_horizontal = 8
 size_flags_vertical = 10
 text = "Back"
 
-[connection signal="pressed" from="UI_Layer/VBoxContainer/PanelContainer/Commands/Fight" to="FSM/ToMoves" method="_condition"]
-[connection signal="pressed" from="UI_Layer/VBoxContainer/PanelContainer/Commands/Switch" to="FSM/ToSwitch" method="_condition"]
-[connection signal="pressed" from="UI_Layer/List/Button" to="FSM/BackToCommands" method="_condition"]
 [connection signal="pressed" from="UI_Layer/ShadowBg/Switch/MarginContainer/VBoxContainer/Button" to="FSM/BackToCommands" method="_condition"]
 
-[editable path="UI_Layer/List/Move1"]
 [editable path="UI_Layer/ShadowBg/Switch/VBoxContainer/MenuButton"]

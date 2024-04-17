@@ -21,8 +21,7 @@ var original_position:Vector2
 var moveset
 
 # UI
-@export var np_associated_bar: NodePath: set = set_np_associated_bar
-var associated_bar
+@export var associated_bar: Node
 
 # BATTLE PARAMETERS
 var max_hp:int: set = set_maxhp
@@ -32,18 +31,25 @@ signal curhp_iset
 
 func _ready():
 	# UI
-	set_associated_bar(get_node(np_associated_bar))
+	if !Engine.is_editor_hint():
+		associated_bar.set_global_position($Marker2D.get_position())
+		
+		connect("maxhp_iset", Callable(associated_bar, "_maxhp_iset"))
+		connect("curhp_iset", Callable(associated_bar, "_curhp_iset"))
+
 
 func _set(p, v):
 	if p == "position":
 		original_position = v
 		update_position()
 
+
 # SET PROPTERTIES
 func set_reserve_index(v):
 	reserve_index = v
 	set_unit(v)
-	
+
+
 func set_unit(i):
 	var unit = get_parent().units[i]
 	
@@ -69,21 +75,26 @@ func set_unit(i):
 
 #	ANIMATION
 
+
 func set_proportional_offset(val:Vector2):
 	proportional_offset = val
 	update_position()
 
+
 func set_relative_forward(val:Vector2):
 	relative_forward = val
 	update_position()
-	
+
+
 func set_relative_backward(val:Vector2):
 	relative_backward = val
 	update_position()
-	
+
+
 func set_relative_right(val:float):
 	relative_right = val
 	update_position()
+
 
 #	MATERIALS
 
@@ -91,30 +102,12 @@ func set_glow_color(val:Color):
 	glow_color = val
 	var v3 = Vector3(glow_color.r, glow_color.g, glow_color.b)
 	get_material().set_shader_parameter("glow_color", v3)
-	
+
+
 func set_glow_extent(val:float):
 	glow_extent = val
 	get_material().set_shader_parameter("extent", glow_extent)
 
-#	UI
-
-func set_np_associated_bar(val:NodePath):
-	np_associated_bar = val
-	
-	# If node is avaiable by the time the property is set
-	if has_node(val):
-		set_associated_bar(get_node(val))
-
-func set_associated_bar(val):
-	if associated_bar and !Engine.is_editor_hint():
-		disconnect("maxhp_iset", Callable(associated_bar, "_maxhp_iset"))
-		disconnect("curhp_iset", Callable(associated_bar, "_curhp_iset"))
-	
-	if val:
-		associated_bar = val
-		if !Engine.is_editor_hint():
-			connect("maxhp_iset", Callable(associated_bar, "_maxhp_iset"))
-			connect("curhp_iset", Callable(associated_bar, "_curhp_iset"))
 
 #		HEALTH
 
@@ -123,10 +116,12 @@ func set_maxhp(val:int):
 	if !Engine.is_editor_hint():
 		emit_signal("maxhp_iset", val)
 
+
 func set_curhp(val:int):
 	cur_hp = val
 	if !Engine.is_editor_hint():
 		emit_signal("curhp_iset", val, false)
+
 
 # METHODS
 	

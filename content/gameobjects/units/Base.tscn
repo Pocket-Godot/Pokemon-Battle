@@ -233,3 +233,6 @@ libraries = {
 "": SubResource("AnimationLibrary_qlt16")
 }
 script = ExtResource("3")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(0, -50)
