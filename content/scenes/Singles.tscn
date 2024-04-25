@@ -61,7 +61,7 @@ script = ExtResource("17")
 
 [node name="Commands" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
 script = ExtResource("3_imt74")
-transitions = [NodePath(""), NodePath("")]
+transitions = [NodePath("../ToDialogTurn")]
 graph_offset = Vector2(20, 0)
 
 [node name="DialogTurn" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
