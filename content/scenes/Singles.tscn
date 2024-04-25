@@ -1,7 +1,8 @@
-[gd_scene load_steps=27 format=3 uid="uid://d3f46b46ab7du"]
+[gd_scene load_steps=26 format=3 uid="uid://d3f46b46ab7du"]
 
 [ext_resource type="Script" path="res://content/scenes/dialogturn_state.gd" id="1"]
 [ext_resource type="Script" path="res://content/scenes/battle.gd" id="3"]
+[ext_resource type="Script" path="res://addons/fsm-node/nodes/state.gd" id="3_imt74"]
 [ext_resource type="Script" path="res://content/scenes/outcome_state.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://f5ws8av0pjry" path="res://content/gameobjects/units/Foe.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dc3d7fkgoonqm" path="res://content/gameobjects/units/Ally.tscn" id="7"]
@@ -16,10 +17,8 @@
 [ext_resource type="Resource" path="res://data/mons/charmander.tres" id="18"]
 [ext_resource type="Script" path="res://addons/fsm-node/nodes/transition.gd" id="19"]
 [ext_resource type="PackedScene" uid="uid://dg6dtl4qcgj4e" path="res://content/ui_objects/AllyBar.tscn" id="19_tjl2e"]
-[ext_resource type="Script" path="res://content/scenes/menu_state.gd" id="20"]
 [ext_resource type="PackedScene" path="res://content/ui_objects/FoeBar.tscn" id="20_gkrhe"]
 [ext_resource type="PackedScene" path="res://content/ui_objects/UnitReserve.tscn" id="21"]
-[ext_resource type="Script" path="res://content/scenes/menu_state_blkbg.gd" id="22"]
 [ext_resource type="Script" path="res://content/scenes/menu_state_blkbg_disback.gd" id="23"]
 
 [sub_resource type="Shader" id="8"]
@@ -61,20 +60,9 @@ timeline = "timeline-1627461926.json"
 script = ExtResource("17")
 
 [node name="Commands" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
-script = ExtResource("20")
-transitions = [NodePath("../ToMoves"), NodePath("../ToSwitch")]
+script = ExtResource("3_imt74")
+transitions = [NodePath(""), NodePath("")]
 graph_offset = Vector2(20, 0)
-
-[node name="Moves" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
-script = ExtResource("20")
-transitions = [NodePath("../BackToCommands"), NodePath("../ToDialogTurn")]
-graph_offset = Vector2(700, 60)
-
-[node name="Switch" type="Node" parent="FSM" node_paths=PackedStringArray("associated_menu", "transitions")]
-script = ExtResource("22")
-associated_menu = NodePath("../../UI_Layer/ShadowBg/Switch/VBoxContainer")
-transitions = [NodePath("../BackToCommands"), NodePath("../ToDialogTurn")]
-graph_offset = Vector2(940, -100)
 
 [node name="DialogTurn" type="Node" parent="FSM" node_paths=PackedStringArray("transitions")]
 script = ExtResource("1")
@@ -100,16 +88,6 @@ graph_offset = Vector2(1120, 560)
 script = ExtResource("4")
 target_timeline = "res://content/dialogic/general/you-lose.dtl"
 graph_offset = Vector2(1120, 760)
-
-[node name="ToMoves" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
-script = ExtResource("19")
-target_state = NodePath("../Moves")
-graph_offset = Vector2(420, 20)
-
-[node name="ToSwitch" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
-script = ExtResource("19")
-target_state = NodePath("../Switch")
-graph_offset = Vector2(620, -100)
 
 [node name="BackToCommands" type="Node" parent="FSM" node_paths=PackedStringArray("target_state")]
 script = ExtResource("19")

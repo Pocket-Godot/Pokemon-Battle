@@ -32,6 +32,7 @@ layout_mode = 2
 text = "Switch"
 
 [node name="Moves" type="VBoxContainer" parent="." index="2"]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -51,3 +52,17 @@ layout_mode = 2
 
 [node name="Move4" parent="Moves" index="3" instance=ExtResource("3_unh2a")]
 layout_mode = 2
+
+[node name="Switch" type="VBoxContainer" parent="." index="3"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GridContainer" type="GridContainer" parent="Switch" index="0"]
+layout_mode = 2
+columns = 2
+
+[connection signal="pressed" from="Commands/Fight" to="Commands" method="hide"]
+[connection signal="pressed" from="Commands/Fight" to="Moves" method="show"]
+[connection signal="pressed" from="Commands/Switch" to="Commands" method="hide"]
+[connection signal="pressed" from="Commands/Switch" to="Switch" method="show"]
