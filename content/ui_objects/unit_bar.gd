@@ -12,9 +12,9 @@ func _curhp_iset(val:int, instant:bool=false):
 		%Health.set_value(val)
 	else:
 		var tween = create_tween()
-		tween.interpolate_property(%Health, "value", %Health.get_value(), val, 1.0)
+		tween.tween_property(%Health, "value", val, 1.0)
 		
-		tween.start()
+		tween.play()
 
 
 func set_display_name(s):
