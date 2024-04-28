@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://d3f46b46ab7du"]
+[gd_scene load_steps=24 format=3 uid="uid://d3f46b46ab7du"]
 
 [ext_resource type="Script" path="res://content/scenes/dialogturn_state.gd" id="1"]
 [ext_resource type="Script" path="res://content/scenes/battle.gd" id="3"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" path="res://data/mons/bulbasaur.tres" id="12"]
 [ext_resource type="Resource" path="res://data/mons/totodile.tres" id="13"]
 [ext_resource type="Resource" path="res://data/mons/chikorita.tres" id="14"]
+[ext_resource type="Script" path="res://content/scenes/side_of_allies.gd" id="14_bc2jp"]
 [ext_resource type="Resource" path="res://data/mons/cyndaquil.tres" id="15"]
 [ext_resource type="Resource" path="res://data/mons/squirtle.tres" id="16"]
 [ext_resource type="Script" path="res://addons/fsm-node/nodes/fsm.gd" id="17"]
@@ -47,7 +48,6 @@ shader_parameter/extent = 0.0
 
 [node name="Battle" type="Node"]
 script = ExtResource("3")
-timeline = "timeline-1627461926.json"
 
 [node name="FSM" type="Node" parent="."]
 script = ExtResource("17")
@@ -121,7 +121,7 @@ associated_bar = NodePath("../../UI/FoeBar")
 [node name="Allies" type="Node2D" parent="."]
 position = Vector2(309.049, 372.628)
 scale = Vector2(3, 3)
-script = ExtResource("11")
+script = ExtResource("14_bc2jp")
 species = Array[Resource]([ExtResource("12"), ExtResource("18"), ExtResource("16")])
 
 [node name="You" parent="Allies" node_paths=PackedStringArray("associated_bar") instance=ExtResource("7")]

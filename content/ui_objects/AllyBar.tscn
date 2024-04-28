@@ -41,16 +41,19 @@ offset_right = 20.0
 offset_bottom = 40.0
 grow_horizontal = 2
 
-[node name="Move" parent="Moves" index="0" instance=ExtResource("3_unh2a")]
+[node name="Back" type="Button" parent="Moves" index="0"]
 layout_mode = 2
 
-[node name="Move2" parent="Moves" index="1" instance=ExtResource("3_unh2a")]
+[node name="Move" parent="Moves" index="1" instance=ExtResource("3_unh2a")]
 layout_mode = 2
 
-[node name="Move3" parent="Moves" index="2" instance=ExtResource("3_unh2a")]
+[node name="Move2" parent="Moves" index="2" instance=ExtResource("3_unh2a")]
 layout_mode = 2
 
-[node name="Move4" parent="Moves" index="3" instance=ExtResource("3_unh2a")]
+[node name="Move3" parent="Moves" index="3" instance=ExtResource("3_unh2a")]
+layout_mode = 2
+
+[node name="Move4" parent="Moves" index="4" instance=ExtResource("3_unh2a")]
 layout_mode = 2
 
 [node name="Switch" type="VBoxContainer" parent="." index="3"]
@@ -58,7 +61,10 @@ visible = false
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="GridContainer" type="GridContainer" parent="Switch" index="0"]
+[node name="Back" type="Button" parent="Switch" index="0"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="Switch" index="1"]
 layout_mode = 2
 columns = 2
 
@@ -66,3 +72,7 @@ columns = 2
 [connection signal="pressed" from="Commands/Fight" to="Moves" method="show"]
 [connection signal="pressed" from="Commands/Switch" to="Commands" method="hide"]
 [connection signal="pressed" from="Commands/Switch" to="Switch" method="show"]
+[connection signal="pressed" from="Moves/Back" to="Commands" method="show"]
+[connection signal="pressed" from="Moves/Back" to="Moves" method="hide"]
+[connection signal="pressed" from="Switch/Back" to="Commands" method="show"]
+[connection signal="pressed" from="Switch/Back" to="Switch" method="hide"]

@@ -1,9 +1,15 @@
 extends Node2D
 
+class_name UnitSide
+
 @export var species: Array[Resource]
 var units = []
 
 func _ready():
+	set_side()
+
+
+func set_side():
 	for r in species:
 		var dict = {
 			"species": r,
@@ -31,11 +37,13 @@ func _ready():
 	for i in get_child_count():
 		get_child(i).set_unit(i)
 
+
 func some_units_are_koed()->bool:
 	for c in get_children():
 		if c.cur_hp <= 0:
 			return true
 	return false
+
 
 func all_reserves_are_koed()->bool:
 	for u in units:
@@ -43,6 +51,7 @@ func all_reserves_are_koed()->bool:
 			return false
 	
 	return true
+
 
 func get_available_reserves()->int:
 	var count = 0
